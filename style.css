@@ -111,6 +111,7 @@ footer {
 
 .building-item .building-name {
     font-size: 1.3em;
+    font-weight: bold;
     margin-top: 0;
     margin-bottom: 5px;
     color: #007bff;
@@ -177,6 +178,7 @@ footer {
 
 .upgrade-item .upgrade-name {
     font-size: 1.3em;
+    font-weight: bold;
     margin-top: 0;
     margin-bottom: 5px;
     color: #9b59b6;

@@ -74,6 +74,28 @@ function getBuildingCurrentCost(building) {
     return building.baseCost * Math.pow(1.15, building.owned);
 }
 
+function formatTime(seconds) {
+    if (seconds <= 0 || !isFinite(seconds)) return '';
+
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const secs = Math.floor(seconds % 60);
+
+    if (hours > 0) {
+        return `${hours}h ${minutes.toString().padStart(2, '0')}m ${secs.toString().padStart(2, '0')}s`;
+    } else if (minutes > 0) {
+        return `${minutes}m ${secs.toString().padStart(2, '0')}s`;
+    } else {
+        return `${secs}s`;
+    }
+}
+
+function getTimeUntilAffordable(cost) {
+    if (mana >= cost) return 0;
+    if (manaPerSecond <= 0) return Infinity;
+    return (cost - mana) / manaPerSecond;
+}
+
 // Function to update the display elements
 function updateDisplay() {
     manaDisplay.textContent = `${mana.toFixed(0)} Mana`;
@@ -118,11 +140,11 @@ function createBuildingElement(building) {
     buildingDiv.setAttribute('aria-labelledby', `building-name-${building.id}`);
 
     buildingDiv.innerHTML = `
-        <h3 id="building-name-${building.id}" class="building-name">${building.name}</h3>
+        <p id="building-name-${building.id}" class="building-name">${building.name}</p>
         <p class="building-description">${building.description}</p>
         <p class="building-owned" aria-live="polite" aria-atomic="true">Owned: <span>${building.owned}</span></p>
         <p class="building-cost">Cost: <span class="cost-value">${getBuildingCurrentCost(building).toFixed(0)}</span> Mana</p>
-        <button id="buy-${building.id}-button" class="buy-building-button" aria-label="Buy ${building.name}">Buy</button>
+        <button id="buy-${building.id}-button" class="buy-building-button">${building.name}, Can Buy</button>
     `;
 
     const buyButton = buildingDiv.querySelector(`#buy-${building.id}-button`);
@@ -177,10 +199,10 @@ function createUpgradeElement(upgrade) {
     upgradeDiv.setAttribute('aria-labelledby', `upgrade-name-${upgrade.id}`);
 
     upgradeDiv.innerHTML = `
-        <h3 id="upgrade-name-${upgrade.id}" class="upgrade-name">${upgrade.name}</h3>
+        <p id="upgrade-name-${upgrade.id}" class="upgrade-name">${upgrade.name}</p>
         <p class="upgrade-description">${upgrade.description}</p>
         <p class="upgrade-cost">Cost: <span class="cost-value">${upgrade.cost.toFixed(0)}</span> Mana</p>
-        <button id="buy-${upgrade.id}-button" class="buy-upgrade-button" aria-label="Buy ${upgrade.name}">${upgrade.isPurchased ? 'Purchased' : 'Buy'}</button>
+        <button id="buy-${upgrade.id}-button" class="buy-upgrade-button">${upgrade.name}, Can Buy</button>
     `;
 
     const buyButton = upgradeDiv.querySelector(`#buy-${upgrade.id}-button`);
@@ -221,14 +243,17 @@ function checkAffordability() {
             const cost = getBuildingCurrentCost(building);
             if (mana >= cost) {
                 buyButton.disabled = false;
-                buyButton.textContent = 'Buy';
-                buyButton.setAttribute('aria-label', `Buy ${building.name} - Can Buy`);
+                buyButton.textContent = `${building.name}, Can Buy`;
+                buyButton.setAttribute('aria-label', `${building.name}, Can Buy`);
                 buyButton.classList.add('can-buy');
                 buyButton.classList.remove('cannot-buy');
             } else {
                 buyButton.disabled = true;
-                buyButton.textContent = 'Too expensive';
-                buyButton.setAttribute('aria-label', `Buy ${building.name} - Not Affordable`);
+                const timeUntil = getTimeUntilAffordable(cost);
+                const timeStr = formatTime(timeUntil);
+                const timerDisplay = timeStr ? `, ${timeStr}` : '';
+                buyButton.textContent = `${building.name}, Not Affordable${timerDisplay}`;
+                buyButton.setAttribute('aria-label', `${building.name}, Not Affordable${timerDisplay}`);
                 buyButton.classList.add('cannot-buy');
                 buyButton.classList.remove('can-buy');
             }
@@ -240,14 +265,17 @@ function checkAffordability() {
             const buyButton = upgrade.element.querySelector('.buy-upgrade-button');
             if (mana >= upgrade.cost) {
                 buyButton.disabled = false;
-                buyButton.textContent = 'Buy';
-                buyButton.setAttribute('aria-label', `Buy ${upgrade.name} - Can Buy`);
+                buyButton.textContent = `${upgrade.name}, Can Buy`;
+                buyButton.setAttribute('aria-label', `${upgrade.name}, Can Buy`);
                 buyButton.classList.add('can-buy');
                 buyButton.classList.remove('cannot-buy');
             } else {
                 buyButton.disabled = true;
-                buyButton.textContent = 'Too expensive';
-                buyButton.setAttribute('aria-label', `Buy ${upgrade.name} - Not Affordable`);
+                const timeUntil = getTimeUntilAffordable(upgrade.cost);
+                const timeStr = formatTime(timeUntil);
+                const timerDisplay = timeStr ? `, ${timeStr}` : '';
+                buyButton.textContent = `${upgrade.name}, Not Affordable${timerDisplay}`;
+                buyButton.setAttribute('aria-label', `${upgrade.name}, Not Affordable${timerDisplay}`);
                 buyButton.classList.add('cannot-buy');
                 buyButton.classList.remove('can-buy');
             }
