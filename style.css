@@ -153,4 +153,108 @@ footer {
     background-color: #6c757d; /* No change on hover when disabled */
 }
 
+/* Upgrades Container */
+#upgrades-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #3a3a3a;
+    border-radius: 8px;
+}
+
+/* Individual Upgrade Item */
+.upgrade-item {
+    background-color: #4a4a4a;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.upgrade-item .upgrade-name {
+    font-size: 1.3em;
+    margin-top: 0;
+    margin-bottom: 5px;
+    color: #9b59b6;
+}
+
+.upgrade-item .upgrade-description {
+    font-size: 0.9em;
+    color: #ccc;
+    margin-bottom: 10px;
+}
+
+.upgrade-item .upgrade-cost {
+    font-size: 1em;
+    margin-bottom: 5px;
+}
+
+.upgrade-item .buy-upgrade-button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    font-size: 1.1em;
+}
+
+/* Upgrade Affordability States */
+.buy-upgrade-button.can-buy {
+    background-color: #9b59b6;
+}
+
+.buy-upgrade-button.can-buy:hover {
+    background-color: #8e44ad;
+}
+
+.buy-upgrade-button.cannot-buy {
+    background-color: #6c757d;
+    cursor: not-allowed;
+}
+
+.buy-upgrade-button.cannot-buy:hover {
+    background-color: #6c757d;
+}
+
+/* Purchased Upgrades Container */
+#purchased-upgrades-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #3a3a3a;
+    border-radius: 8px;
+}
+
+/* Purchased Upgrade Item */
+.purchased-upgrade-item {
+    background-color: #2d4a2d;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    border-left: 4px solid #4CAF50;
+}
+
+.purchased-upgrade-item .upgrade-name {
+    font-size: 1.3em;
+    margin-top: 0;
+    margin-bottom: 5px;
+    color: #4CAF50;
+}
+
+.purchased-upgrade-item .upgrade-description {
+    font-size: 0.9em;
+    color: #ccc;
+    margin-bottom: 0;
+}
+
+/* Focus styles for headings */
+h2:focus {
+    outline: 2px solid #007bff;
+    outline-offset: 4px;
+}
+
 

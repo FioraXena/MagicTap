@@ -11,6 +11,9 @@ const gatherManaButton = document.getElementById('gather-mana-button');
 const buildingsContainer = document.getElementById('buildings-container');
 const upgradesContainer = document.getElementById('upgrades-container'); // Get upgrades container
 const eventsLog = document.getElementById('events-log');
+const purchasedUpgradesContainer = document.getElementById('purchased-upgrades-container');
+const upgradesButton = document.getElementById('upgrades-button');
+const purchasedUpgradesHeading = document.getElementById('purchased-upgrades-heading');
 
 // --- Game Data Structures ---
 const buildings = [
@@ -162,10 +165,11 @@ function updateUpgradeDisplay(upgrade) {
 
     const buyButton = upgrade.element.querySelector('.buy-upgrade-button');
     if (upgrade.isPurchased) {
-        buyButton.disabled = true;
-        buyButton.textContent = 'Purchased';
-        buyButton.classList.add('purchased');
-        buyButton.classList.remove('can-buy', 'cannot-buy');
+        buyButton.remove();
+        upgrade.element.querySelector('.upgrade-cost').remove();
+        purchasedUpgradesContainer.appendChild(upgrade.element);
+        upgrade.element.classList.remove('upgrade-item');
+        upgrade.element.classList.add('purchased-upgrade-item');
     } else {
         // Affordability handled by checkAffordability
         upgrade.element.querySelector('.upgrade-cost .cost-value').textContent = upgrade.cost.toFixed(0);
@@ -216,6 +220,12 @@ function checkAffordability() {
         }
     });
 }
+
+// --- Navigation ---
+upgradesButton.addEventListener('click', () => {
+    purchasedUpgradesHeading.scrollIntoView({ behavior: 'smooth' });
+    purchasedUpgradesHeading.focus();
+});
 
 // --- Game Loop and Initialization ---
 gatherManaButton.addEventListener('click', gatherMana);
