@@ -3,18 +3,8 @@ const ChangelogModule = (function() {
     const changelog = [
         {
             version: '0.01',
-            date: '2026-01-24',
             changes: [
-                'Initial release',
-                'Added mana gathering mechanic',
-                'Added Wizard\'s Hand building',
-                'Added Magic Theory upgrade',
-                'Added Statistics panel',
-                'Added Achievements panel',
-                'Added Production panel',
-                'Added Purchased Upgrades panel',
-                'Added Prestige panel (coming soon)',
-                'Added Options panel'
+                'Initial release.'
             ]
         }
     ];
@@ -39,7 +29,7 @@ const ChangelogModule = (function() {
             const entryDiv = document.createElement('div');
             entryDiv.className = 'changelog-entry';
             entryDiv.innerHTML = `
-                <h3>Version ${entry.version} <span class="changelog-date">(${entry.date})</span></h3>
+                <h3>V${entry.version}</h3>
                 <ul>
                     ${entry.changes.map(change => `<li>${change}</li>`).join('')}
                 </ul>
