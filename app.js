@@ -12,8 +12,18 @@ const buildingsContainer = document.getElementById('buildings-container');
 const upgradesContainer = document.getElementById('upgrades-container'); // Get upgrades container
 const eventsLog = document.getElementById('events-log');
 const purchasedUpgradesContainer = document.getElementById('purchased-upgrades-container');
-const upgradesButton = document.getElementById('upgrades-button');
+const purchasedUpgradesPanel = document.getElementById('purchased-upgrades-panel');
 const purchasedUpgradesHeading = document.getElementById('purchased-upgrades-heading');
+
+// Navigation buttons
+const navButtons = {
+    'statistics-button': null,
+    'achievements-button': null,
+    'upgrades-button': purchasedUpgradesPanel,
+    'prestige-button': null,
+    'changelog-button': null,
+    'options-button': null
+};
 
 // --- Game Data Structures ---
 const buildings = [
@@ -222,9 +232,45 @@ function checkAffordability() {
 }
 
 // --- Navigation ---
-upgradesButton.addEventListener('click', () => {
-    purchasedUpgradesHeading.scrollIntoView({ behavior: 'smooth' });
-    purchasedUpgradesHeading.focus();
+let currentOpenPanel = null;
+
+function togglePanel(panel, heading) {
+    if (!panel) return;
+
+    // If clicking the same panel, close it
+    if (currentOpenPanel === panel) {
+        panel.hidden = true;
+        currentOpenPanel = null;
+        return;
+    }
+
+    // Close any currently open panel
+    if (currentOpenPanel) {
+        currentOpenPanel.hidden = true;
+    }
+
+    // Open the new panel
+    panel.hidden = false;
+    currentOpenPanel = panel;
+
+    // Scroll to and focus the heading
+    if (heading) {
+        heading.scrollIntoView({ behavior: 'smooth' });
+        heading.focus();
+    }
+}
+
+// Set up navigation button listeners
+Object.keys(navButtons).forEach(buttonId => {
+    const button = document.getElementById(buttonId);
+    const panel = navButtons[buttonId];
+
+    if (button && panel) {
+        button.addEventListener('click', () => {
+            const heading = panel.querySelector('h2[tabindex="-1"]');
+            togglePanel(panel, heading);
+        });
+    }
 });
 
 // --- Game Loop and Initialization ---
