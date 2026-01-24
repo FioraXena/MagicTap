@@ -231,18 +231,18 @@ footer {
 
 /* Purchased Upgrade Item */
 .purchased-upgrade-item {
-    background-color: #2d4a2d;
+    background-color: #2d3a4a;
     padding: 15px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    border-left: 4px solid #4CAF50;
+    border-left: 4px solid #007bff;
 }
 
 .purchased-upgrade-item .upgrade-name {
     font-size: 1.3em;
     margin-top: 0;
     margin-bottom: 5px;
-    color: #4CAF50;
+    color: #007bff;
 }
 
 .purchased-upgrade-item .upgrade-description {

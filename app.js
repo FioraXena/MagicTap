@@ -14,16 +14,32 @@ const eventsLog = document.getElementById('events-log');
 const purchasedUpgradesContainer = document.getElementById('purchased-upgrades-container');
 const purchasedUpgradesPanel = document.getElementById('purchased-upgrades-panel');
 const purchasedUpgradesHeading = document.getElementById('purchased-upgrades-heading');
+const panelsContainer = document.getElementById('panels-container');
 
-// Navigation buttons
-const navButtons = {
-    'statistics-button': null,
-    'achievements-button': null,
-    'upgrades-button': purchasedUpgradesPanel,
-    'prestige-button': null,
-    'changelog-button': null,
-    'options-button': null
-};
+// Track mana per click bonus from upgrades (base is 1)
+let baseManaPerClick = 1;
+let manaPerClickFromUpgrades = 0;
+let mpsFromUpgrades = 0;
+
+// --- Initialize Panels ---
+function initializePanels() {
+    // Insert panel HTML into the panels container
+    panelsContainer.innerHTML =
+        StatisticsModule.getHTML() +
+        AchievementsModule.getHTML() +
+        ProductionModule.getHTML() +
+        PrestigeModule.getHTML() +
+        ChangelogModule.getHTML() +
+        OptionsModule.getHTML();
+
+    // Initialize modules that need it
+    OptionsModule.init();
+    ChangelogModule.renderChangelog();
+    AchievementsModule.renderAchievements();
+}
+
+// Navigation buttons - will be populated after panels are initialized
+let navButtons = {};
 
 // --- Game Data Structures ---
 const buildings = [
@@ -69,6 +85,7 @@ function updateDisplay() {
 // Function to gather mana when the button is clicked
 function gatherMana() {
     mana += manaPerClick;
+    StatisticsModule.addManaByClick(manaPerClick);
     updateDisplay();
 }
 
@@ -85,11 +102,11 @@ function buyBuilding(buildingId) {
         mana -= cost;
         building.owned++;
         manaPerSecond += building.productionPerSecond;
+        StatisticsModule.addBuildingOwned();
         updateBuildingDisplay(building);
         updateDisplay(); // Update main displays and affordability
-        announce(`Purchased ${building.name}! You now own ${building.owned}.`);
     } else {
-        announce(`Not enough mana to buy ${building.name}. Requires ${cost.toFixed(0)} Mana.`);
+        // Do nothing if cannot afford
     }
 }
 
@@ -141,11 +158,14 @@ function buyUpgrade(upgradeId) {
         mana -= upgrade.cost;
         upgrade.effect(); // Apply the upgrade's effect
         upgrade.isPurchased = true;
+        StatisticsModule.addUpgradePurchased();
+        // Track mana per click from upgrades
+        manaPerClickFromUpgrades = manaPerClick - baseManaPerClick;
+        ProductionModule.setManaPerClickFromUpgrades(manaPerClickFromUpgrades);
         updateUpgradeDisplay(upgrade);
         updateDisplay(); // Update main displays and affordability
-        announce(`Purchased ${upgrade.name}!`);
     } else {
-        announce(`Not enough mana to buy ${upgrade.name}. Requires ${upgrade.cost.toFixed(0)} Mana.`);
+        // Do nothing if cannot afford
     }
 }
 
@@ -202,11 +222,13 @@ function checkAffordability() {
             if (mana >= cost) {
                 buyButton.disabled = false;
                 buyButton.textContent = 'Buy';
+                buyButton.setAttribute('aria-label', `Buy ${building.name} - Can Buy`);
                 buyButton.classList.add('can-buy');
                 buyButton.classList.remove('cannot-buy');
             } else {
                 buyButton.disabled = true;
                 buyButton.textContent = 'Too expensive';
+                buyButton.setAttribute('aria-label', `Buy ${building.name} - Not Affordable`);
                 buyButton.classList.add('cannot-buy');
                 buyButton.classList.remove('can-buy');
             }
@@ -219,11 +241,13 @@ function checkAffordability() {
             if (mana >= upgrade.cost) {
                 buyButton.disabled = false;
                 buyButton.textContent = 'Buy';
+                buyButton.setAttribute('aria-label', `Buy ${upgrade.name} - Can Buy`);
                 buyButton.classList.add('can-buy');
                 buyButton.classList.remove('cannot-buy');
             } else {
                 buyButton.disabled = true;
                 buyButton.textContent = 'Too expensive';
+                buyButton.setAttribute('aria-label', `Buy ${upgrade.name} - Not Affordable`);
                 buyButton.classList.add('cannot-buy');
                 buyButton.classList.remove('can-buy');
             }
@@ -260,41 +284,72 @@ function togglePanel(panel, heading) {
     }
 }
 
-// Set up navigation button listeners
-Object.keys(navButtons).forEach(buttonId => {
-    const button = document.getElementById(buttonId);
-    const panel = navButtons[buttonId];
+function setupNavigation() {
+    // Map buttons to their panels
+    navButtons = {
+        'statistics-button': document.getElementById('statistics-panel'),
+        'achievements-button': document.getElementById('achievements-panel'),
+        'upgrades-button': purchasedUpgradesPanel,
+        'production-button': document.getElementById('production-panel'),
+        'prestige-button': document.getElementById('prestige-panel'),
+        'changelog-button': document.getElementById('changelog-panel'),
+        'options-button': document.getElementById('options-panel')
+    };
 
-    if (button && panel) {
-        button.addEventListener('click', () => {
-            const heading = panel.querySelector('h2[tabindex="-1"]');
-            togglePanel(panel, heading);
-        });
-    }
-});
+    // Set up navigation button listeners
+    Object.keys(navButtons).forEach(buttonId => {
+        const button = document.getElementById(buttonId);
+        const panel = navButtons[buttonId];
+
+        if (button && panel) {
+            button.addEventListener('click', () => {
+                const heading = panel.querySelector('h2[tabindex="-1"]');
+                togglePanel(panel, heading);
+
+                // Update panel contents when opened
+                if (panel.id === 'statistics-panel') {
+                    StatisticsModule.updateDisplay();
+                } else if (panel.id === 'production-panel') {
+                    ProductionModule.updateDisplay(buildings);
+                }
+            });
+        }
+    });
+}
 
 // --- Game Loop and Initialization ---
 gatherManaButton.addEventListener('click', gatherMana);
 
 function gameLoop() {
-    mana += manaPerSecond / 10;
+    const manaFromBuildings = manaPerSecond / 10;
+    mana += manaFromBuildings;
+    if (manaFromBuildings > 0) {
+        StatisticsModule.addManaByBuildings(manaFromBuildings);
+    }
+    StatisticsModule.setCurrentMana(mana);
+
+    // Check achievements
+    AchievementsModule.checkAchievements(StatisticsModule.getStats());
+
     updateDisplay();
 }
 
 setInterval(gameLoop, 100);
 
 // Initial setup
+initializePanels();
+setupNavigation();
 updateDisplay();
 renderBuildings();
 renderUpgrades();
 
-// Function for general announcements
+// Function for general announcements (kept for future use, but not for purchases)
 function announce(message) {
     const announcement = document.createElement('p');
     announcement.textContent = message;
-    announcement.classList.add('sr-only'); 
-    eventsLog.prepend(announcement); 
-    
+    announcement.classList.add('sr-only');
+    eventsLog.prepend(announcement);
+
     while (eventsLog.children.length > 5) {
         eventsLog.removeChild(eventsLog.lastChild);
     }

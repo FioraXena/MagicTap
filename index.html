@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MagicTap</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="modules/panels.css">
 </head>
 <body>
     <main>
@@ -33,6 +34,8 @@
             <h2 id="purchased-upgrades-heading" tabindex="-1">Purchased Upgrades</h2>
             <div id="purchased-upgrades-container" aria-labelledby="purchased-upgrades-heading"></div>
         </section>
+
+        <div id="panels-container"></div>
     </main>
 
     <footer>
@@ -40,12 +43,19 @@
             <button id="statistics-button">Statistics</button>
             <button id="achievements-button">Achievements</button>
             <button id="upgrades-button">Upgrades</button>
+            <button id="production-button">Production</button>
             <button id="prestige-button">Prestige</button>
             <button id="changelog-button">Changelog</button>
             <button id="options-button">Options</button>
         </nav>
     </footer>
 
+    <script src="modules/statistics.js"></script>
+    <script src="modules/achievements.js"></script>
+    <script src="modules/production.js"></script>
+    <script src="modules/prestige.js"></script>
+    <script src="modules/changelog.js"></script>
+    <script src="modules/options.js"></script>
     <script src="app.js"></script>
 </body>
 </html>

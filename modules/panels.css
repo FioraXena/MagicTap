@@ -1,0 +1,238 @@
+/* Panels Module Styles */
+
+/* Statistics Panel */
+.statistics-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.statistics-list li {
+    padding: 10px 15px;
+    border-bottom: 1px solid #444;
+    display: flex;
+    justify-content: space-between;
+}
+
+.statistics-list li:last-child {
+    border-bottom: none;
+}
+
+.statistics-list span {
+    color: #007bff;
+    font-weight: bold;
+}
+
+/* Achievements Panel */
+#achievements-count {
+    font-size: 1.1em;
+    margin-bottom: 15px;
+    padding: 10px;
+    background-color: #3a3a3a;
+    border-radius: 5px;
+}
+
+#achievements-count span {
+    color: #ffd700;
+    font-weight: bold;
+}
+
+.achievements-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+}
+
+.achievement-item {
+    background-color: #4a4a4a;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #ffd700;
+}
+
+.achievement-item .achievement-name {
+    display: block;
+    font-size: 1.2em;
+    color: #ffd700;
+    margin-bottom: 5px;
+}
+
+.achievement-item .achievement-description {
+    display: block;
+    font-size: 0.9em;
+    color: #ccc;
+}
+
+/* Production Panel */
+.production-upgrades {
+    background-color: #3a3a3a;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.production-upgrades p {
+    margin: 5px 0;
+}
+
+.production-upgrades span {
+    color: #9b59b6;
+    font-weight: bold;
+}
+
+#production-container h3 {
+    color: #007bff;
+    margin-bottom: 10px;
+}
+
+.production-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.production-building-item {
+    padding: 12px 15px;
+    background-color: #4a4a4a;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.production-building-item .building-name {
+    color: #007bff;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+.production-building-item .building-production {
+    color: #4CAF50;
+    font-size: 0.95em;
+}
+
+.no-buildings {
+    color: #888;
+    font-style: italic;
+    padding: 15px;
+}
+
+/* Prestige Panel */
+.prestige-description {
+    color: #ccc;
+    margin-bottom: 15px;
+}
+
+.prestige-button {
+    background-color: #9b59b6;
+    font-size: 1.2em;
+    padding: 15px 30px;
+}
+
+.prestige-button:hover:not(:disabled) {
+    background-color: #8e44ad;
+}
+
+.prestige-button:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+}
+
+#prestige-container p {
+    margin: 10px 0;
+}
+
+#prestige-points, #times-prestiged {
+    color: #9b59b6;
+    font-weight: bold;
+}
+
+/* Changelog Panel */
+#current-version {
+    color: #4CAF50;
+    font-weight: bold;
+}
+
+.changelog-entry {
+    background-color: #3a3a3a;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 15px;
+}
+
+.changelog-entry h3 {
+    color: #007bff;
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.changelog-date {
+    color: #888;
+    font-size: 0.85em;
+    font-weight: normal;
+}
+
+.changelog-entry ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.changelog-entry li {
+    margin: 5px 0;
+    color: #ccc;
+}
+
+/* Options Panel */
+.option-group {
+    background-color: #3a3a3a;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.option-group h3 {
+    color: #007bff;
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+.option-group button {
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.option-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    cursor: pointer;
+}
+
+.option-item input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.danger-zone {
+    border: 1px solid #dc3545;
+}
+
+.danger-zone h3 {
+    color: #dc3545;
+}
+
+.danger-button {
+    background-color: #dc3545;
+}
+
+.danger-button:hover {
+    background-color: #c82333;
+}
