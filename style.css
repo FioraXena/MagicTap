@@ -1,0 +1,156 @@
+body {
+    font-family: sans-serif;
+    background-color: #1a1a1a;
+    color: #f0f0f0;
+    margin: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+main {
+    max-width: 800px;
+    width: 100%;
+    padding: 20px;
+    background-color: #2a2a2a;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+}
+
+h1, h2 {
+    color: #e0e0e0;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.game-stats, .game-actions, footer nav {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+p {
+    font-size: 1.2em;
+    margin: 5px 0;
+}
+
+button {
+    background-color: #4CAF50; /* Green */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    margin: 5px;
+    transition: background-color 0.2s;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+button:focus {
+    outline: 2px solid #007bff;
+    outline-offset: 2px;
+}
+
+#gather-mana-button {
+    font-size: 1.5em;
+    padding: 15px 30px;
+    background-color: #007bff; /* Blue */
+}
+
+#gather-mana-button:hover {
+    background-color: #0056b3;
+}
+
+footer {
+    width: 100%;
+    max-width: 800px;
+    text-align: center;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #444;
+}
+
+/* Screen Reader Only Class */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+/* Buildings Container */
+#buildings-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #3a3a3a;
+    border-radius: 8px;
+}
+
+/* Individual Building Item */
+.building-item {
+    background-color: #4a4a4a;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.building-item .building-name {
+    font-size: 1.3em;
+    margin-top: 0;
+    margin-bottom: 5px;
+    color: #007bff;
+}
+
+.building-item .building-description {
+    font-size: 0.9em;
+    color: #ccc;
+    margin-bottom: 10px;
+}
+
+.building-item .building-owned,
+.building-item .building-cost {
+    font-size: 1em;
+    margin-bottom: 5px;
+}
+
+.building-item .buy-building-button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    font-size: 1.1em;
+}
+
+/* Affordability States */
+.buy-building-button.can-buy {
+    background-color: #4CAF50; /* Green */
+}
+
+.buy-building-button.can-buy:hover {
+    background-color: #45a049;
+}
+
+.buy-building-button.cannot-buy {
+    background-color: #6c757d; /* Grey */
+    cursor: not-allowed;
+}
+
+.buy-building-button.cannot-buy:hover {
+    background-color: #6c757d; /* No change on hover when disabled */
+}
+
+
