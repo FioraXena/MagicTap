@@ -120,11 +120,35 @@ const AchievementsModule = (function() {
         return achievements;
     }
 
+    function loadAchievements(savedAchievements) {
+        if (savedAchievements) {
+            earnedCount = 0;
+            savedAchievements.forEach(savedAch => {
+                const achievement = achievements.find(a => a.id === savedAch.id);
+                if (achievement) {
+                    achievement.isEarned = savedAch.isEarned || false;
+                    if (achievement.isEarned) {
+                        earnedCount++;
+                    }
+                }
+            });
+        }
+    }
+
+    function reset() {
+        earnedCount = 0;
+        achievements.forEach(achievement => {
+            achievement.isEarned = false;
+        });
+    }
+
     return {
         getHTML,
         renderAchievements,
         checkAchievements,
         getEarnedCount,
-        getAchievements
+        getAchievements,
+        loadAchievements,
+        reset
     };
 })();

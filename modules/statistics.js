@@ -88,6 +88,36 @@ const StatisticsModule = (function() {
         return stats;
     }
 
+    function loadStats(savedStats) {
+        if (savedStats) {
+            stats.manaByClick = savedStats.manaByClick || 0;
+            stats.manaByBuildings = savedStats.manaByBuildings || 0;
+            stats.currentMana = savedStats.currentMana || 0;
+            stats.manaTotal = savedStats.manaTotal || 0;
+            stats.manaThisRun = savedStats.manaThisRun || 0;
+            stats.manaSpentOnPrestige = savedStats.manaSpentOnPrestige || 0;
+            stats.totalBuildingsOwned = savedStats.totalBuildingsOwned || 0;
+            stats.upgradesPurchased = savedStats.upgradesPurchased || 0;
+            stats.achievementsEarned = savedStats.achievementsEarned || 0;
+            stats.spellsCastThisRun = savedStats.spellsCastThisRun || 0;
+            stats.spellsCastTotal = savedStats.spellsCastTotal || 0;
+        }
+    }
+
+    function reset() {
+        stats.manaByClick = 0;
+        stats.manaByBuildings = 0;
+        stats.currentMana = 0;
+        stats.manaTotal = 0;
+        stats.manaThisRun = 0;
+        stats.manaSpentOnPrestige = 0;
+        stats.totalBuildingsOwned = 0;
+        stats.upgradesPurchased = 0;
+        stats.achievementsEarned = 0;
+        stats.spellsCastThisRun = 0;
+        stats.spellsCastTotal = 0;
+    }
+
     return {
         getHTML,
         updateDisplay,
@@ -98,6 +128,8 @@ const StatisticsModule = (function() {
         addUpgradePurchased,
         addAchievementEarned,
         addSpellCast,
-        getStats
+        getStats,
+        loadStats,
+        reset
     };
 })();

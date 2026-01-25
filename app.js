@@ -407,6 +407,7 @@ updateDisplay();
 renderBuildings();
 renderUpgrades();
 FlavorEventsModule.init();
+SaveManager.init();
 
 // Function for general announcements (kept for future use, but not for purchases)
 function announce(message) {
