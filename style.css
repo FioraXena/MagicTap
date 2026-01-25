@@ -24,6 +24,67 @@ h1, h2 {
     margin-bottom: 15px;
 }
 
+/* Notification Area */
+#notification-area {
+    margin-bottom: 15px;
+}
+
+.notification {
+    background-color: #2d3a4a;
+    border: 2px solid #ffd700;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 10px;
+    position: relative;
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.notification-dismiss {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    color: #ccc;
+    font-size: 1.5em;
+    cursor: pointer;
+    padding: 0 8px;
+    line-height: 1;
+}
+
+.notification-dismiss:hover {
+    color: #fff;
+}
+
+.notification-dismiss:focus {
+    outline: 2px solid #007bff;
+    outline-offset: 2px;
+}
+
+.notification-title {
+    color: #ffd700;
+    font-size: 1.1em;
+    font-weight: bold;
+    margin: 0 0 5px 0;
+}
+
+.notification-content {
+    color: #f0f0f0;
+    font-size: 1.2em;
+    margin: 0;
+}
+
 .game-stats, .game-actions, footer nav {
     text-align: center;
     margin-bottom: 20px;

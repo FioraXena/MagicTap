@@ -33,6 +33,37 @@ const AchievementsModule = (function() {
 
     let earnedCount = 0;
 
+    function showNotification(achievementName) {
+        const notificationArea = document.getElementById('notification-area');
+        if (!notificationArea) return;
+
+        const notification = document.createElement('div');
+        notification.className = 'notification';
+        notification.setAttribute('role', 'alert');
+
+        const dismissBtn = document.createElement('button');
+        dismissBtn.className = 'notification-dismiss';
+        dismissBtn.setAttribute('aria-label', 'Dismiss notification');
+        dismissBtn.textContent = 'X';
+        dismissBtn.addEventListener('click', () => {
+            notification.remove();
+        });
+
+        const title = document.createElement('p');
+        title.className = 'notification-title';
+        title.textContent = 'New Achievement!';
+
+        const content = document.createElement('p');
+        content.className = 'notification-content';
+        content.textContent = achievementName;
+
+        notification.appendChild(dismissBtn);
+        notification.appendChild(title);
+        notification.appendChild(content);
+
+        notificationArea.prepend(notification);
+    }
+
     function getHTML() {
         return `
         <section id="achievements-panel" class="game-panel" hidden>
@@ -72,6 +103,7 @@ const AchievementsModule = (function() {
                 earnedCount++;
                 newAchievements = true;
                 StatisticsModule.addAchievementEarned();
+                showNotification(achievement.name);
             }
         });
 
