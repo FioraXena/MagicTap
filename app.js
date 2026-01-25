@@ -76,8 +76,8 @@ const upgrades = [
 
 // --- Helper Functions ---
 function getBuildingCurrentCost(building) {
-    // Exponential cost increase: baseCost * 1.07^owned
-    return building.baseCost * Math.pow(1.07, building.owned);
+    // Exponential cost increase: baseCost * 1.15^owned
+    return building.baseCost * Math.pow(1.15, building.owned);
 }
 
 function formatTime(seconds) {
