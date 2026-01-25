@@ -1,5 +1,6 @@
 // Flavor Events Module
 const FlavorEventsModule = (function() {
+    // Events can be strings (always visible) or objects with text and unlockCondition
     const flavorTexts = [
         'The air shimmers with magical potential.',
         'A faint hum of arcane energy fills the room.',
@@ -32,14 +33,48 @@ const FlavorEventsModule = (function() {
         return (Math.floor(Math.random() * 131) + 20) * 1000;
     }
 
+    function getAvailableEvents() {
+        // Filter to only events that are unlocked
+        return flavorTexts.filter(event => {
+            if (typeof event === 'string') {
+                return true; // Simple strings are always available
+            }
+            // Object with unlockCondition
+            if (event.unlockCondition) {
+                try {
+                    return event.unlockCondition();
+                } catch (e) {
+                    return false;
+                }
+            }
+            return true;
+        });
+    }
+
+    function getEventText(event) {
+        if (typeof event === 'string') {
+            return event;
+        }
+        return event.text;
+    }
+
     function getRandomFlavorText() {
-        return flavorTexts[Math.floor(Math.random() * flavorTexts.length)];
+        const available = getAvailableEvents();
+        if (available.length === 0) return null;
+        const event = available[Math.floor(Math.random() * available.length)];
+        return getEventText(event);
     }
 
     function showFlavorEvent() {
         if (!eventsLog) return;
 
         const message = getRandomFlavorText();
+        if (!message) {
+            // No available events, try again later
+            scheduleNextEvent();
+            return;
+        }
+
         const eventElement = document.createElement('p');
         eventElement.textContent = message;
         eventElement.className = 'flavor-event';
