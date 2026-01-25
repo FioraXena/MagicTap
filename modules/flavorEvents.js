@@ -29,8 +29,8 @@ const FlavorEventsModule = (function() {
     }
 
     function getRandomInterval() {
-        // Random number between 20 and 150 seconds
-        return (Math.floor(Math.random() * 131) + 20) * 1000;
+        // Random number between 45 and 300 seconds
+        return (Math.floor(Math.random() * 256) + 45) * 1000;
     }
 
     function getAvailableEvents() {
