@@ -120,6 +120,13 @@ footer {
 .building-item .building-description {
     font-size: 0.9em;
     color: #ccc;
+    margin-bottom: 5px;
+}
+
+.building-item .building-flavor {
+    font-size: 0.85em;
+    color: #888;
+    font-style: italic;
     margin-bottom: 10px;
 }
 
@@ -187,6 +194,13 @@ footer {
 .upgrade-item .upgrade-description {
     font-size: 0.9em;
     color: #ccc;
+    margin-bottom: 5px;
+}
+
+.upgrade-item .upgrade-flavor {
+    font-size: 0.85em;
+    color: #888;
+    font-style: italic;
     margin-bottom: 10px;
 }
 
@@ -257,6 +271,26 @@ footer {
 h2:focus {
     outline: 2px solid #007bff;
     outline-offset: 4px;
+}
+
+/* Events Log */
+#events-log {
+    background-color: #3a3a3a;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+    min-height: 50px;
+}
+
+.flavor-event {
+    font-size: 0.95em;
+    color: #aaa;
+    font-style: italic;
+    margin: 8px 0;
+    padding: 8px 12px;
+    background-color: #4a4a4a;
+    border-left: 3px solid #9b59b6;
+    border-radius: 4px;
 }
 
 /* Game Panels (toggled via navigation) */

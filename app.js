@@ -47,10 +47,13 @@ const buildings = [
         id: 'wizards-hand',
         name: 'Wizard\'s Hand',
         description: 'Generates 0.1 Mana per second.',
+        flavorText: 'A spectral hand that gathers ambient mana from the air.',
         baseCost: 10,
         productionPerSecond: 0.1,
         owned: 0,
-        element: null // To store the DOM element for easy access
+        unlockCondition: () => true, // Always visible
+        isUnlocked: true,
+        element: null
     }
     // Future buildings will go here
 ];
@@ -60,18 +63,21 @@ const upgrades = [
         id: 'magic-theory',
         name: 'Magic Theory',
         description: 'Increases mana per click by 1.',
+        flavorText: 'Understanding the fundamentals amplifies your natural talent.',
         cost: 30,
         effect: () => { manaPerClick += 1; },
         isPurchased: false,
-        element: null // To store the DOM element for easy access
+        unlockCondition: () => true, // Always visible
+        isUnlocked: true,
+        element: null
     }
     // Future upgrades will go here
 ];
 
 // --- Helper Functions ---
 function getBuildingCurrentCost(building) {
-    // Exponential cost increase: baseCost * 1.15^owned
-    return building.baseCost * Math.pow(1.15, building.owned);
+    // Exponential cost increase: baseCost * 1.07^owned
+    return building.baseCost * Math.pow(1.07, building.owned);
 }
 
 function formatTime(seconds) {
@@ -142,6 +148,7 @@ function createBuildingElement(building) {
     buildingDiv.innerHTML = `
         <p id="building-name-${building.id}" class="building-name">${building.name}</p>
         <p class="building-description">${building.description}</p>
+        <p class="building-flavor">${building.flavorText}</p>
         <p class="building-owned" aria-live="polite" aria-atomic="true">Owned: <span>${building.owned}</span></p>
         <p class="building-cost">Cost: <span class="cost-value">${getBuildingCurrentCost(building).toFixed(0)}</span> Mana</p>
         <button id="buy-${building.id}-button" class="buy-building-button">${building.name}, Can Buy</button>
@@ -164,8 +171,33 @@ function updateBuildingDisplay(building) {
 function renderBuildings() {
     buildingsContainer.innerHTML = '';
     buildings.forEach(building => {
-        buildingsContainer.appendChild(createBuildingElement(building));
+        if (building.isUnlocked) {
+            buildingsContainer.appendChild(createBuildingElement(building));
+        }
     });
+}
+
+function checkUnlocks() {
+    let newUnlocks = false;
+
+    buildings.forEach(building => {
+        if (!building.isUnlocked && building.unlockCondition()) {
+            building.isUnlocked = true;
+            newUnlocks = true;
+        }
+    });
+
+    upgrades.forEach(upgrade => {
+        if (!upgrade.isUnlocked && !upgrade.isPurchased && upgrade.unlockCondition()) {
+            upgrade.isUnlocked = true;
+            newUnlocks = true;
+        }
+    });
+
+    if (newUnlocks) {
+        renderBuildings();
+        renderUpgrades();
+    }
 }
 
 // --- Upgrade Logic ---
@@ -201,6 +233,7 @@ function createUpgradeElement(upgrade) {
     upgradeDiv.innerHTML = `
         <p id="upgrade-name-${upgrade.id}" class="upgrade-name">${upgrade.name}</p>
         <p class="upgrade-description">${upgrade.description}</p>
+        <p class="upgrade-flavor">${upgrade.flavorText}</p>
         <p class="upgrade-cost">Cost: <span class="cost-value">${upgrade.cost.toFixed(0)}</span> Mana</p>
         <button id="buy-${upgrade.id}-button" class="buy-upgrade-button">${upgrade.name}, Can Buy</button>
     `;
@@ -231,7 +264,9 @@ function updateUpgradeDisplay(upgrade) {
 function renderUpgrades() {
     upgradesContainer.innerHTML = '';
     upgrades.forEach(upgrade => {
-        upgradesContainer.appendChild(createUpgradeElement(upgrade));
+        if (upgrade.isUnlocked && !upgrade.isPurchased) {
+            upgradesContainer.appendChild(createUpgradeElement(upgrade));
+        }
     });
 }
 
@@ -356,8 +391,9 @@ function gameLoop() {
     }
     StatisticsModule.setCurrentMana(mana);
 
-    // Check achievements
+    // Check achievements and unlocks
     AchievementsModule.checkAchievements(StatisticsModule.getStats());
+    checkUnlocks();
 
     updateDisplay();
 }
@@ -370,6 +406,7 @@ setupNavigation();
 updateDisplay();
 renderBuildings();
 renderUpgrades();
+FlavorEventsModule.init();
 
 // Function for general announcements (kept for future use, but not for purchases)
 function announce(message) {
