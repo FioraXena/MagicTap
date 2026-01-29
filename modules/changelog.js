@@ -2,6 +2,16 @@
 const ChangelogModule = (function() {
     const changelog = [
         {
+            version: '0.02',
+            changes: [
+                'Added save system with auto-save, manual save/load, and export/import.',
+                'Added ability to reset progress in Options.',
+                'Added new building: Wizard\'s Eye.',
+                'Added new upgrades: Magic Sight and Arcane Tap.',
+                'Renamed achievements for clarity.'
+            ]
+        },
+        {
             version: '0.01',
             changes: [
                 'Initial release.'
