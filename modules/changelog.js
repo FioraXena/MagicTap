@@ -2,6 +2,20 @@
 const ChangelogModule = (function() {
     const changelog = [
         {
+            version: '0.03',
+            changes: [
+                'Added Prestige system with Mana Crystals.',
+                'Added Prestige Store with purchasable upgrades.',
+                'Added Spell Core prestige upgrade (+5% MPS).',
+                'Added new building: Magus.',
+                'Added Arcane Focus and Components\' Pouch upgrades.',
+                'Added Magic Fingers upgrade line (10 levels).',
+                'Added 9 magic school upgrades (Abjuration, Conjuration, etc.).',
+                'Prestige unlocks at 1 billion Mana gathered.',
+                'Each Mana Crystal grants +1% production bonus.'
+            ]
+        },
+        {
             version: '0.02',
             changes: [
                 'Added save system with auto-save, manual save/load, and export/import.',
