@@ -52,6 +52,22 @@
         </nav>
     </footer>
 
+    <script>
+        // Global error handler to catch and display JavaScript errors
+        window.onerror = function(message, source, lineno, colno, error) {
+            const errorDiv = document.createElement('div');
+            errorDiv.id = 'error-display';
+            errorDiv.setAttribute('role', 'alert');
+            errorDiv.style.cssText = 'background: #ffcccc; border: 2px solid #cc0000; padding: 20px; margin: 20px; color: #000;';
+            errorDiv.innerHTML = '<h2>Game Error</h2>' +
+                '<p>An error occurred while loading the game. This may be caused by corrupted game data.</p>' +
+                '<p><strong>Error:</strong> ' + message + '</p>' +
+                '<p><strong>Location:</strong> ' + source + ' (line ' + lineno + ')</p>' +
+                '<p>Try clearing your browser cache or resetting the game save data.</p>';
+            document.body.insertBefore(errorDiv, document.body.firstChild);
+            return false;
+        };
+    </script>
     <script src="modules/statistics.js"></script>
     <script src="modules/achievements.js"></script>
     <script src="modules/production.js"></script>

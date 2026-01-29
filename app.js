@@ -66,6 +66,18 @@ const buildings = [
         unlockCondition: () => upgrades.find(u => u.id === 'magic-sight').isPurchased,
         isUnlocked: false,
         element: null
+    },
+    {
+        id: 'magus',
+        name: 'Magus',
+        description: 'Casts spells to generate Mana.',
+        flavorText: 'Practitioners of the arcane who go by far too many names.',
+        baseCost: 550,
+        productionPerSecond: 2,
+        owned: 0,
+        unlockCondition: () => upgrades.find(u => u.id === 'magic-schools').isPurchased,
+        isUnlocked: false,
+        element: null
     }
     // Future buildings will go here
 ];
@@ -93,6 +105,18 @@ const upgrades = [
         isPurchased: false,
         unlockCondition: () => true,
         isUnlocked: true,
+        element: null
+    },
+    {
+        id: 'hand-eye-coordination',
+        name: 'Hand-Eye Coordination',
+        description: 'Train the hands and eyes to collaborate.',
+        flavorText: 'A simple training manual, nothing arcane about it, other than its application to the metaphysical.',
+        cost: 500,
+        effect: () => { manaPerClick *= 2; const sb = buildings.find(b => b.id === 'wizards-eye'); if(sb) sb.productionPerSecond *= 2; },
+        isPurchased: false,
+        unlockCondition: () => buildings.find(b => b.id === 'wizards-eye').owned >= 25,
+        isUnlocked: false,
         element: null
     },
     {

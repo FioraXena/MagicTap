@@ -18,8 +18,8 @@ const AchievementsModule = (function() {
         {
         id: 'three-hands',
         name: 'Three Hands',
-        description: 'Purchase 1 Wizard\'s Hand',
-        condition: (stats) => buildings.find(b => b.id === 'wizards-hand').owned >= 1,
+        description: 'Purchase 3 Wizard\'s Hands.',
+        condition: (stats) => buildings.find(b => b.id === 'wizards-hand').owned >= 3,
         isEarned: false
     },
         {
