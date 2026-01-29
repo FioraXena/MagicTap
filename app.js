@@ -287,6 +287,114 @@ const upgrades = [
         unlockCondition: () => upgrades.find(u => u.id === 'magic-fingers-9').isPurchased,
         isUnlocked: false,
         element: null
+    },
+    {
+        id: 'abjuration',
+        name: 'Abjuration',
+        description: 'Increases Mana per second by 1%.',
+        flavorText: '',
+        cost: 9999,
+        effect: () => { manaPerSecond *= 1.01; },
+        isPurchased: false,
+        unlockCondition: () => upgrades.find(u => u.id === 'magic-schools').isPurchased && buildings.find(b => b.id === 'magus').owned >= 10,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'conjuration',
+        name: 'Conjuration',
+        description: 'Increases Mana per second by 1%.',
+        flavorText: '',
+        cost: 19999,
+        effect: () => { manaPerSecond *= 1.01; },
+        isPurchased: false,
+        unlockCondition: () => upgrades.find(u => u.id === 'magic-schools').isPurchased && buildings.find(b => b.id === 'magus').owned >= 10,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'evocation',
+        name: 'Evocation',
+        description: 'Increases Mana per second by 2%.',
+        flavorText: '',
+        cost: 49999,
+        effect: () => { manaPerSecond *= 1.02; },
+        isPurchased: false,
+        unlockCondition: () => upgrades.find(u => u.id === 'magic-schools').isPurchased && buildings.find(b => b.id === 'magus').owned >= 10,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'enchantment',
+        name: 'Enchantment',
+        description: 'Increases Mana per second by 1%.',
+        flavorText: '',
+        cost: 49999,
+        effect: () => { manaPerSecond *= 1.01; },
+        isPurchased: false,
+        unlockCondition: () => upgrades.find(u => u.id === 'magic-schools').isPurchased && buildings.find(b => b.id === 'magus').owned >= 10,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'illusion',
+        name: 'Illusion',
+        description: 'Increases Mana per second by 2%.',
+        flavorText: '',
+        cost: 49999,
+        effect: () => { manaPerSecond *= 1.02; },
+        isPurchased: false,
+        unlockCondition: () => upgrades.find(u => u.id === 'magic-schools').isPurchased && buildings.find(b => b.id === 'magus').owned >= 10,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'necromancy',
+        name: 'Necromancy',
+        description: 'Increases Mana per second by 2%.',
+        flavorText: '',
+        cost: 99999,
+        effect: () => { manaPerSecond *= 1.02; },
+        isPurchased: false,
+        unlockCondition: () => upgrades.find(u => u.id === 'magic-schools').isPurchased && buildings.find(b => b.id === 'magus').owned >= 10,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'summoning',
+        name: 'Summoning',
+        description: 'Increases Mana per second by 2%.',
+        flavorText: '',
+        cost: 199999,
+        effect: () => { manaPerSecond *= 1.02; },
+        isPurchased: false,
+        unlockCondition: () => upgrades.find(u => u.id === 'magic-schools').isPurchased && buildings.find(b => b.id === 'magus').owned >= 10,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'transmutation',
+        name: 'Transmutation',
+        description: 'Increases Mana per second by 2%.',
+        flavorText: '',
+        cost: 499999,
+        effect: () => { manaPerSecond *= 1.02; },
+        isPurchased: false,
+        unlockCondition: () => upgrades.find(u => u.id === 'magic-schools').isPurchased && buildings.find(b => b.id === 'magus').owned >= 10,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'prestidigitation',
+        name: 'Prestidigitation',
+        description: 'Increases Mana per second by 1%.',
+        flavorText: 'A wizard\'s first spell, and an all-purpose magic tool.',
+        cost: 15000,
+        effect: () => { manaPerSecond *= 1.01; },
+        isPurchased: false,
+        unlockCondition: () => upgrades.find(u => u.id === 'magic-schools').isPurchased && buildings.find(b => b.id === 'magus').owned >= 10,
+        isUnlocked: false,
+        element: null
     }
     // Future upgrades will go here
 ];
