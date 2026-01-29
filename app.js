@@ -807,8 +807,8 @@ FlavorEventsModule.init();
 SaveManager.init();
 
 // Display version in title
-document.getElementById('version-display').textContent = 'V' + VERSION;
-document.title = 'MagicTap V' + VERSION;
+document.getElementById('game-title').textContent = 'MagicTap, V.' + VERSION;
+document.title = 'MagicTap, V.' + VERSION;
 
 // Function for general announcements (kept for future use, but not for purchases)
 function announce(message) {
