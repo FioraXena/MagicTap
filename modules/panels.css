@@ -197,9 +197,92 @@
     padding: 15px;
 }
 
+#prestige-store-container > p {
+    font-size: 1.2em;
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #3a3a3a;
+    border-radius: 5px;
+}
+
 .prestige-store-note {
     color: #888;
     font-style: italic;
+}
+
+/* Prestige Upgrades */
+#prestige-upgrades-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.prestige-upgrade-item {
+    background-color: #3a3a3a;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #9b59b6;
+}
+
+.prestige-upgrade-item.purchased {
+    border-left-color: #4CAF50;
+    opacity: 0.8;
+}
+
+.prestige-upgrade-name {
+    font-size: 1.2em;
+    color: #9b59b6;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.prestige-upgrade-item.purchased .prestige-upgrade-name {
+    color: #4CAF50;
+}
+
+.prestige-upgrade-description {
+    color: #fff;
+    margin-bottom: 8px;
+}
+
+.prestige-upgrade-flavor {
+    color: #888;
+    font-style: italic;
+    font-size: 0.9em;
+    margin-bottom: 10px;
+}
+
+.prestige-upgrade-cost {
+    color: #ffd700;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.prestige-upgrade-cost span {
+    color: #9b59b6;
+}
+
+.prestige-upgrade-button {
+    padding: 10px 20px;
+    font-size: 1em;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.prestige-upgrade-button.can-afford {
+    background-color: #9b59b6;
+    color: white;
+}
+
+.prestige-upgrade-button.can-afford:hover {
+    background-color: #8e44ad;
+}
+
+.prestige-upgrade-button.cannot-afford {
+    background-color: #555;
+    color: #999;
+    cursor: not-allowed;
 }
 
 /* Finish Prestige Button */
