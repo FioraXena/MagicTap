@@ -189,40 +189,11 @@ const SaveManager = (function() {
     }
 
     function resetGame() {
-        // Reset game state
-        mana = 0;
-        manaPerClick = 1;
-        manaPerSecond = 0;
-        baseManaPerClick = 1;
-        manaPerClickFromUpgrades = 0;
-        mpsFromUpgrades = 0;
-
-        // Reset buildings
-        buildings.forEach(building => {
-            building.owned = 0;
-            building.isUnlocked = building.unlockCondition();
-        });
-
-        // Reset upgrades
-        upgrades.forEach(upgrade => {
-            upgrade.isPurchased = false;
-            upgrade.isUnlocked = upgrade.unlockCondition();
-        });
-
-        // Reset modules
-        StatisticsModule.reset();
-        AchievementsModule.reset();
-
-        // Clear localStorage
+        // Clear localStorage first
         localStorage.removeItem(SAVE_KEY);
 
-        // Re-render everything
-        renderBuildings();
-        renderUpgrades();
-        AchievementsModule.renderAchievements();
-        updateDisplay();
-
-        console.log('Game reset');
+        // Reload the page to ensure clean state
+        window.location.reload();
     }
 
     function startAutoSave(intervalSeconds) {
