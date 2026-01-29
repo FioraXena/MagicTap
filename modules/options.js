@@ -135,7 +135,6 @@ const OptionsModule = (function() {
                 if (confirm('Are you sure you want to reset the game? ALL progress will be lost!')) {
                     if (confirm('This cannot be undone. Reset game?')) {
                         SaveManager.resetGame();
-                        alert('Game has been reset.');
                     }
                 }
             });

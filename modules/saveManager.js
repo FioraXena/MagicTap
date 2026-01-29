@@ -195,11 +195,14 @@ const SaveManager = (function() {
     }
 
     function resetGame() {
-        // Clear localStorage first
+        // Stop auto-save to prevent saving during reset
+        stopAutoSave();
+
+        // Clear the save data from localStorage
         localStorage.removeItem(SAVE_KEY);
 
-        // Reload the page to ensure clean state
-        window.location.reload();
+        // Force reload the page to ensure clean state
+        window.location.href = window.location.href;
     }
 
     function startAutoSave(intervalSeconds) {
