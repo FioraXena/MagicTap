@@ -34,6 +34,7 @@ function initializePanels() {
 
     // Initialize modules that need it
     OptionsModule.init();
+    PrestigeModule.init();
     ChangelogModule.renderChangelog();
     AchievementsModule.renderAchievements();
 }
@@ -194,14 +195,23 @@ function formatTime(seconds) {
 
 function getTimeUntilAffordable(cost) {
     if (mana >= cost) return 0;
-    if (manaPerSecond <= 0) return Infinity;
-    return (cost - mana) / manaPerSecond;
+    const effectiveMPS = typeof getEffectiveMPS === 'function' ? getEffectiveMPS() : manaPerSecond;
+    if (effectiveMPS <= 0) return Infinity;
+    return (cost - mana) / effectiveMPS;
 }
 
 // Function to update the display elements
 function updateDisplay() {
+    // Show effective MPS with prestige bonus
+    const effectiveMPS = typeof getEffectiveMPS === 'function' ? getEffectiveMPS() : manaPerSecond;
+    const prestigeBonus = typeof PrestigeModule !== 'undefined' ? PrestigeModule.getPrestigeLevel() : 0;
+
     manaDisplay.textContent = `${mana.toFixed(0)} Mana`;
-    mpsDisplay.textContent = `${manaPerSecond.toFixed(1)} MPS`;
+    if (prestigeBonus > 0) {
+        mpsDisplay.textContent = `${effectiveMPS.toFixed(1)} MPS (+${prestigeBonus}%)`;
+    } else {
+        mpsDisplay.textContent = `${effectiveMPS.toFixed(1)} MPS`;
+    }
     mpcDisplay.textContent = `${manaPerClick.toFixed(0)} per click`;
     checkAffordability(); // Check affordability for both buildings and upgrades
 }
@@ -479,8 +489,15 @@ function setupNavigation() {
 // --- Game Loop and Initialization ---
 gatherManaButton.addEventListener('click', gatherMana);
 
+// Calculate effective MPS with prestige bonus
+function getEffectiveMPS() {
+    return manaPerSecond * PrestigeModule.getPrestigeMultiplier();
+}
+
 function gameLoop() {
-    const manaFromBuildings = manaPerSecond / 10;
+    // Apply prestige multiplier to production
+    const effectiveMPS = getEffectiveMPS();
+    const manaFromBuildings = effectiveMPS / 10;
     mana += manaFromBuildings;
     if (manaFromBuildings > 0) {
         StatisticsModule.addManaByBuildings(manaFromBuildings);
@@ -492,6 +509,58 @@ function gameLoop() {
     checkUnlocks();
 
     updateDisplay();
+}
+
+// Reset game for prestige ascension (keeps prestige data and total mana stat)
+function resetForPrestige() {
+    // Save total mana before reset
+    const stats = StatisticsModule.getStats();
+    const totalMana = stats.manaTotal;
+    const prestigeData = PrestigeModule.getPrestigeData();
+
+    // Reset game state
+    mana = 0;
+    manaPerClick = 1;
+    manaPerSecond = 0;
+    baseManaPerClick = 1;
+    manaPerClickFromUpgrades = 0;
+    mpsFromUpgrades = 0;
+
+    // Reset buildings
+    buildings.forEach(building => {
+        building.owned = 0;
+        building.isUnlocked = building.unlockCondition === (() => true) || building.id === 'wizards-hand';
+        building.element = null;
+    });
+    // Ensure first building is unlocked
+    const firstBuilding = buildings.find(b => b.id === 'wizards-hand');
+    if (firstBuilding) firstBuilding.isUnlocked = true;
+
+    // Reset upgrades
+    upgrades.forEach(upgrade => {
+        upgrade.isPurchased = false;
+        upgrade.isUnlocked = upgrade.unlockCondition === (() => true) || upgrade.id === 'magic-theory' || upgrade.id === 'magic-sight' || upgrade.id === 'magic-schools';
+        upgrade.element = null;
+    });
+
+    // Clear purchased upgrades container
+    purchasedUpgradesContainer.innerHTML = '';
+
+    // Reset statistics but keep total mana
+    StatisticsModule.reset();
+    const newStats = StatisticsModule.getStats();
+    newStats.manaTotal = totalMana;
+
+    // Restore prestige data
+    PrestigeModule.loadPrestigeData(prestigeData);
+
+    // Re-render UI
+    renderBuildings();
+    renderUpgrades();
+    updateDisplay();
+
+    // Save the game
+    SaveManager.saveGame();
 }
 
 setInterval(gameLoop, 100);

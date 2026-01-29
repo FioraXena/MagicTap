@@ -31,6 +31,7 @@ const SaveManager = (function() {
                 id: a.id,
                 isEarned: a.isEarned
             })),
+            prestige: PrestigeModule.getPrestigeData(),
             options: OptionsModule.getOptions()
         };
     }
@@ -79,6 +80,11 @@ const SaveManager = (function() {
             // Restore achievements
             if (data.achievements) {
                 AchievementsModule.loadAchievements(data.achievements);
+            }
+
+            // Restore prestige
+            if (data.prestige) {
+                PrestigeModule.loadPrestigeData(data.prestige);
             }
 
             // Restore options
@@ -221,6 +227,7 @@ const SaveManager = (function() {
 
     return {
         save,
+        saveGame: save,  // Alias for save
         load,
         exportSave,
         importSave,
