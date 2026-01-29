@@ -142,6 +142,30 @@ const upgrades = [
         unlockCondition: () => true,
         isUnlocked: true,
         element: null
+    },
+    {
+        id: 'arcane-focus',
+        name: 'Arcane Focus',
+        description: 'Doubles Magus production.',
+        flavorText: 'One of a mages\' first tools.',
+        cost: 5000,
+        effect: () => { const m = buildings.find(b => b.id === 'magus'); if(m) m.productionPerSecond *= 2; },
+        isPurchased: false,
+        unlockCondition: () => buildings.find(b => b.id === 'magus').owned >= 1,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'components-pouch',
+        name: 'Components\' Pouch',
+        description: 'Doubles Mana per click.',
+        flavorText: 'One of a mages\' first tools.',
+        cost: 5000,
+        effect: () => { manaPerClick *= 2; },
+        isPurchased: false,
+        unlockCondition: () => buildings.find(b => b.id === 'magus').owned >= 1,
+        isUnlocked: false,
+        element: null
     }
     // Future upgrades will go here
 ];
