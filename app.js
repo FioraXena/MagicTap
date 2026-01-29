@@ -63,7 +63,7 @@ const buildings = [
         baseCost: 50,
         productionPerSecond: 0.5,
         owned: 0,
-        unlockCondition: () => buildings.find(b => b.id === 'wizards-hand').owned >= 10,
+        unlockCondition: () => upgrades.find(u => u.id === 'magic-sight').isPurchased,
         isUnlocked: false,
         element: null
     }
@@ -84,6 +84,18 @@ const upgrades = [
         element: null
     },
     {
+        id: 'magic-sight',
+        name: 'Magic Sight',
+        description: 'Unlocks the Wizard\'s Eye building.',
+        flavorText: 'To peer into the unknown is to accept the unknown exists.',
+        cost: 30,
+        effect: () => { const b = buildings.find(b => b.id === 'wizards-eye'); if(b) b.isUnlocked = true; },
+        isPurchased: false,
+        unlockCondition: () => true,
+        isUnlocked: true,
+        element: null
+    },
+    {
         id: 'arcane-tap',
         name: 'Arcane Tap',
         description: 'Increase Mana per click.',
@@ -93,6 +105,18 @@ const upgrades = [
         isPurchased: false,
         unlockCondition: () => upgrades.find(u => u.id === 'magic-theory').isPurchased,
         isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'magic-schools',
+        name: 'Magic Schools',
+        description: 'Increases Mana per second.',
+        flavorText: 'Theory gives way to practice.',
+        cost: 500,
+        effect: () => { manaPerSecond *= 2; },
+        isPurchased: false,
+        unlockCondition: () => true,
+        isUnlocked: true,
         element: null
     }
     // Future upgrades will go here
