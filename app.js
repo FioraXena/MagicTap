@@ -167,6 +167,126 @@ const upgrades = [
         unlockCondition: () => buildings.find(b => b.id === 'magus').owned >= 1,
         isUnlocked: false,
         element: null
+    },
+    {
+        id: 'magic-fingers-1',
+        name: 'Magic Fingers LV. 1',
+        description: 'Boosts Wizard\'s Hand production by 1% and doubles Mana per click.',
+        flavorText: 'Train your Wizard\'s Hands by focusing power into each individual finger.',
+        cost: 1000,
+        effect: () => { const wh = buildings.find(b => b.id === 'wizards-hand'); if(wh) wh.productionPerSecond *= 1.01; manaPerClick *= 2; },
+        isPurchased: false,
+        unlockCondition: () => buildings.find(b => b.id === 'wizards-hand').owned >= 25,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'magic-fingers-2',
+        name: 'Magic Fingers LV. 2',
+        description: 'Boosts Wizard\'s Hand production by 1% and doubles Mana per click.',
+        flavorText: 'Train your Wizard\'s Hands by focusing power into each individual finger.',
+        cost: 10000,
+        effect: () => { const wh = buildings.find(b => b.id === 'wizards-hand'); if(wh) wh.productionPerSecond *= 1.01; manaPerClick *= 2; },
+        isPurchased: false,
+        unlockCondition: () => upgrades.find(u => u.id === 'magic-fingers-1').isPurchased,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'magic-fingers-3',
+        name: 'Magic Fingers LV. 3',
+        description: 'Boosts Wizard\'s Hand production by 1% and doubles Mana per click.',
+        flavorText: 'Train your Wizard\'s Hands by focusing power into each individual finger.',
+        cost: 100000,
+        effect: () => { const wh = buildings.find(b => b.id === 'wizards-hand'); if(wh) wh.productionPerSecond *= 1.01; manaPerClick *= 2; },
+        isPurchased: false,
+        unlockCondition: () => upgrades.find(u => u.id === 'magic-fingers-2').isPurchased,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'magic-fingers-4',
+        name: 'Magic Fingers LV. 4',
+        description: 'Boosts Wizard\'s Hand production by 1% and doubles Mana per click.',
+        flavorText: 'Train your Wizard\'s Hands by focusing power into each individual finger.',
+        cost: 1000000,
+        effect: () => { const wh = buildings.find(b => b.id === 'wizards-hand'); if(wh) wh.productionPerSecond *= 1.01; manaPerClick *= 2; },
+        isPurchased: false,
+        unlockCondition: () => upgrades.find(u => u.id === 'magic-fingers-3').isPurchased,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'magic-fingers-5',
+        name: 'Magic Fingers LV. 5',
+        description: 'Boosts Wizard\'s Hand production by 1% and doubles Mana per click.',
+        flavorText: 'Train your Wizard\'s Hands by focusing power into each individual finger.',
+        cost: 10000000,
+        effect: () => { const wh = buildings.find(b => b.id === 'wizards-hand'); if(wh) wh.productionPerSecond *= 1.01; manaPerClick *= 2; },
+        isPurchased: false,
+        unlockCondition: () => upgrades.find(u => u.id === 'magic-fingers-4').isPurchased,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'magic-fingers-6',
+        name: 'Magic Fingers LV. 6',
+        description: 'Boosts Wizard\'s Hand production by 1% and doubles Mana per click.',
+        flavorText: 'Train your Wizard\'s Hands by focusing power into each individual finger.',
+        cost: 100000000,
+        effect: () => { const wh = buildings.find(b => b.id === 'wizards-hand'); if(wh) wh.productionPerSecond *= 1.01; manaPerClick *= 2; },
+        isPurchased: false,
+        unlockCondition: () => upgrades.find(u => u.id === 'magic-fingers-5').isPurchased,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'magic-fingers-7',
+        name: 'Magic Fingers LV. 7',
+        description: 'Boosts Wizard\'s Hand production by 1% and doubles Mana per click.',
+        flavorText: 'Train your Wizard\'s Hands by focusing power into each individual finger.',
+        cost: 1000000000,
+        effect: () => { const wh = buildings.find(b => b.id === 'wizards-hand'); if(wh) wh.productionPerSecond *= 1.01; manaPerClick *= 2; },
+        isPurchased: false,
+        unlockCondition: () => upgrades.find(u => u.id === 'magic-fingers-6').isPurchased,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'magic-fingers-8',
+        name: 'Magic Fingers LV. 8',
+        description: 'Boosts Wizard\'s Hand production by 1% and doubles Mana per click.',
+        flavorText: 'Train your Wizard\'s Hands by focusing power into each individual finger.',
+        cost: 10000000000,
+        effect: () => { const wh = buildings.find(b => b.id === 'wizards-hand'); if(wh) wh.productionPerSecond *= 1.01; manaPerClick *= 2; },
+        isPurchased: false,
+        unlockCondition: () => upgrades.find(u => u.id === 'magic-fingers-7').isPurchased,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'magic-fingers-9',
+        name: 'Magic Fingers LV. 9',
+        description: 'Boosts Wizard\'s Hand production by 1% and doubles Mana per click.',
+        flavorText: 'Train your Wizard\'s Hands by focusing power into each individual finger.',
+        cost: 100000000000,
+        effect: () => { const wh = buildings.find(b => b.id === 'wizards-hand'); if(wh) wh.productionPerSecond *= 1.01; manaPerClick *= 2; },
+        isPurchased: false,
+        unlockCondition: () => upgrades.find(u => u.id === 'magic-fingers-8').isPurchased,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'magic-fingers-10',
+        name: 'Magic Fingers LV. 10',
+        description: 'Boosts Wizard\'s Hand production by 1% and doubles Mana per click.',
+        flavorText: 'Train your Wizard\'s Hands by focusing power into each individual finger.',
+        cost: 1000000000000,
+        effect: () => { const wh = buildings.find(b => b.id === 'wizards-hand'); if(wh) wh.productionPerSecond *= 1.01; manaPerClick *= 2; },
+        isPurchased: false,
+        unlockCondition: () => upgrades.find(u => u.id === 'magic-fingers-9').isPurchased,
+        isUnlocked: false,
+        element: null
     }
     // Future upgrades will go here
 ];
