@@ -495,6 +495,11 @@ function getEffectiveMPS() {
 }
 
 function gameLoop() {
+    // Skip production if in prestige mode
+    if (PrestigeModule.isPrestigeMode()) {
+        return;
+    }
+
     // Apply prestige multiplier to production
     const effectiveMPS = getEffectiveMPS();
     const manaFromBuildings = effectiveMPS / 10;
@@ -508,16 +513,14 @@ function gameLoop() {
     AchievementsModule.checkAchievements(StatisticsModule.getStats());
     checkUnlocks();
 
+    // Update prestige display (for countdown timers)
+    PrestigeModule.updateDisplay();
+
     updateDisplay();
 }
 
 // Reset game for prestige ascension (keeps prestige data and total mana stat)
 function resetForPrestige() {
-    // Save total mana before reset
-    const stats = StatisticsModule.getStats();
-    const totalMana = stats.manaTotal;
-    const prestigeData = PrestigeModule.getPrestigeData();
-
     // Reset game state
     mana = 0;
     manaPerClick = 1;
@@ -529,7 +532,7 @@ function resetForPrestige() {
     // Reset buildings
     buildings.forEach(building => {
         building.owned = 0;
-        building.isUnlocked = building.unlockCondition === (() => true) || building.id === 'wizards-hand';
+        building.isUnlocked = false;
         building.element = null;
     });
     // Ensure first building is unlocked
@@ -539,20 +542,21 @@ function resetForPrestige() {
     // Reset upgrades
     upgrades.forEach(upgrade => {
         upgrade.isPurchased = false;
-        upgrade.isUnlocked = upgrade.unlockCondition === (() => true) || upgrade.id === 'magic-theory' || upgrade.id === 'magic-sight' || upgrade.id === 'magic-schools';
+        upgrade.isUnlocked = false;
         upgrade.element = null;
+    });
+    // Ensure starting upgrades are unlocked
+    const startingUpgrades = ['magic-theory', 'magic-sight', 'magic-schools'];
+    startingUpgrades.forEach(id => {
+        const upgrade = upgrades.find(u => u.id === id);
+        if (upgrade) upgrade.isUnlocked = true;
     });
 
     // Clear purchased upgrades container
     purchasedUpgradesContainer.innerHTML = '';
 
     // Reset statistics but keep total mana
-    StatisticsModule.reset();
-    const newStats = StatisticsModule.getStats();
-    newStats.manaTotal = totalMana;
-
-    // Restore prestige data
-    PrestigeModule.loadPrestigeData(prestigeData);
+    StatisticsModule.resetForPrestige();
 
     // Re-render UI
     renderBuildings();

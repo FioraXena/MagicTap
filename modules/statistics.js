@@ -118,6 +118,23 @@ const StatisticsModule = (function() {
         stats.spellsCastTotal = 0;
     }
 
+    // Reset for prestige - keeps total mana
+    function resetForPrestige() {
+        const keepTotalMana = stats.manaTotal;
+        stats.manaByClick = 0;
+        stats.manaByBuildings = 0;
+        stats.currentMana = 0;
+        stats.manaThisRun = 0;
+        stats.totalBuildingsOwned = 0;
+        stats.upgradesPurchased = 0;
+        stats.spellsCastThisRun = 0;
+        // Keep these:
+        stats.manaTotal = keepTotalMana;
+        // stats.achievementsEarned stays
+        // stats.spellsCastTotal stays
+        // stats.manaSpentOnPrestige stays
+    }
+
     return {
         getHTML,
         updateDisplay,
@@ -130,6 +147,7 @@ const StatisticsModule = (function() {
         addSpellCast,
         getStats,
         loadStats,
-        reset
+        reset,
+        resetForPrestige
     };
 })();

@@ -129,10 +129,17 @@
     margin-bottom: 15px;
 }
 
+.prestige-note {
+    color: #888;
+    font-style: italic;
+    font-size: 0.9em;
+}
+
 .prestige-button {
     background-color: #9b59b6;
     font-size: 1.2em;
     padding: 15px 30px;
+    margin-top: 15px;
 }
 
 .prestige-button:hover:not(:disabled) {
@@ -148,9 +155,71 @@
     margin: 10px 0;
 }
 
-#prestige-points, #times-prestiged {
+#prestige-container hr {
+    border: none;
+    border-top: 1px solid #555;
+    margin: 15px 0;
+}
+
+#prestige-countdown,
+#prestige-next-countdown {
+    color: #ffd700;
+    font-weight: bold;
+}
+
+#prestige-pending-crystals,
+#prestige-current-crystals,
+#prestige-store-crystals {
     color: #9b59b6;
     font-weight: bold;
+}
+
+#prestige-bonus,
+#times-prestiged {
+    color: #4CAF50;
+    font-weight: bold;
+}
+
+#prestige-gain-info {
+    font-size: 1.1em;
+    background-color: #3a3a3a;
+    padding: 10px 15px;
+    border-radius: 5px;
+    border-left: 4px solid #9b59b6;
+}
+
+/* Prestige Store Panel */
+#prestige-store-panel {
+    background-color: #2a2a2a;
+}
+
+#prestige-store-container {
+    padding: 15px;
+}
+
+.prestige-store-note {
+    color: #888;
+    font-style: italic;
+}
+
+/* Finish Prestige Button */
+#finish-prestige-container {
+    text-align: center;
+    padding: 15px;
+}
+
+#finish-prestige-button {
+    background-color: #9b59b6;
+    color: white;
+    font-size: 1.3em;
+    padding: 15px 40px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+#finish-prestige-button:hover {
+    background-color: #8e44ad;
 }
 
 /* Changelog Panel */
