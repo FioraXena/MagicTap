@@ -2,33 +2,40 @@
 const AchievementsModule = (function() {
     const achievements = [
         {
-            id: 'first-mana',
-            name: 'First Spark',
-            description: 'Gather your first mana.',
-            condition: (stats) => stats.manaTotal >= 1,
-            isEarned: false
-        },
+        id: 'drop-in-the-bucket',
+        name: 'Drop In The Bucket',
+        description: 'Gather 1 mana',
+        condition: (stats) => stats.currentMana >= 1,
+        isEarned: false
+    },
         {
-            id: 'hundred-mana',
-            name: 'Mana Collector',
-            description: 'Gather 100 mana total.',
-            condition: (stats) => stats.manaTotal >= 100,
-            isEarned: false
-        },
+        id: 'mana-to-spare',
+        name: 'Mana To Spare',
+        description: 'Have 100 current Mana.',
+        condition: (stats) => stats.currentMana >= 100,
+        isEarned: false
+    },
         {
-            id: 'first-building',
-            name: 'Apprentice Builder',
-            description: 'Purchase your first building.',
-            condition: (stats) => stats.totalBuildingsOwned >= 1,
-            isEarned: false
-        },
+        id: 'three-hands',
+        name: 'Three Hands',
+        description: 'Purchase 1 Wizard\'s Hand',
+        condition: (stats) => buildings.find(b => b.id === 'wizards-hand').owned >= 1,
+        isEarned: false
+    },
         {
-            id: 'first-upgrade',
-            name: 'Student of Magic',
-            description: 'Purchase your first upgrade.',
-            condition: (stats) => stats.upgradesPurchased >= 1,
-            isEarned: false
-        }
+        id: 'start-your-studies',
+        name: 'Start Your Studies!',
+        description: 'Purchase Magic Theory.',
+        condition: (stats) => upgrades.find(u => u.id === 'magic-theory').isPurchased,
+        isEarned: false
+    },
+    {
+        id: 'many-hands',
+        name: 'Many Hands',
+        description: 'Purchase 25 Wizard\'s Hands.',
+        condition: (stats) => buildings.find(b => b.id === 'wizards-hand').owned >= 25,
+        isEarned: false
+    }
     ];
 
     let earnedCount = 0;

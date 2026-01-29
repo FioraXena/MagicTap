@@ -51,8 +51,20 @@ const buildings = [
         baseCost: 10,
         productionPerSecond: 0.1,
         owned: 0,
-        unlockCondition: () => true, // Always visible
+        unlockCondition: () => true,
         isUnlocked: true,
+        element: null
+    },
+    {
+        id: 'wizards-eye',
+        name: 'Wizard\'s Eye',
+        description: 'Generates 0.5 Mana per second.',
+        flavorText: 'One must see power, to be able to grasp it.',
+        baseCost: 50,
+        productionPerSecond: 0.5,
+        owned: 0,
+        unlockCondition: () => buildings.find(b => b.id === 'wizards-hand').owned >= 10,
+        isUnlocked: false,
         element: null
     }
     // Future buildings will go here
@@ -69,6 +81,18 @@ const upgrades = [
         isPurchased: false,
         unlockCondition: () => true, // Always visible
         isUnlocked: true,
+        element: null
+    },
+    {
+        id: 'arcane-tap',
+        name: 'Arcane Tap',
+        description: 'Increase Mana per click.',
+        flavorText: 'Learn how to improve the gathering of mana, gaining more with less effort.',
+        cost: 25,
+        effect: () => { manaPerClick *= 2; },
+        isPurchased: false,
+        unlockCondition: () => upgrades.find(u => u.id === 'magic-theory').isPurchased,
+        isUnlocked: false,
         element: null
     }
     // Future upgrades will go here
