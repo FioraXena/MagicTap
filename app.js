@@ -551,6 +551,7 @@ function buyUpgrade(upgradeId) {
         manaPerClickFromUpgrades = manaPerClick - baseManaPerClick;
         ProductionModule.setManaPerClickFromUpgrades(manaPerClickFromUpgrades);
         updateUpgradeDisplay(upgrade);
+        renderBuildings(); // Re-render buildings in case upgrade unlocked one
         updateDisplay(); // Update main displays and affordability
     } else {
         // Do nothing if cannot afford
