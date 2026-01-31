@@ -183,10 +183,10 @@ const upgrades = [
         name: 'Hand-Eye Coordination',
         description: 'Train the hands and eyes to collaborate.',
         flavorText: 'A simple training manual, nothing arcane about it, other than its application to the metaphysical.',
-        cost: 500,
+        cost: 1250,
         effect: () => { manaPerClick *= 2; const sb = buildings.find(b => b.id === 'wizards-eye'); if(sb) sb.productionPerSecond *= 2; recalculateMPS(); },
         isPurchased: false,
-        unlockCondition: () => buildings.find(b => b.id === 'wizards-eye').owned >= 25,
+        unlockCondition: () => buildings.find(b => b.id === 'wizards-hand').owned >= 25 && buildings.find(b => b.id === 'wizards-eye').owned >= 25,
         isUnlocked: false,
         element: null
     },
