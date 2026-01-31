@@ -16,7 +16,8 @@ const FlavorEventsModule = (function() {
         'The stars align in your favor.',
         'A distant tower glows on the horizon.',
         'The familiar hum of magic comforts you.',
-        'Runes flicker briefly in the shadows.'
+        'Runes flicker briefly in the shadows.',
+        // === INSERT NEW EVENTS HERE ===
     ];
 
     let eventsLog = null;

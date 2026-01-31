@@ -85,6 +85,28 @@ h1, h2 {
     margin: 0;
 }
 
+.dismiss-all-button {
+    display: block;
+    width: 100%;
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    background-color: #6c757d;
+    color: #fff;
+    border: 2px solid #ffd700;
+    border-radius: 8px;
+    font-size: 1em;
+    cursor: pointer;
+}
+
+.dismiss-all-button:hover {
+    background-color: #5a6268;
+}
+
+.dismiss-all-button:focus {
+    outline: 2px solid #007bff;
+    outline-offset: 2px;
+}
+
 .game-stats, .game-actions, footer nav {
     text-align: center;
     margin-bottom: 20px;

@@ -4,7 +4,9 @@ const OptionsModule = (function() {
         soundEnabled: true,
         notificationsEnabled: true,
         autoSaveEnabled: true,
-        autoSaveInterval: 30
+        autoSaveInterval: 30,
+        truncateLargeNumbers: false,
+        numberFormat: 'basic' // 'basic' or 'scientific'
     };
 
     function getHTML() {
@@ -33,6 +35,23 @@ const OptionsModule = (function() {
                         <input type="checkbox" id="option-autosave" checked>
                         Enable Auto-Save
                     </label>
+                </div>
+                <div class="option-group">
+                    <h3>Number Display</h3>
+                    <label class="option-item">
+                        <input type="checkbox" id="option-truncate">
+                        Truncate Large Numbers
+                    </label>
+                    <label class="option-item">
+                        <span id="number-format-label">Number Format:</span>
+                        <select id="option-number-format" aria-labelledby="number-format-label">
+                            <option value="basic">Basic Numbers</option>
+                            <option value="scientific">Scientific Notation</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="option-group">
+                    <button id="save-options-button">Save Changes</button>
                 </div>
                 <div class="option-group danger-zone">
                     <h3>Danger Zone</h3>
@@ -63,6 +82,40 @@ const OptionsModule = (function() {
         if (autosaveCheckbox) {
             autosaveCheckbox.addEventListener('change', (e) => {
                 options.autoSaveEnabled = e.target.checked;
+            });
+        }
+
+        // Number display options
+        const truncateCheckbox = document.getElementById('option-truncate');
+        const numberFormatSelect = document.getElementById('option-number-format');
+        const saveOptionsButton = document.getElementById('save-options-button');
+
+        if (truncateCheckbox) {
+            truncateCheckbox.addEventListener('change', (e) => {
+                options.truncateLargeNumbers = e.target.checked;
+            });
+        }
+
+        if (numberFormatSelect) {
+            numberFormatSelect.addEventListener('change', (e) => {
+                options.numberFormat = e.target.value;
+            });
+        }
+
+        if (saveOptionsButton) {
+            saveOptionsButton.addEventListener('click', () => {
+                if (SaveManager.save()) {
+                    // Close the options panel
+                    const optionsPanel = document.getElementById('options-panel');
+                    if (optionsPanel) {
+                        optionsPanel.hidden = true;
+                    }
+                    // Return focus to options button
+                    const optionsButton = document.getElementById('options-button');
+                    if (optionsButton) {
+                        optionsButton.focus();
+                    }
+                }
             });
         }
 
@@ -147,16 +200,45 @@ const OptionsModule = (function() {
             options.notificationsEnabled = savedOptions.notificationsEnabled !== undefined ? savedOptions.notificationsEnabled : true;
             options.autoSaveEnabled = savedOptions.autoSaveEnabled !== undefined ? savedOptions.autoSaveEnabled : true;
             options.autoSaveInterval = savedOptions.autoSaveInterval || 30;
+            options.truncateLargeNumbers = savedOptions.truncateLargeNumbers !== undefined ? savedOptions.truncateLargeNumbers : false;
+            options.numberFormat = savedOptions.numberFormat || 'basic';
 
             // Update checkboxes to match loaded options
             const soundCheckbox = document.getElementById('option-sound');
             const notificationsCheckbox = document.getElementById('option-notifications');
             const autosaveCheckbox = document.getElementById('option-autosave');
+            const truncateCheckbox = document.getElementById('option-truncate');
+            const numberFormatSelect = document.getElementById('option-number-format');
 
             if (soundCheckbox) soundCheckbox.checked = options.soundEnabled;
             if (notificationsCheckbox) notificationsCheckbox.checked = options.notificationsEnabled;
             if (autosaveCheckbox) autosaveCheckbox.checked = options.autoSaveEnabled;
+            if (truncateCheckbox) truncateCheckbox.checked = options.truncateLargeNumbers;
+            if (numberFormatSelect) numberFormatSelect.value = options.numberFormat;
         }
+    }
+
+    // Format a number based on current options
+    function formatNumber(num) {
+        if (options.numberFormat === 'scientific' && Math.abs(num) >= 1000000) {
+            return num.toExponential(2);
+        }
+
+        if (options.truncateLargeNumbers && Math.abs(num) >= 1000) {
+            const suffixes = ['', 'K', 'M', 'B', 'T', 'Qa', 'Qi', 'Sx', 'Sp', 'Oc', 'No', 'Dc'];
+            let tier = Math.floor(Math.log10(Math.abs(num)) / 3);
+            if (tier > suffixes.length - 1) tier = suffixes.length - 1;
+            const suffix = suffixes[tier];
+            const scale = Math.pow(10, tier * 3);
+            const scaled = num / scale;
+            return scaled.toFixed(2) + suffix;
+        }
+
+        // Basic format with commas
+        if (Number.isInteger(num)) {
+            return num.toLocaleString();
+        }
+        return num.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
     }
 
     function getOptions() {
@@ -167,6 +249,7 @@ const OptionsModule = (function() {
         getHTML,
         init,
         getOptions,
-        loadOptions
+        loadOptions,
+        formatNumber
     };
 })();

@@ -2,6 +2,22 @@
 const ChangelogModule = (function() {
     const changelog = [
         {
+            version: '0.4',
+            title: 'The Overhaul Update',
+            changes: [
+                'Added Wizard Rank system with 37 ranks based on achievements earned.',
+                'Added Magic Proficiency mechanic (4% per achievement).',
+                'Added new building: Ley Line (15 MPS, unlocked via upgrade).',
+                'Added 50 achievements across all building types and milestones.',
+                'Added number formatting options (truncate large numbers, scientific notation).',
+                'Added Dismiss All button for notifications (appears at 3+ notifications).',
+                'Added bonus prestige level upgrades (Mana-Touched through One With The Weave).',
+                'Added new upgrades: Ley Lines, Invocation, Blood Magic, Mana Manipulation Techniques.',
+                'Improved accessibility with better ARIA labels and keyboard navigation.',
+                'Added Save Changes button to Options panel.'
+            ]
+        },
+        {
             version: '0.03',
             changes: [
                 'Added Prestige system with Mana Crystals.',
@@ -52,8 +68,9 @@ const ChangelogModule = (function() {
         changelog.forEach(entry => {
             const entryDiv = document.createElement('div');
             entryDiv.className = 'changelog-entry';
+            const titleText = entry.title ? ` - ${entry.title}` : '';
             entryDiv.innerHTML = `
-                <h3>V${entry.version}</h3>
+                <h3>V${entry.version}${titleText}</h3>
                 <ul>
                     ${entry.changes.map(change => `<li>${change}</li>`).join('')}
                 </ul>

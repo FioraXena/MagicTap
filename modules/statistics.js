@@ -38,12 +38,12 @@ const StatisticsModule = (function() {
     }
 
     function updateDisplay() {
-        document.getElementById('stat-mana-by-click').textContent = stats.manaByClick.toFixed(0);
-        document.getElementById('stat-mana-by-buildings').textContent = stats.manaByBuildings.toFixed(0);
-        document.getElementById('stat-current-mana').textContent = stats.currentMana.toFixed(0);
-        document.getElementById('stat-mana-total').textContent = stats.manaTotal.toFixed(0);
-        document.getElementById('stat-mana-this-run').textContent = stats.manaThisRun.toFixed(0);
-        document.getElementById('stat-mana-prestige').textContent = stats.manaSpentOnPrestige.toFixed(0);
+        document.getElementById('stat-mana-by-click').textContent = OptionsModule.formatNumber(Math.floor(stats.manaByClick));
+        document.getElementById('stat-mana-by-buildings').textContent = OptionsModule.formatNumber(Math.floor(stats.manaByBuildings));
+        document.getElementById('stat-current-mana').textContent = OptionsModule.formatNumber(Math.floor(stats.currentMana));
+        document.getElementById('stat-mana-total').textContent = OptionsModule.formatNumber(Math.floor(stats.manaTotal));
+        document.getElementById('stat-mana-this-run').textContent = OptionsModule.formatNumber(Math.floor(stats.manaThisRun));
+        document.getElementById('stat-mana-prestige').textContent = OptionsModule.formatNumber(Math.floor(stats.manaSpentOnPrestige));
         document.getElementById('stat-buildings-owned').textContent = stats.totalBuildingsOwned;
         document.getElementById('stat-upgrades-purchased').textContent = stats.upgradesPurchased;
         document.getElementById('stat-achievements-earned').textContent = stats.achievementsEarned;

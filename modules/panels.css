@@ -37,6 +37,41 @@
     font-weight: bold;
 }
 
+/* Wizard Rank Display */
+.wizard-rank-section {
+    background: linear-gradient(135deg, #2a2a4a 0%, #3a3a5a 100%);
+    border: 2px solid #6a5acd;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+.wizard-rank-section p {
+    margin: 8px 0;
+    font-size: 1.1em;
+}
+
+.wizard-rank-section strong {
+    color: #9b8ed4;
+}
+
+#wizard-rank-name {
+    color: #ffd700;
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+#magic-proficiency {
+    color: #00ff88;
+    font-weight: bold;
+}
+
+#rank-progress {
+    color: #aaa;
+    font-style: italic;
+    font-size: 0.95em;
+}
+
 .achievements-list {
     list-style: none;
     padding: 0;

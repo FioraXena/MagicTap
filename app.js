@@ -1,4 +1,4 @@
-const VERSION = '0.03';
+const VERSION = '0.4';
 
 let mana = 0;
 let manaPerClick = 1;
@@ -79,8 +79,20 @@ const buildings = [
         unlockCondition: () => upgrades.find(u => u.id === 'magic-schools').isPurchased,
         isUnlocked: false,
         element: null
-    }
-    // Future buildings will go here
+    },
+    {
+        id: 'ley-line',
+        name: 'Ley Line',
+        description: 'Draw upon the planet to gain Mana.',
+        flavorText: 'Draws raw Mana from within the planet.',
+        baseCost: 1550,
+        productionPerSecond: 15,
+        owned: 0,
+        unlockCondition: () => upgrades.find(u => u.id === 'ley-lines').isPurchased,
+        isUnlocked: false,
+        element: null
+    },
+    // === INSERT NEW BUILDINGS HERE ===
 ];
 
 const upgrades = [
@@ -395,8 +407,137 @@ const upgrades = [
         unlockCondition: () => upgrades.find(u => u.id === 'magic-schools').isPurchased && buildings.find(b => b.id === 'magus').owned >= 10,
         isUnlocked: false,
         element: null
-    }
-    // Future upgrades will go here
+    },
+    {
+        id: 'mana-manipulation-techniques',
+        name: 'Mana Manipulation Techniques',
+        description: 'Doubles Mana per click.',
+        flavorText: 'Advanced methods for channeling and shaping raw mana.',
+        cost: 1111,
+        effect: () => { manaPerClick *= 2; },
+        isPurchased: false,
+        unlockCondition: () => upgrades.find(u => u.id === 'magic-theory').isPurchased && upgrades.find(u => u.id === 'magic-sight').isPurchased,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'ley-lines',
+        name: 'Ley Lines',
+        description: 'Unlocks the Ley Line building.',
+        flavorText: 'Tap into the ancient rivers of magic that flow beneath the earth.',
+        cost: 500,
+        effect: () => { const b = buildings.find(b => b.id === 'ley-line'); if(b) b.isUnlocked = true; },
+        isPurchased: false,
+        unlockCondition: () => true,
+        isUnlocked: true,
+        element: null
+    },
+    {
+        id: 'invocation',
+        name: 'Invocation',
+        description: 'Doubles Magus production.',
+        flavorText: 'Call upon greater powers to amplify your magical workings.',
+        cost: 25000,
+        effect: () => { const m = buildings.find(b => b.id === 'magus'); if(m) m.productionPerSecond *= 2; },
+        isPurchased: false,
+        unlockCondition: () => upgrades.find(u => u.id === 'prestidigitation').isPurchased,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'blood-magic',
+        name: 'Blood Magic',
+        description: 'Doubles Magus production.',
+        flavorText: 'A forbidden art that draws power from life force itself.',
+        cost: 1000000,
+        effect: () => { const m = buildings.find(b => b.id === 'magus'); if(m) m.productionPerSecond *= 2; },
+        isPurchased: false,
+        unlockCondition: () => upgrades.find(u => u.id === 'magic-schools').isPurchased &&
+            upgrades.find(u => u.id === 'abjuration').isPurchased &&
+            upgrades.find(u => u.id === 'conjuration').isPurchased &&
+            upgrades.find(u => u.id === 'evocation').isPurchased &&
+            upgrades.find(u => u.id === 'enchantment').isPurchased &&
+            upgrades.find(u => u.id === 'illusion').isPurchased &&
+            upgrades.find(u => u.id === 'necromancy').isPurchased &&
+            upgrades.find(u => u.id === 'summoning').isPurchased &&
+            upgrades.find(u => u.id === 'transmutation').isPurchased &&
+            upgrades.find(u => u.id === 'prestidigitation').isPurchased,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'mana-touched',
+        name: 'Mana-Touched',
+        description: 'Gain +1 bonus prestige level and +2% Mana per second.',
+        flavorText: 'The mana has begun to seep into your very being.',
+        cost: 1000000000000000,
+        effect: () => { PrestigeModule.addBonusPrestigeLevel(1); manaPerSecond *= 1.02; },
+        isPurchased: false,
+        unlockCondition: () => true,
+        isUnlocked: true,
+        element: null
+    },
+    {
+        id: 'mana-drenched',
+        name: 'Mana-Drenched',
+        description: 'Gain +1 bonus prestige level and +2% Mana per second.',
+        flavorText: 'You are saturated with arcane energy.',
+        cost: 1000000000000000,
+        effect: () => { PrestigeModule.addBonusPrestigeLevel(1); manaPerSecond *= 1.02; },
+        isPurchased: false,
+        unlockCondition: () => upgrades.find(u => u.id === 'mana-touched').isPurchased,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'mana-gorged',
+        name: 'Mana-Gorged',
+        description: 'Gain +1 bonus prestige level and +2% Mana per second.',
+        flavorText: 'You have consumed more mana than any mortal should.',
+        cost: 1000000000000000,
+        effect: () => { PrestigeModule.addBonusPrestigeLevel(1); manaPerSecond *= 1.02; },
+        isPurchased: false,
+        unlockCondition: () => upgrades.find(u => u.id === 'mana-drenched').isPurchased,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'mana-warped',
+        name: 'Mana-Warped',
+        description: 'Gain +1 bonus prestige level and +2% Mana per second.',
+        flavorText: 'The mana has changed you, reshaping your essence.',
+        cost: 1000000000000000,
+        effect: () => { PrestigeModule.addBonusPrestigeLevel(1); manaPerSecond *= 1.02; },
+        isPurchased: false,
+        unlockCondition: () => upgrades.find(u => u.id === 'mana-gorged').isPurchased,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'mana-empowered',
+        name: 'Mana-Empowered',
+        description: 'Gain +1 bonus prestige level and +2% Mana per second.',
+        flavorText: 'Raw magical power courses through your veins.',
+        cost: 1000000000000000,
+        effect: () => { PrestigeModule.addBonusPrestigeLevel(1); manaPerSecond *= 1.02; },
+        isPurchased: false,
+        unlockCondition: () => upgrades.find(u => u.id === 'mana-warped').isPurchased,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'one-with-the-weave',
+        name: 'One With The Weave',
+        description: 'Gain +1 bonus prestige level and +2% Mana per second.',
+        flavorText: 'You have become one with the fabric of magic itself.',
+        cost: 1000000000000000,
+        effect: () => { PrestigeModule.addBonusPrestigeLevel(1); manaPerSecond *= 1.02; },
+        isPurchased: false,
+        unlockCondition: () => upgrades.find(u => u.id === 'mana-empowered').isPurchased,
+        isUnlocked: false,
+        element: null
+    },
+    // === INSERT NEW UPGRADES HERE ===
 ];
 
 // --- Helper Functions ---
@@ -434,13 +575,13 @@ function updateDisplay() {
     const effectiveMPS = typeof getEffectiveMPS === 'function' ? getEffectiveMPS() : manaPerSecond;
     const prestigeBonus = typeof PrestigeModule !== 'undefined' ? PrestigeModule.getPrestigeLevel() : 0;
 
-    manaDisplay.textContent = `${mana.toFixed(0)} Mana`;
+    manaDisplay.textContent = `${OptionsModule.formatNumber(Math.floor(mana))} Mana`;
     if (prestigeBonus > 0) {
-        mpsDisplay.textContent = `${effectiveMPS.toFixed(1)} MPS (+${prestigeBonus}%)`;
+        mpsDisplay.textContent = `${OptionsModule.formatNumber(effectiveMPS)} MPS (+${prestigeBonus}%)`;
     } else {
-        mpsDisplay.textContent = `${effectiveMPS.toFixed(1)} MPS`;
+        mpsDisplay.textContent = `${OptionsModule.formatNumber(effectiveMPS)} MPS`;
     }
-    mpcDisplay.textContent = `${manaPerClick.toFixed(0)} per click`;
+    mpcDisplay.textContent = `${OptionsModule.formatNumber(Math.floor(manaPerClick))} per click`;
     checkAffordability(); // Check affordability for both buildings and upgrades
 }
 
@@ -484,7 +625,7 @@ function createBuildingElement(building) {
         <p class="building-description">${building.description}</p>
         <p class="building-flavor">${building.flavorText}</p>
         <p class="building-owned" aria-live="polite" aria-atomic="true">Owned: <span>${building.owned}</span></p>
-        <p class="building-cost">Cost: <span class="cost-value">${getBuildingCurrentCost(building).toFixed(0)}</span> Mana</p>
+        <p class="building-cost">Cost: <span class="cost-value">${OptionsModule.formatNumber(Math.floor(getBuildingCurrentCost(building)))}</span> Mana</p>
         <button id="buy-${building.id}-button" class="buy-building-button">${building.name}, Can Buy</button>
     `;
 
@@ -499,7 +640,7 @@ function updateBuildingDisplay(building) {
     if (!building.element) return;
 
     building.element.querySelector('.building-owned span').textContent = building.owned;
-    building.element.querySelector('.building-cost .cost-value').textContent = getBuildingCurrentCost(building).toFixed(0);
+    building.element.querySelector('.building-cost .cost-value').textContent = OptionsModule.formatNumber(Math.floor(getBuildingCurrentCost(building)));
 }
 
 function renderBuildings() {
@@ -569,7 +710,7 @@ function createUpgradeElement(upgrade) {
         <p id="upgrade-name-${upgrade.id}" class="upgrade-name">${upgrade.name}</p>
         <p class="upgrade-description">${upgrade.description}</p>
         <p class="upgrade-flavor">${upgrade.flavorText}</p>
-        <p class="upgrade-cost">Cost: <span class="cost-value">${upgrade.cost.toFixed(0)}</span> Mana</p>
+        <p class="upgrade-cost">Cost: <span class="cost-value">${OptionsModule.formatNumber(Math.floor(upgrade.cost))}</span> Mana</p>
         <button id="buy-${upgrade.id}-button" class="buy-upgrade-button">${upgrade.name}, Can Buy</button>
     `;
 
@@ -592,7 +733,7 @@ function updateUpgradeDisplay(upgrade) {
         upgrade.element.classList.add('purchased-upgrade-item');
     } else {
         // Affordability handled by checkAffordability
-        upgrade.element.querySelector('.upgrade-cost .cost-value').textContent = upgrade.cost.toFixed(0);
+        upgrade.element.querySelector('.upgrade-cost .cost-value').textContent = OptionsModule.formatNumber(Math.floor(upgrade.cost));
     }
 }
 

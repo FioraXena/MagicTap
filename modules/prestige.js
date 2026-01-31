@@ -3,6 +3,7 @@ const PrestigeModule = (function() {
     // Prestige state
     let manaCrystals = 0;  // Current spendable Mana Crystals
     let totalManaCrystalsEarned = 0;  // Total ever earned (for prestige level)
+    let bonusPrestigeLevels = 0;  // Bonus levels from upgrades (shown as pending)
     let timesPrestiged = 0;
     let isInPrestigeMode = false;
 
@@ -109,6 +110,7 @@ const PrestigeModule = (function() {
                     <p id="prestige-gain-info">Prestige: (Gain <span id="prestige-pending-crystals">0</span> Mana Crystals)</p>
                     <p>Time until next Mana Crystal: <span id="prestige-next-countdown">calculating...</span></p>
                     <p>Current Mana Crystals: <span id="prestige-current-crystals">0</span></p>
+                    <p id="prestige-bonus-levels-display" style="display: none;">Bonus Prestige Levels: <span id="prestige-bonus-levels">0</span></p>
                     <p>Production Bonus: <span id="prestige-bonus">+0%</span></p>
                     <p>Times Ascended: <span id="times-prestiged">0</span></p>
                     <button id="prestige-action-button" class="prestige-button">Prestige</button>
@@ -271,6 +273,19 @@ const PrestigeModule = (function() {
             if (currentCrystalsEl) {
                 currentCrystalsEl.textContent = manaCrystals;
             }
+
+            // Update bonus prestige levels display
+            const bonusLevelsDisplay = document.getElementById('prestige-bonus-levels-display');
+            const bonusLevelsEl = document.getElementById('prestige-bonus-levels');
+            if (bonusLevelsDisplay && bonusLevelsEl) {
+                if (bonusPrestigeLevels > 0) {
+                    bonusLevelsDisplay.style.display = 'block';
+                    bonusLevelsEl.textContent = bonusPrestigeLevels;
+                } else {
+                    bonusLevelsDisplay.style.display = 'none';
+                }
+            }
+
             if (bonusEl) {
                 bonusEl.textContent = '+' + getTotalBonusPercent() + '%';
             }
@@ -413,7 +428,16 @@ const PrestigeModule = (function() {
     }
 
     function getPrestigeLevel() {
-        return totalManaCrystalsEarned;
+        return totalManaCrystalsEarned + bonusPrestigeLevels;
+    }
+
+    function addBonusPrestigeLevel(amount) {
+        bonusPrestigeLevels += amount;
+        updateDisplay();
+    }
+
+    function getBonusPrestigeLevels() {
+        return bonusPrestigeLevels;
     }
 
     function getManaCrystals() {
@@ -442,6 +466,7 @@ const PrestigeModule = (function() {
         return {
             manaCrystals,
             totalManaCrystalsEarned,
+            bonusPrestigeLevels,
             timesPrestiged,
             isInPrestigeMode,
             prestigeUpgrades: prestigeUpgrades.map(u => ({
@@ -455,6 +480,7 @@ const PrestigeModule = (function() {
         if (data) {
             manaCrystals = data.manaCrystals || 0;
             totalManaCrystalsEarned = data.totalManaCrystalsEarned || 0;
+            bonusPrestigeLevels = data.bonusPrestigeLevels || 0;
             timesPrestiged = data.timesPrestiged || 0;
             isInPrestigeMode = data.isInPrestigeMode || false;
 
@@ -493,6 +519,8 @@ const PrestigeModule = (function() {
         init,
         updateDisplay,
         getPrestigeLevel,
+        addBonusPrestigeLevel,
+        getBonusPrestigeLevels,
         getManaCrystals,
         spendManaCrystals,
         getTimesPrestiged,
