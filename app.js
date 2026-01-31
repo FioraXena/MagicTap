@@ -383,6 +383,18 @@ const upgrades = [
         element: null
     },
     {
+        id: 'divination',
+        name: 'Divination',
+        description: 'Increases Mana per second by 1%.',
+        flavorText: '',
+        cost: 49999,
+        effect: () => { mpsUpgradeMultiplier *= 1.01; recalculateMPS(); },
+        isPurchased: false,
+        unlockCondition: () => upgrades.find(u => u.id === 'magic-schools').isPurchased && buildings.find(b => b.id === 'magus').owned >= 10,
+        isUnlocked: false,
+        element: null
+    },
+    {
         id: 'evocation',
         name: 'Evocation',
         description: 'Increases Mana per second by 2%.',
@@ -513,6 +525,29 @@ const upgrades = [
         unlockCondition: () => upgrades.find(u => u.id === 'magic-schools').isPurchased &&
             upgrades.find(u => u.id === 'abjuration').isPurchased &&
             upgrades.find(u => u.id === 'conjuration').isPurchased &&
+            upgrades.find(u => u.id === 'divination').isPurchased &&
+            upgrades.find(u => u.id === 'evocation').isPurchased &&
+            upgrades.find(u => u.id === 'enchantment').isPurchased &&
+            upgrades.find(u => u.id === 'illusion').isPurchased &&
+            upgrades.find(u => u.id === 'necromancy').isPurchased &&
+            upgrades.find(u => u.id === 'summoning').isPurchased &&
+            upgrades.find(u => u.id === 'transmutation').isPurchased &&
+            upgrades.find(u => u.id === 'prestidigitation').isPurchased,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'ritualist',
+        name: 'Ritualist',
+        description: 'Increases Mana per second by 1%.',
+        flavorText: 'With understanding of all spell schools, you now turn to a more advanced topic, Rituals.',
+        cost: 999999,
+        effect: () => { mpsUpgradeMultiplier *= 1.01; recalculateMPS(); },
+        isPurchased: false,
+        unlockCondition: () => upgrades.find(u => u.id === 'magic-schools').isPurchased &&
+            upgrades.find(u => u.id === 'abjuration').isPurchased &&
+            upgrades.find(u => u.id === 'conjuration').isPurchased &&
+            upgrades.find(u => u.id === 'divination').isPurchased &&
             upgrades.find(u => u.id === 'evocation').isPurchased &&
             upgrades.find(u => u.id === 'enchantment').isPurchased &&
             upgrades.find(u => u.id === 'illusion').isPurchased &&

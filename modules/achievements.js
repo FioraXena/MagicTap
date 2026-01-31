@@ -302,6 +302,7 @@ const AchievementsModule = (function() {
         condition: (stats) => upgrades.find(u => u.id === 'magic-schools').isPurchased &&
             upgrades.find(u => u.id === 'abjuration').isPurchased &&
             upgrades.find(u => u.id === 'conjuration').isPurchased &&
+            upgrades.find(u => u.id === 'divination').isPurchased &&
             upgrades.find(u => u.id === 'evocation').isPurchased &&
             upgrades.find(u => u.id === 'enchantment').isPurchased &&
             upgrades.find(u => u.id === 'illusion').isPurchased &&
