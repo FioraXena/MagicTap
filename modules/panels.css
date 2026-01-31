@@ -363,6 +363,12 @@
     color: #888;
     font-size: 0.85em;
     font-weight: normal;
+    margin-left: 10px;
+}
+
+.changelog-entry p {
+    margin: 5px 0;
+    color: #ccc;
 }
 
 .changelog-entry ul {
