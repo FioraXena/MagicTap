@@ -217,7 +217,7 @@ const upgrades = [
         description: 'Doubles Magus production.',
         flavorText: 'One of a mages\' first tools.',
         cost: 5000,
-        effect: () => { const m = buildings.find(b => b.id === 'magus'); if(m) m.productionPerSecond *= 2; },
+        effect: () => { const m = buildings.find(b => b.id === 'magus'); if(m) m.productionPerSecond *= 2; recalculateMPS(); },
         isPurchased: false,
         unlockCondition: () => buildings.find(b => b.id === 'magus').owned >= 1,
         isUnlocked: false,
@@ -241,7 +241,7 @@ const upgrades = [
         description: 'Boosts Wizard\'s Hand production by 1% and doubles Mana per click.',
         flavorText: 'Train your Wizard\'s Hands by focusing power into each individual finger.',
         cost: 1000,
-        effect: () => { const wh = buildings.find(b => b.id === 'wizards-hand'); if(wh) wh.productionPerSecond *= 1.01; manaPerClick *= 2; },
+        effect: () => { const wh = buildings.find(b => b.id === 'wizards-hand'); if(wh) wh.productionPerSecond *= 1.01; manaPerClick *= 2; recalculateMPS(); },
         isPurchased: false,
         unlockCondition: () => buildings.find(b => b.id === 'wizards-hand').owned >= 25,
         isUnlocked: false,
@@ -253,7 +253,7 @@ const upgrades = [
         description: 'Boosts Wizard\'s Hand production by 1% and doubles Mana per click.',
         flavorText: 'Train your Wizard\'s Hands by focusing power into each individual finger.',
         cost: 10000,
-        effect: () => { const wh = buildings.find(b => b.id === 'wizards-hand'); if(wh) wh.productionPerSecond *= 1.01; manaPerClick *= 2; },
+        effect: () => { const wh = buildings.find(b => b.id === 'wizards-hand'); if(wh) wh.productionPerSecond *= 1.01; manaPerClick *= 2; recalculateMPS(); },
         isPurchased: false,
         unlockCondition: () => upgrades.find(u => u.id === 'magic-fingers-1').isPurchased,
         isUnlocked: false,
@@ -265,7 +265,7 @@ const upgrades = [
         description: 'Boosts Wizard\'s Hand production by 1% and doubles Mana per click.',
         flavorText: 'Train your Wizard\'s Hands by focusing power into each individual finger.',
         cost: 100000,
-        effect: () => { const wh = buildings.find(b => b.id === 'wizards-hand'); if(wh) wh.productionPerSecond *= 1.01; manaPerClick *= 2; },
+        effect: () => { const wh = buildings.find(b => b.id === 'wizards-hand'); if(wh) wh.productionPerSecond *= 1.01; manaPerClick *= 2; recalculateMPS(); },
         isPurchased: false,
         unlockCondition: () => upgrades.find(u => u.id === 'magic-fingers-2').isPurchased,
         isUnlocked: false,
@@ -277,7 +277,7 @@ const upgrades = [
         description: 'Boosts Wizard\'s Hand production by 1% and doubles Mana per click.',
         flavorText: 'Train your Wizard\'s Hands by focusing power into each individual finger.',
         cost: 1000000,
-        effect: () => { const wh = buildings.find(b => b.id === 'wizards-hand'); if(wh) wh.productionPerSecond *= 1.01; manaPerClick *= 2; },
+        effect: () => { const wh = buildings.find(b => b.id === 'wizards-hand'); if(wh) wh.productionPerSecond *= 1.01; manaPerClick *= 2; recalculateMPS(); },
         isPurchased: false,
         unlockCondition: () => upgrades.find(u => u.id === 'magic-fingers-3').isPurchased,
         isUnlocked: false,
@@ -289,7 +289,7 @@ const upgrades = [
         description: 'Boosts Wizard\'s Hand production by 1% and doubles Mana per click.',
         flavorText: 'Train your Wizard\'s Hands by focusing power into each individual finger.',
         cost: 10000000,
-        effect: () => { const wh = buildings.find(b => b.id === 'wizards-hand'); if(wh) wh.productionPerSecond *= 1.01; manaPerClick *= 2; },
+        effect: () => { const wh = buildings.find(b => b.id === 'wizards-hand'); if(wh) wh.productionPerSecond *= 1.01; manaPerClick *= 2; recalculateMPS(); },
         isPurchased: false,
         unlockCondition: () => upgrades.find(u => u.id === 'magic-fingers-4').isPurchased,
         isUnlocked: false,
@@ -301,7 +301,7 @@ const upgrades = [
         description: 'Boosts Wizard\'s Hand production by 1% and doubles Mana per click.',
         flavorText: 'Train your Wizard\'s Hands by focusing power into each individual finger.',
         cost: 100000000,
-        effect: () => { const wh = buildings.find(b => b.id === 'wizards-hand'); if(wh) wh.productionPerSecond *= 1.01; manaPerClick *= 2; },
+        effect: () => { const wh = buildings.find(b => b.id === 'wizards-hand'); if(wh) wh.productionPerSecond *= 1.01; manaPerClick *= 2; recalculateMPS(); },
         isPurchased: false,
         unlockCondition: () => upgrades.find(u => u.id === 'magic-fingers-5').isPurchased,
         isUnlocked: false,
@@ -313,7 +313,7 @@ const upgrades = [
         description: 'Boosts Wizard\'s Hand production by 1% and doubles Mana per click.',
         flavorText: 'Train your Wizard\'s Hands by focusing power into each individual finger.',
         cost: 1000000000,
-        effect: () => { const wh = buildings.find(b => b.id === 'wizards-hand'); if(wh) wh.productionPerSecond *= 1.01; manaPerClick *= 2; },
+        effect: () => { const wh = buildings.find(b => b.id === 'wizards-hand'); if(wh) wh.productionPerSecond *= 1.01; manaPerClick *= 2; recalculateMPS(); },
         isPurchased: false,
         unlockCondition: () => upgrades.find(u => u.id === 'magic-fingers-6').isPurchased,
         isUnlocked: false,
@@ -325,7 +325,7 @@ const upgrades = [
         description: 'Boosts Wizard\'s Hand production by 1% and doubles Mana per click.',
         flavorText: 'Train your Wizard\'s Hands by focusing power into each individual finger.',
         cost: 10000000000,
-        effect: () => { const wh = buildings.find(b => b.id === 'wizards-hand'); if(wh) wh.productionPerSecond *= 1.01; manaPerClick *= 2; },
+        effect: () => { const wh = buildings.find(b => b.id === 'wizards-hand'); if(wh) wh.productionPerSecond *= 1.01; manaPerClick *= 2; recalculateMPS(); },
         isPurchased: false,
         unlockCondition: () => upgrades.find(u => u.id === 'magic-fingers-7').isPurchased,
         isUnlocked: false,
@@ -337,7 +337,7 @@ const upgrades = [
         description: 'Boosts Wizard\'s Hand production by 1% and doubles Mana per click.',
         flavorText: 'Train your Wizard\'s Hands by focusing power into each individual finger.',
         cost: 100000000000,
-        effect: () => { const wh = buildings.find(b => b.id === 'wizards-hand'); if(wh) wh.productionPerSecond *= 1.01; manaPerClick *= 2; },
+        effect: () => { const wh = buildings.find(b => b.id === 'wizards-hand'); if(wh) wh.productionPerSecond *= 1.01; manaPerClick *= 2; recalculateMPS(); },
         isPurchased: false,
         unlockCondition: () => upgrades.find(u => u.id === 'magic-fingers-8').isPurchased,
         isUnlocked: false,
@@ -349,7 +349,7 @@ const upgrades = [
         description: 'Boosts Wizard\'s Hand production by 1% and doubles Mana per click.',
         flavorText: 'Train your Wizard\'s Hands by focusing power into each individual finger.',
         cost: 1000000000000,
-        effect: () => { const wh = buildings.find(b => b.id === 'wizards-hand'); if(wh) wh.productionPerSecond *= 1.01; manaPerClick *= 2; },
+        effect: () => { const wh = buildings.find(b => b.id === 'wizards-hand'); if(wh) wh.productionPerSecond *= 1.01; manaPerClick *= 2; recalculateMPS(); },
         isPurchased: false,
         unlockCondition: () => upgrades.find(u => u.id === 'magic-fingers-9').isPurchased,
         isUnlocked: false,
@@ -493,7 +493,7 @@ const upgrades = [
         description: 'Doubles Magus production.',
         flavorText: 'Call upon greater powers to amplify your magical workings.',
         cost: 25000,
-        effect: () => { const m = buildings.find(b => b.id === 'magus'); if(m) m.productionPerSecond *= 2; },
+        effect: () => { const m = buildings.find(b => b.id === 'magus'); if(m) m.productionPerSecond *= 2; recalculateMPS(); },
         isPurchased: false,
         unlockCondition: () => upgrades.find(u => u.id === 'prestidigitation').isPurchased,
         isUnlocked: false,
@@ -505,7 +505,7 @@ const upgrades = [
         description: 'Doubles Magus production.',
         flavorText: 'A forbidden art that draws power from life force itself.',
         cost: 1000000,
-        effect: () => { const m = buildings.find(b => b.id === 'magus'); if(m) m.productionPerSecond *= 2; },
+        effect: () => { const m = buildings.find(b => b.id === 'magus'); if(m) m.productionPerSecond *= 2; recalculateMPS(); },
         isPurchased: false,
         unlockCondition: () => upgrades.find(u => u.id === 'magic-schools').isPurchased &&
             upgrades.find(u => u.id === 'abjuration').isPurchased &&
@@ -598,7 +598,7 @@ const upgrades = [
         description: 'Ley Lines are twice as effective.',
         flavorText: 'Withdraw more Mana with these reinforcements to your Ley Lines.',
         cost: 11550,
-        effect: () => { const ll = buildings.find(b => b.id === 'ley-line'); if(ll) ll.productionPerSecond *= 2; },
+        effect: () => { const ll = buildings.find(b => b.id === 'ley-line'); if(ll) ll.productionPerSecond *= 2; recalculateMPS(); },
         isPurchased: false,
         unlockCondition: () => buildings.find(b => b.id === 'ley-line').owned >= 1,
         isUnlocked: false,
@@ -610,7 +610,7 @@ const upgrades = [
         description: 'Mana Crystals are twice as effective.',
         flavorText: 'Enhance your refinement techniques to make more Mana Crystals.',
         cost: 45000,
-        effect: () => { const mc = buildings.find(b => b.id === 'mana-crystal'); if(mc) mc.productionPerSecond *= 2; },
+        effect: () => { const mc = buildings.find(b => b.id === 'mana-crystal'); if(mc) mc.productionPerSecond *= 2; recalculateMPS(); },
         isPurchased: false,
         unlockCondition: () => buildings.find(b => b.id === 'mana-crystal').owned >= 1,
         isUnlocked: false,
@@ -645,10 +645,12 @@ function recalculateMPS() {
     });
     manaPerSecond = baseMPS * mpsUpgradeMultiplier;
 
-    // Update Production panel with MPS bonus and multiplier
-    const mpsBonus = baseMPS * (mpsUpgradeMultiplier - 1);
-    ProductionModule.setMPSFromUpgrades(mpsBonus);
-    ProductionModule.setMPSMultiplier(mpsUpgradeMultiplier);
+    // Update Production panel with MPS bonus and multiplier (if module is loaded)
+    if (typeof ProductionModule !== 'undefined') {
+        const mpsBonus = baseMPS * (mpsUpgradeMultiplier - 1);
+        ProductionModule.setMPSFromUpgrades(mpsBonus);
+        ProductionModule.setMPSMultiplier(mpsUpgradeMultiplier);
+    }
 }
 
 function formatTime(seconds) {
