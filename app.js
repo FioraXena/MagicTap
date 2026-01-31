@@ -20,6 +20,7 @@ const panelsContainer = document.getElementById('panels-container');
 let baseManaPerClick = 1;
 let manaPerClickFromUpgrades = 0;
 let mpsFromUpgrades = 0;
+let mpsUpgradeMultiplier = 1; // Multiplier from upgrades that boost all MPS
 
 // --- Initialize Panels ---
 function initializePanels() {
@@ -163,7 +164,7 @@ const upgrades = [
         description: 'Increases Mana per second.',
         flavorText: 'Theory gives way to practice.',
         cost: 500,
-        effect: () => { manaPerSecond *= 2; },
+        effect: () => { mpsUpgradeMultiplier *= 2; recalculateMPS(); },
         isPurchased: false,
         unlockCondition: () => true,
         isUnlocked: true,
@@ -319,7 +320,7 @@ const upgrades = [
         description: 'Increases Mana per second by 1%.',
         flavorText: '',
         cost: 9999,
-        effect: () => { manaPerSecond *= 1.01; },
+        effect: () => { mpsUpgradeMultiplier *= 1.01; recalculateMPS(); },
         isPurchased: false,
         unlockCondition: () => upgrades.find(u => u.id === 'magic-schools').isPurchased && buildings.find(b => b.id === 'magus').owned >= 10,
         isUnlocked: false,
@@ -331,7 +332,7 @@ const upgrades = [
         description: 'Increases Mana per second by 1%.',
         flavorText: '',
         cost: 19999,
-        effect: () => { manaPerSecond *= 1.01; },
+        effect: () => { mpsUpgradeMultiplier *= 1.01; recalculateMPS(); },
         isPurchased: false,
         unlockCondition: () => upgrades.find(u => u.id === 'magic-schools').isPurchased && buildings.find(b => b.id === 'magus').owned >= 10,
         isUnlocked: false,
@@ -343,7 +344,7 @@ const upgrades = [
         description: 'Increases Mana per second by 2%.',
         flavorText: '',
         cost: 49999,
-        effect: () => { manaPerSecond *= 1.02; },
+        effect: () => { mpsUpgradeMultiplier *= 1.02; recalculateMPS(); },
         isPurchased: false,
         unlockCondition: () => upgrades.find(u => u.id === 'magic-schools').isPurchased && buildings.find(b => b.id === 'magus').owned >= 10,
         isUnlocked: false,
@@ -355,7 +356,7 @@ const upgrades = [
         description: 'Increases Mana per second by 1%.',
         flavorText: '',
         cost: 49999,
-        effect: () => { manaPerSecond *= 1.01; },
+        effect: () => { mpsUpgradeMultiplier *= 1.01; recalculateMPS(); },
         isPurchased: false,
         unlockCondition: () => upgrades.find(u => u.id === 'magic-schools').isPurchased && buildings.find(b => b.id === 'magus').owned >= 10,
         isUnlocked: false,
@@ -367,7 +368,7 @@ const upgrades = [
         description: 'Increases Mana per second by 2%.',
         flavorText: '',
         cost: 49999,
-        effect: () => { manaPerSecond *= 1.02; },
+        effect: () => { mpsUpgradeMultiplier *= 1.02; recalculateMPS(); },
         isPurchased: false,
         unlockCondition: () => upgrades.find(u => u.id === 'magic-schools').isPurchased && buildings.find(b => b.id === 'magus').owned >= 10,
         isUnlocked: false,
@@ -379,7 +380,7 @@ const upgrades = [
         description: 'Increases Mana per second by 2%.',
         flavorText: '',
         cost: 99999,
-        effect: () => { manaPerSecond *= 1.02; },
+        effect: () => { mpsUpgradeMultiplier *= 1.02; recalculateMPS(); },
         isPurchased: false,
         unlockCondition: () => upgrades.find(u => u.id === 'magic-schools').isPurchased && buildings.find(b => b.id === 'magus').owned >= 10,
         isUnlocked: false,
@@ -391,7 +392,7 @@ const upgrades = [
         description: 'Increases Mana per second by 2%.',
         flavorText: '',
         cost: 199999,
-        effect: () => { manaPerSecond *= 1.02; },
+        effect: () => { mpsUpgradeMultiplier *= 1.02; recalculateMPS(); },
         isPurchased: false,
         unlockCondition: () => upgrades.find(u => u.id === 'magic-schools').isPurchased && buildings.find(b => b.id === 'magus').owned >= 10,
         isUnlocked: false,
@@ -403,7 +404,7 @@ const upgrades = [
         description: 'Increases Mana per second by 2%.',
         flavorText: '',
         cost: 499999,
-        effect: () => { manaPerSecond *= 1.02; },
+        effect: () => { mpsUpgradeMultiplier *= 1.02; recalculateMPS(); },
         isPurchased: false,
         unlockCondition: () => upgrades.find(u => u.id === 'magic-schools').isPurchased && buildings.find(b => b.id === 'magus').owned >= 10,
         isUnlocked: false,
@@ -415,7 +416,7 @@ const upgrades = [
         description: 'Increases Mana per second by 1%.',
         flavorText: 'A wizard\'s first spell, and an all-purpose magic tool.',
         cost: 15000,
-        effect: () => { manaPerSecond *= 1.01; },
+        effect: () => { mpsUpgradeMultiplier *= 1.01; recalculateMPS(); },
         isPurchased: false,
         unlockCondition: () => upgrades.find(u => u.id === 'magic-schools').isPurchased && buildings.find(b => b.id === 'magus').owned >= 10,
         isUnlocked: false,
@@ -484,10 +485,10 @@ const upgrades = [
         description: 'Gain +1 bonus prestige level and +2% Mana per second.',
         flavorText: 'The mana has begun to seep into your very being.',
         cost: 1000000000000000,
-        effect: () => { PrestigeModule.addBonusPrestigeLevel(1); manaPerSecond *= 1.02; },
+        effect: () => { PrestigeModule.addBonusPrestigeLevel(1); mpsUpgradeMultiplier *= 1.02; recalculateMPS(); },
         isPurchased: false,
-        unlockCondition: () => true,
-        isUnlocked: true,
+        unlockCondition: () => mana >= 1000000000000,
+        isUnlocked: false,
         element: null
     },
     {
@@ -496,7 +497,7 @@ const upgrades = [
         description: 'Gain +1 bonus prestige level and +2% Mana per second.',
         flavorText: 'You are saturated with arcane energy.',
         cost: 1000000000000000,
-        effect: () => { PrestigeModule.addBonusPrestigeLevel(1); manaPerSecond *= 1.02; },
+        effect: () => { PrestigeModule.addBonusPrestigeLevel(1); mpsUpgradeMultiplier *= 1.02; recalculateMPS(); },
         isPurchased: false,
         unlockCondition: () => upgrades.find(u => u.id === 'mana-touched').isPurchased,
         isUnlocked: false,
@@ -508,7 +509,7 @@ const upgrades = [
         description: 'Gain +1 bonus prestige level and +2% Mana per second.',
         flavorText: 'You have consumed more mana than any mortal should.',
         cost: 1000000000000000,
-        effect: () => { PrestigeModule.addBonusPrestigeLevel(1); manaPerSecond *= 1.02; },
+        effect: () => { PrestigeModule.addBonusPrestigeLevel(1); mpsUpgradeMultiplier *= 1.02; recalculateMPS(); },
         isPurchased: false,
         unlockCondition: () => upgrades.find(u => u.id === 'mana-drenched').isPurchased,
         isUnlocked: false,
@@ -520,7 +521,7 @@ const upgrades = [
         description: 'Gain +1 bonus prestige level and +2% Mana per second.',
         flavorText: 'The mana has changed you, reshaping your essence.',
         cost: 1000000000000000,
-        effect: () => { PrestigeModule.addBonusPrestigeLevel(1); manaPerSecond *= 1.02; },
+        effect: () => { PrestigeModule.addBonusPrestigeLevel(1); mpsUpgradeMultiplier *= 1.02; recalculateMPS(); },
         isPurchased: false,
         unlockCondition: () => upgrades.find(u => u.id === 'mana-gorged').isPurchased,
         isUnlocked: false,
@@ -532,7 +533,7 @@ const upgrades = [
         description: 'Gain +1 bonus prestige level and +2% Mana per second.',
         flavorText: 'Raw magical power courses through your veins.',
         cost: 1000000000000000,
-        effect: () => { PrestigeModule.addBonusPrestigeLevel(1); manaPerSecond *= 1.02; },
+        effect: () => { PrestigeModule.addBonusPrestigeLevel(1); mpsUpgradeMultiplier *= 1.02; recalculateMPS(); },
         isPurchased: false,
         unlockCondition: () => upgrades.find(u => u.id === 'mana-warped').isPurchased,
         isUnlocked: false,
@@ -544,7 +545,7 @@ const upgrades = [
         description: 'Gain +1 bonus prestige level and +2% Mana per second.',
         flavorText: 'You have become one with the fabric of magic itself.',
         cost: 1000000000000000,
-        effect: () => { PrestigeModule.addBonusPrestigeLevel(1); manaPerSecond *= 1.02; },
+        effect: () => { PrestigeModule.addBonusPrestigeLevel(1); mpsUpgradeMultiplier *= 1.02; recalculateMPS(); },
         isPurchased: false,
         unlockCondition: () => upgrades.find(u => u.id === 'mana-empowered').isPurchased,
         isUnlocked: false,
@@ -593,6 +594,15 @@ const upgrades = [
 function getBuildingCurrentCost(building) {
     // Exponential cost increase: baseCost * 1.15^owned
     return building.baseCost * Math.pow(1.15, building.owned);
+}
+
+// Recalculate total MPS from all buildings (call after upgrades modify production rates)
+function recalculateMPS() {
+    let baseMPS = 0;
+    buildings.forEach(building => {
+        baseMPS += building.productionPerSecond * building.owned;
+    });
+    manaPerSecond = baseMPS * mpsUpgradeMultiplier;
 }
 
 function formatTime(seconds) {
@@ -653,7 +663,7 @@ function buyBuilding(buildingId) {
     if (mana >= cost) {
         mana -= cost;
         building.owned++;
-        manaPerSecond += building.productionPerSecond;
+        recalculateMPS();
         StatisticsModule.addBuildingOwned();
         updateBuildingDisplay(building);
         updateDisplay(); // Update main displays and affordability
@@ -740,6 +750,8 @@ function buyUpgrade(upgradeId) {
         upgrade.effect(); // Apply the upgrade's effect
         upgrade.isPurchased = true;
         StatisticsModule.addUpgradePurchased();
+        // Recalculate MPS in case upgrade modified building production
+        recalculateMPS();
         // Track mana per click from upgrades
         manaPerClickFromUpgrades = manaPerClick - baseManaPerClick;
         ProductionModule.setManaPerClickFromUpgrades(manaPerClickFromUpgrades);
@@ -960,6 +972,7 @@ function resetForPrestige() {
     baseManaPerClick = 1;
     manaPerClickFromUpgrades = 0;
     mpsFromUpgrades = 0;
+    mpsUpgradeMultiplier = 1;
 
     // Reset buildings
     buildings.forEach(building => {

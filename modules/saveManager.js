@@ -14,7 +14,8 @@ const SaveManager = (function() {
                 manaPerSecond: manaPerSecond,
                 baseManaPerClick: baseManaPerClick,
                 manaPerClickFromUpgrades: manaPerClickFromUpgrades,
-                mpsFromUpgrades: mpsFromUpgrades
+                mpsFromUpgrades: mpsFromUpgrades,
+                mpsUpgradeMultiplier: mpsUpgradeMultiplier
             },
             buildings: buildings.map(b => ({
                 id: b.id,
@@ -49,6 +50,7 @@ const SaveManager = (function() {
                 baseManaPerClick = data.game.baseManaPerClick || 1;
                 manaPerClickFromUpgrades = data.game.manaPerClickFromUpgrades || 0;
                 mpsFromUpgrades = data.game.mpsFromUpgrades || 0;
+                mpsUpgradeMultiplier = data.game.mpsUpgradeMultiplier || 1;
             }
 
             // Restore buildings
@@ -127,6 +129,8 @@ const SaveManager = (function() {
 
             const saveData = JSON.parse(saveString);
             if (applySaveData(saveData)) {
+                // Recalculate MPS with loaded multiplier and building data
+                recalculateMPS();
                 // Re-render everything after loading
                 renderBuildings();
                 renderUpgrades();
@@ -175,6 +179,7 @@ const SaveManager = (function() {
             const saveString = atob(encoded);
             const saveData = JSON.parse(saveString);
             if (applySaveData(saveData)) {
+                recalculateMPS();
                 renderBuildings();
                 renderUpgrades();
                 upgrades.forEach(upgrade => {
