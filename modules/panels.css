@@ -423,3 +423,47 @@
 .danger-button:hover {
     background-color: #c82333;
 }
+
+/* Wishing Well Panel */
+.wishing-well-status {
+    background-color: #3a3a3a;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.wishing-well-status p {
+    margin: 8px 0;
+    font-size: 1.1em;
+}
+
+#wishing-well-coins {
+    color: #ffd700;
+    font-weight: bold;
+}
+
+#wishing-well-max-coins {
+    color: #888;
+}
+
+#wishing-well-level {
+    color: #9b59b6;
+    font-weight: bold;
+}
+
+.wishing-well-effects {
+    background-color: #3a3a3a;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.wishing-well-effects h3 {
+    color: #007bff;
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.wishing-well-coming-soon {
+    color: #888;
+    font-style: italic;
+}

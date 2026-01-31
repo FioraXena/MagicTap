@@ -32,7 +32,8 @@ const SaveManager = (function() {
                 isEarned: a.isEarned
             })),
             prestige: PrestigeModule.getPrestigeData(),
-            options: OptionsModule.getOptions()
+            options: OptionsModule.getOptions(),
+            wishingWell: WishingWellModule.getState()
         };
     }
 
@@ -92,6 +93,11 @@ const SaveManager = (function() {
                 OptionsModule.loadOptions(data.options);
             }
 
+            // Restore Wishing Well
+            if (data.wishingWell) {
+                WishingWellModule.loadState(data.wishingWell);
+            }
+
             return true;
         } catch (e) {
             console.error('Error applying save data:', e);
@@ -141,6 +147,7 @@ const SaveManager = (function() {
                 });
                 AchievementsModule.renderAchievements();
                 updateDisplay();
+                updateWishingWellButton();
                 console.log('Game loaded successfully');
                 return true;
             }
@@ -183,6 +190,7 @@ const SaveManager = (function() {
                 });
                 AchievementsModule.renderAchievements();
                 updateDisplay();
+                updateWishingWellButton();
                 save(); // Save the imported data to localStorage
                 console.log('Save imported successfully');
                 return true;

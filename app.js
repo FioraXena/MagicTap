@@ -29,6 +29,7 @@ function initializePanels() {
         AchievementsModule.getHTML() +
         ProductionModule.getHTML() +
         PrestigeModule.getHTML() +
+        WishingWellModule.getHTML() +
         ChangelogModule.getHTML() +
         OptionsModule.getHTML();
 
@@ -89,6 +90,18 @@ const buildings = [
         productionPerSecond: 15,
         owned: 0,
         unlockCondition: () => upgrades.find(u => u.id === 'ley-lines').isPurchased,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'mana-crystal',
+        name: 'Mana Crystal',
+        description: 'Crystallize raw Mana into a refined form for 38 Mana per second.',
+        flavorText: 'Mana, refined into a tangible form.',
+        baseCost: 21750,
+        productionPerSecond: 38,
+        owned: 0,
+        unlockCondition: () => mana >= 17500,
         isUnlocked: false,
         element: null
     },
@@ -537,6 +550,42 @@ const upgrades = [
         isUnlocked: false,
         element: null
     },
+    {
+        id: 'reinforced-ley-lines',
+        name: 'Reinforced Ley Lines',
+        description: 'Ley Lines are twice as effective.',
+        flavorText: 'Withdraw more Mana with these reinforcements to your Ley Lines.',
+        cost: 11550,
+        effect: () => { const ll = buildings.find(b => b.id === 'ley-line'); if(ll) ll.productionPerSecond *= 2; },
+        isPurchased: false,
+        unlockCondition: () => buildings.find(b => b.id === 'ley-line').owned >= 1,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'refinement-process',
+        name: 'Refinement Process',
+        description: 'Mana Crystals are twice as effective.',
+        flavorText: 'Enhance your refinement techniques to make more Mana Crystals.',
+        cost: 45000,
+        effect: () => { const mc = buildings.find(b => b.id === 'mana-crystal'); if(mc) mc.productionPerSecond *= 2; },
+        isPurchased: false,
+        unlockCondition: () => buildings.find(b => b.id === 'mana-crystal').owned >= 1,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'wishing-well',
+        name: 'Wishing Well',
+        description: 'Unlock the Wishing Well, an upgradeable fortune-mechanic.',
+        flavorText: 'Toss a coin, for a chance at...',
+        cost: 25000,
+        effect: () => { WishingWellModule.unlock(); },
+        isPurchased: false,
+        unlockCondition: () => mana >= 50000,
+        isUnlocked: false,
+        element: null
+    },
     // === INSERT NEW UPGRADES HERE ===
 ];
 
@@ -673,6 +722,9 @@ function checkUnlocks() {
         renderBuildings();
         renderUpgrades();
     }
+
+    // Check Wishing Well button visibility
+    updateWishingWellButton();
 }
 
 // --- Upgrade Logic ---
@@ -831,6 +883,7 @@ function setupNavigation() {
         'upgrades-button': purchasedUpgradesPanel,
         'production-button': document.getElementById('production-panel'),
         'prestige-button': document.getElementById('prestige-panel'),
+        'wishing-well-button': document.getElementById('wishing-well-panel'),
         'changelog-button': document.getElementById('changelog-panel'),
         'options-button': document.getElementById('options-panel')
     };
@@ -854,6 +907,15 @@ function setupNavigation() {
             });
         }
     });
+}
+
+// Check if Wishing Well button should be visible
+function updateWishingWellButton() {
+    const wishingWellUpgrade = upgrades.find(u => u.id === 'wishing-well');
+    const wishingWellButton = document.getElementById('wishing-well-button');
+    if (wishingWellButton && wishingWellUpgrade && wishingWellUpgrade.isPurchased) {
+        wishingWellButton.style.display = '';
+    }
 }
 
 // --- Game Loop and Initialization ---

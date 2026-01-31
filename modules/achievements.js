@@ -353,6 +353,83 @@ const AchievementsModule = (function() {
         condition: (stats) => buildings.find(b => b.id === 'ley-line').owned >= 500,
         isEarned: false
     },
+    {
+        id: 'handicraft',
+        name: 'Handicraft',
+        description: 'Purchase 1,000 Wizard\'s Hands.',
+        condition: (stats) => buildings.find(b => b.id === 'wizards-hand').owned >= 1000,
+        isEarned: false
+    },
+    {
+        id: 'arcane-visionary',
+        name: 'Arcane Visionary',
+        description: 'Purchase 1,000 Wizard\'s Eyes.',
+        condition: (stats) => buildings.find(b => b.id === 'wizards-eye').owned >= 1000,
+        isEarned: false
+    },
+    {
+        id: 'mage-of-many-talents',
+        name: 'Mage Of Many Talents',
+        description: 'Purchase 1,000 Magi.',
+        condition: (stats) => buildings.find(b => b.id === 'magus').owned >= 1000,
+        isEarned: false
+    },
+    {
+        id: 'mana-desert',
+        name: 'Mana Desert',
+        description: 'Purchase 1,000 Ley Lines.',
+        condition: (stats) => buildings.find(b => b.id === 'ley-line').owned >= 1000,
+        isEarned: false
+    },
+    {
+        id: 'refined',
+        name: 'Refined',
+        description: 'Purchase 1 Mana Crystal.',
+        condition: (stats) => buildings.find(b => b.id === 'mana-crystal').owned >= 1,
+        isEarned: false
+    },
+    {
+        id: 'crystallize',
+        name: 'Crystallize',
+        description: 'Purchase 25 Mana Crystals.',
+        condition: (stats) => buildings.find(b => b.id === 'mana-crystal').owned >= 25,
+        isEarned: false
+    },
+    {
+        id: 'tangible',
+        name: 'Tangible',
+        description: 'Purchase 50 Mana Crystals.',
+        condition: (stats) => buildings.find(b => b.id === 'mana-crystal').owned >= 50,
+        isEarned: false
+    },
+    {
+        id: 'arcane-forger',
+        name: 'Arcane Forger',
+        description: 'Purchase 100 Mana Crystals.',
+        condition: (stats) => buildings.find(b => b.id === 'mana-crystal').owned >= 100,
+        isEarned: false
+    },
+    {
+        id: 'you-cant-prestige-with-these',
+        name: 'You Can\'t Prestige With These',
+        description: 'Purchase 200 Mana Crystals.',
+        condition: (stats) => buildings.find(b => b.id === 'mana-crystal').owned >= 200,
+        isEarned: false
+    },
+    {
+        id: 'wrong-currency',
+        name: 'Wrong Currency',
+        description: 'Purchase 500 Mana Crystals.',
+        condition: (stats) => buildings.find(b => b.id === 'mana-crystal').owned >= 500,
+        isEarned: false
+    },
+    {
+        id: 'glittering-arcana',
+        name: 'Glittering Arcana',
+        description: 'Purchase 1,000 Mana Crystals.',
+        condition: (stats) => buildings.find(b => b.id === 'mana-crystal').owned >= 1000,
+        isEarned: false
+    },
     // === INSERT NEW ACHIEVEMENTS HERE ===
     ];
 
