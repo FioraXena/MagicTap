@@ -15,7 +15,8 @@ const SaveManager = (function() {
                 baseManaPerClick: baseManaPerClick,
                 manaPerClickFromUpgrades: manaPerClickFromUpgrades,
                 mpsFromUpgrades: mpsFromUpgrades,
-                mpsUpgradeMultiplier: mpsUpgradeMultiplier
+                mpsUpgradeMultiplier: mpsUpgradeMultiplier,
+                proficiencyUpgradeCount: proficiencyUpgradeCount
             },
             buildings: buildings.map(b => ({
                 id: b.id,
@@ -34,7 +35,8 @@ const SaveManager = (function() {
             })),
             prestige: PrestigeModule.getPrestigeData(),
             options: OptionsModule.getOptions(),
-            wishingWell: WishingWellModule.getState()
+            wishingWell: WishingWellModule.getState(),
+            rankingUpgrades: RankingUpgradesModule.getSaveData()
         };
     }
 
@@ -51,6 +53,7 @@ const SaveManager = (function() {
                 manaPerClickFromUpgrades = data.game.manaPerClickFromUpgrades || 0;
                 mpsFromUpgrades = data.game.mpsFromUpgrades || 0;
                 mpsUpgradeMultiplier = data.game.mpsUpgradeMultiplier || 1;
+                proficiencyUpgradeCount = data.game.proficiencyUpgradeCount || 0;
             }
 
             // Restore buildings
@@ -98,6 +101,11 @@ const SaveManager = (function() {
             // Restore Wishing Well
             if (data.wishingWell) {
                 WishingWellModule.loadState(data.wishingWell);
+            }
+
+            // Restore Ranking Upgrades
+            if (data.rankingUpgrades) {
+                RankingUpgradesModule.loadSaveData(data.rankingUpgrades);
             }
 
             return true;
@@ -154,6 +162,7 @@ const SaveManager = (function() {
                 AchievementsModule.renderAchievements();
                 updateDisplay();
                 updateWishingWellButton();
+                updateRankingUpgradesButton();
                 console.log('Game loaded successfully');
                 return true;
             }
@@ -199,6 +208,7 @@ const SaveManager = (function() {
                 AchievementsModule.renderAchievements();
                 updateDisplay();
                 updateWishingWellButton();
+                updateRankingUpgradesButton();
                 save(); // Save the imported data to localStorage
                 console.log('Save imported successfully');
                 return true;

@@ -430,6 +430,24 @@ const AchievementsModule = (function() {
         condition: (stats) => buildings.find(b => b.id === 'mana-crystal').owned >= 1000,
         isEarned: false
     },
+    {
+        id: 'suit-and-tie',
+        name: 'Suit And Tie',
+        description: 'Purchase all Apparel upgrades.',
+        condition: (stats) =>
+            upgrades.find(u => u.id === 'wizards-cape').isPurchased &&
+            upgrades.find(u => u.id === 'wizards-staff').isPurchased &&
+            upgrades.find(u => u.id === 'witchs-broom').isPurchased &&
+            upgrades.find(u => u.id === 'wizards-hat').isPurchased &&
+            upgrades.find(u => u.id === 'wizards-mantle').isPurchased &&
+            upgrades.find(u => u.id === 'enchanted-amulet').isPurchased &&
+            upgrades.find(u => u.id === 'warding-ring').isPurchased &&
+            upgrades.find(u => u.id === 'magic-wand').isPurchased &&
+            upgrades.find(u => u.id === 'ancient-scroll').isPurchased &&
+            upgrades.find(u => u.id === 'magic-monocle').isPurchased &&
+            upgrades.find(u => u.id === 'crystal-ball').isPurchased,
+        isEarned: false
+    },
     // === INSERT NEW ACHIEVEMENTS HERE ===
     ];
 

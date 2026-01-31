@@ -1,0 +1,26 @@
+V.0.1/V.0.2, 01-24-26/01-25-26:
+Initial release, and setup.
+Made MagicTap with ClaudeCode.
+Included the first buildings, and upgrades. Made achievements, and Game Navigation section.
+Also includes save system.
+V.0.3, 01-29-26:
+Added prestige system.
+Added new upgrades, and a new building.
+Populated the Prestige Store with a single upgrade.
+V.0.4, 01-30-26:
+Did a major overhaul including,
+Tons of achievements
+New upgrades
+Slightly altered save system (you can save your option changes)
+Added number formatting, and truncation for you monsters who don't want to hear long numbers.
+2 new buildings
+Setup for Magic Proficiency (boost to MPS based on achievements), including upgrades to further increase the mana production.
+Improved accessibility.
+Dismiss all notifications button.
+Wishing Well setup. (Along with thoughts for future "mini-games.")
+Bonus prestige upgrades.
+V.0.5, 01-31-26:
+Added achievement-related upgrades, and fleshed out the achievement boost system.
+Added more achievements, upgrades, and buildings.
+Now you can get familiars, and we'll have a selector to display your favorite, as you unlock them.
+Worked more on the Wishing Well.

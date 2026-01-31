@@ -479,4 +479,101 @@ h2:focus {
     }
 }
 
+/* Ranking Upgrades Panel */
+#ranking-upgrades-panel .ranking-info {
+    margin-bottom: 1.5em;
+    color: #aaa;
+    font-style: italic;
+}
+
+.ranking-category {
+    margin-bottom: 2em;
+}
+
+.ranking-category h3 {
+    border-bottom: 1px solid #444;
+    padding-bottom: 0.5em;
+    margin-bottom: 1em;
+}
+
+.ranking-category .unlock-info {
+    font-size: 0.8em;
+    color: #888;
+    font-weight: normal;
+}
+
+.ranking-upgrades-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+}
+
+.ranking-upgrade-item {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    padding: 0.75em 1em;
+    background: #2a2a3a;
+    border-radius: 6px;
+    border: 1px solid #3a3a4a;
+}
+
+.ranking-upgrade-item .upgrade-name {
+    font-weight: bold;
+    min-width: 150px;
+}
+
+.ranking-upgrade-item .upgrade-effect {
+    color: #7cfc00;
+    min-width: 80px;
+}
+
+.ranking-upgrade-item .upgrade-cost {
+    color: #ffd700;
+    flex-grow: 1;
+}
+
+.ranking-upgrade-item .purchased-label {
+    color: #888;
+    font-style: italic;
+}
+
+.ranking-upgrade-item.purchased {
+    background: #1a2a1a;
+    border-color: #2a3a2a;
+    opacity: 0.8;
+}
+
+.buy-ranking-upgrade-btn {
+    padding: 0.4em 1em;
+    background: #4a4a6a;
+    border: 1px solid #5a5a7a;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.buy-ranking-upgrade-btn:hover:not(:disabled) {
+    background: #5a5a7a;
+}
+
+.buy-ranking-upgrade-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.locked-message {
+    color: #888;
+    font-style: italic;
+    padding: 1em;
+    background: #1a1a2a;
+    border-radius: 4px;
+}
+
+.category-complete {
+    color: #7cfc00;
+    font-style: italic;
+    text-align: center;
+    padding: 0.5em;
+}
 

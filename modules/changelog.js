@@ -2,6 +2,15 @@
 const ChangelogModule = (function() {
     const changelog = [
         {
+            version: '0.5',
+            date: '01-31-26',
+            summary: `Addressed MPS issue.
+Added achievement-related upgrades, and fleshed out the achievement boost system.
+Added more achievements, upgrades, and buildings.
+Now you can get familiars, and we'll have a selector to display your favorite, as you unlock them.
+Worked more on the Wishing Well.`
+        },
+        {
             version: '0.4',
             date: '01-30-26',
             summary: `Did a major overhaul including,

@@ -1,4 +1,4 @@
-const VERSION = '0.4';
+const VERSION = '0.5';
 
 let mana = 0;
 let manaPerClick = 1;
@@ -21,6 +21,7 @@ let baseManaPerClick = 1;
 let manaPerClickFromUpgrades = 0;
 let mpsFromUpgrades = 0;
 let mpsUpgradeMultiplier = 1; // Multiplier from upgrades that boost all MPS
+let proficiencyUpgradeCount = 0; // Count of kitten-style upgrades that scale with Magic Proficiency
 
 // --- Initialize Panels ---
 function initializePanels() {
@@ -28,6 +29,7 @@ function initializePanels() {
     panelsContainer.innerHTML =
         StatisticsModule.getHTML() +
         AchievementsModule.getHTML() +
+        RankingUpgradesModule.getHTML() +
         ProductionModule.getHTML() +
         PrestigeModule.getHTML() +
         WishingWellModule.getHTML() +
@@ -37,6 +39,7 @@ function initializePanels() {
     // Initialize modules that need it
     OptionsModule.init();
     PrestigeModule.init();
+    RankingUpgradesModule.init();
     ChangelogModule.renderChangelog();
     AchievementsModule.renderAchievements();
 }
@@ -628,6 +631,151 @@ const upgrades = [
         isUnlocked: false,
         element: null
     },
+    // === APPAREL UPGRADES (Unlocks at Rank 2 - 25 achievements) ===
+    {
+        id: 'wizards-cape',
+        name: 'Wizard\'s Cape',
+        description: 'Increases Mana per second by 1%.',
+        flavorText: '',
+        cost: 9500,
+        effect: () => { mpsUpgradeMultiplier *= 1.01; recalculateMPS(); },
+        isPurchased: false,
+        unlockCondition: () => AchievementsModule.getEarnedCount() >= 25,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'wizards-staff',
+        name: 'Wizard\'s Staff',
+        description: 'Increases Mana per click by 10.',
+        flavorText: '',
+        cost: 9500,
+        effect: () => { manaPerClick += 10; },
+        isPurchased: false,
+        unlockCondition: () => AchievementsModule.getEarnedCount() >= 25,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'witchs-broom',
+        name: 'Witch\'s Broom',
+        description: 'Increases Mana per second by 2%.',
+        flavorText: '',
+        cost: 11500,
+        effect: () => { mpsUpgradeMultiplier *= 1.02; recalculateMPS(); },
+        isPurchased: false,
+        unlockCondition: () => AchievementsModule.getEarnedCount() >= 25,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'ancient-spell-staff',
+        name: 'Ancient Spell Staff',
+        description: 'Triples Mana per click.',
+        flavorText: '',
+        cost: 19000,
+        effect: () => { manaPerClick *= 3; },
+        isPurchased: false,
+        unlockCondition: () => PrestigeModule.getPrestigeUpgrades && PrestigeModule.getPrestigeUpgrades().find(u => u.id === 'ancient-spell-staff-unlock' && u.isPurchased),
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'wizards-hat',
+        name: 'Wizard\'s Hat',
+        description: 'Increases Mana per second by 3%.',
+        flavorText: '',
+        cost: 29999,
+        effect: () => { mpsUpgradeMultiplier *= 1.03; recalculateMPS(); },
+        isPurchased: false,
+        unlockCondition: () => upgrades.find(u => u.id === 'wizards-cape').isPurchased,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'wizards-mantle',
+        name: 'Wizard\'s Mantle',
+        description: 'Increases Mana per second by 3%.',
+        flavorText: '',
+        cost: 49000,
+        effect: () => { mpsUpgradeMultiplier *= 1.03; recalculateMPS(); },
+        isPurchased: false,
+        unlockCondition: () => upgrades.find(u => u.id === 'wizards-hat').isPurchased,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'enchanted-amulet',
+        name: 'Enchanted Amulet',
+        description: 'Increases Mana per second by 3%.',
+        flavorText: '',
+        cost: 90000,
+        effect: () => { mpsUpgradeMultiplier *= 1.03; recalculateMPS(); },
+        isPurchased: false,
+        unlockCondition: () => upgrades.find(u => u.id === 'wizards-mantle').isPurchased,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'warding-ring',
+        name: 'Warding Ring',
+        description: 'Increases MPS based on your Magic Proficiency.',
+        flavorText: '',
+        cost: 190000,
+        effect: () => { proficiencyUpgradeCount++; recalculateMPS(); },
+        isPurchased: false,
+        unlockCondition: () => upgrades.find(u => u.id === 'enchanted-amulet').isPurchased,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'magic-wand',
+        name: 'Magic Wand',
+        description: 'Doubles Mana per click and increases MPS based on your Magic Proficiency.',
+        flavorText: '',
+        cost: 900000,
+        effect: () => { manaPerClick *= 2; proficiencyUpgradeCount++; recalculateMPS(); },
+        isPurchased: false,
+        unlockCondition: () => upgrades.find(u => u.id === 'warding-ring').isPurchased,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'ancient-scroll',
+        name: 'Ancient Scroll',
+        description: 'Increases MPS based on your Magic Proficiency.',
+        flavorText: '',
+        cost: 1500000,
+        effect: () => { proficiencyUpgradeCount++; recalculateMPS(); },
+        isPurchased: false,
+        unlockCondition: () => upgrades.find(u => u.id === 'magic-wand').isPurchased,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'magic-monocle',
+        name: 'Magic Monocle',
+        description: 'Increases MPS based on your Magic Proficiency.',
+        flavorText: '',
+        cost: 9000000,
+        effect: () => { proficiencyUpgradeCount++; recalculateMPS(); },
+        isPurchased: false,
+        unlockCondition: () => upgrades.find(u => u.id === 'ancient-scroll').isPurchased,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'crystal-ball',
+        name: 'Crystal Ball',
+        description: 'Increases MPS based on your Magic Proficiency.',
+        flavorText: '',
+        cost: 90000000,
+        effect: () => { proficiencyUpgradeCount++; recalculateMPS(); },
+        isPurchased: false,
+        unlockCondition: () => upgrades.find(u => u.id === 'magic-monocle').isPurchased,
+        isUnlocked: false,
+        element: null
+    },
     // === INSERT NEW UPGRADES HERE ===
 ];
 
@@ -643,13 +791,25 @@ function recalculateMPS() {
     buildings.forEach(building => {
         baseMPS += building.productionPerSecond * building.owned;
     });
-    manaPerSecond = baseMPS * mpsUpgradeMultiplier;
+
+    // Calculate proficiency multiplier (kitten-style: each upgrade multiplies by 1 + proficiency * factor)
+    let proficiencyMultiplier = 1;
+    if (proficiencyUpgradeCount > 0 && typeof WizardRankModule !== 'undefined') {
+        const proficiency = WizardRankModule.getMagicProficiency() / 100; // Convert percentage to decimal
+        const factor = 0.05; // 5% factor per upgrade
+        for (let i = 0; i < proficiencyUpgradeCount; i++) {
+            proficiencyMultiplier *= (1 + proficiency * factor);
+        }
+    }
+
+    manaPerSecond = baseMPS * mpsUpgradeMultiplier * proficiencyMultiplier;
 
     // Update Production panel with MPS bonus and multiplier (if module is loaded)
     if (typeof ProductionModule !== 'undefined') {
-        const mpsBonus = baseMPS * (mpsUpgradeMultiplier - 1);
+        const totalMultiplier = mpsUpgradeMultiplier * proficiencyMultiplier;
+        const mpsBonus = baseMPS * (totalMultiplier - 1);
         ProductionModule.setMPSFromUpgrades(mpsBonus);
-        ProductionModule.setMPSMultiplier(mpsUpgradeMultiplier);
+        ProductionModule.setMPSMultiplier(totalMultiplier);
     }
 }
 
@@ -941,6 +1101,7 @@ function setupNavigation() {
         'statistics-button': document.getElementById('statistics-panel'),
         'achievements-button': document.getElementById('achievements-panel'),
         'upgrades-button': purchasedUpgradesPanel,
+        'ranking-upgrades-button': document.getElementById('ranking-upgrades-panel'),
         'production-button': document.getElementById('production-panel'),
         'prestige-button': document.getElementById('prestige-panel'),
         'wishing-well-button': document.getElementById('wishing-well-panel'),
@@ -963,6 +1124,8 @@ function setupNavigation() {
                     StatisticsModule.updateDisplay();
                 } else if (panel.id === 'production-panel') {
                     ProductionModule.updateDisplay(buildings);
+                } else if (panel.id === 'ranking-upgrades-panel') {
+                    RankingUpgradesModule.renderUpgrades();
                 }
             });
         }
@@ -975,6 +1138,17 @@ function updateWishingWellButton() {
     const wishingWellButton = document.getElementById('wishing-well-button');
     if (wishingWellButton && wishingWellUpgrade && wishingWellUpgrade.isPurchased) {
         wishingWellButton.style.display = '';
+    }
+}
+
+// Check if Ranking Upgrades button should be visible
+function updateRankingUpgradesButton() {
+    const rankingButton = document.getElementById('ranking-upgrades-button');
+    if (rankingButton && typeof RankingUpgradesModule !== 'undefined') {
+        // Show button if any category is unlocked (Wizardries unlocks first at rank 2)
+        if (RankingUpgradesModule.isCategoryUnlocked('wizardries')) {
+            rankingButton.style.display = '';
+        }
     }
 }
 
@@ -1005,6 +1179,9 @@ function gameLoop() {
     AchievementsModule.checkAchievements(StatisticsModule.getStats());
     checkUnlocks();
 
+    // Update ranking upgrades button visibility (based on achievement count)
+    updateRankingUpgradesButton();
+
     // Update prestige display (for countdown timers)
     PrestigeModule.updateDisplay();
 
@@ -1021,6 +1198,7 @@ function resetForPrestige() {
     manaPerClickFromUpgrades = 0;
     mpsFromUpgrades = 0;
     mpsUpgradeMultiplier = 1;
+    proficiencyUpgradeCount = 0;
 
     // Reset buildings
     buildings.forEach(building => {
@@ -1054,6 +1232,9 @@ function resetForPrestige() {
 
     // Reset statistics but keep total mana
     StatisticsModule.resetForPrestige();
+
+    // Reset ranking upgrades
+    RankingUpgradesModule.resetForPrestige();
 
     // Re-render UI
     renderBuildings();

@@ -30,6 +30,14 @@ const PrestigeModule = (function() {
             cost: 5,
             buildingBoost: { buildingId: 'wizards-eye', multiplier: 2 },
             isPurchased: false
+        },
+        {
+            id: 'ancient-spell-staff-unlock',
+            name: 'Ancient Spell Staff Unlock',
+            description: 'Unlocks the Ancient Spell Staff upgrade.',
+            flavorText: 'A relic from ages past, imbued with the power of countless forgotten spells.',
+            cost: 3,
+            isPurchased: false
         }
         // Future prestige upgrades go here
     ];
@@ -548,6 +556,10 @@ const PrestigeModule = (function() {
         prestigeUpgrades.forEach(u => u.isPurchased = false);
     }
 
+    function getPrestigeUpgrades() {
+        return prestigeUpgrades;
+    }
+
     return {
         getHTML,
         init,
@@ -567,6 +579,7 @@ const PrestigeModule = (function() {
         shouldShowPrestige,
         renderPrestigeUpgrades,
         applyAllPrestigeBuildingBoosts,
+        getPrestigeUpgrades,
         reset
     };
 })();
