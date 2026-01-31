@@ -34,11 +34,12 @@ const WizardRankModule = (function() {
         { name: 'Void Magus', minAchievements: 725 },
         { name: 'Archmage', minAchievements: 750 },
         { name: 'Arcane Weaver', minAchievements: 775 },
-        { name: 'Deity', minAchievements: 800 },
-        { name: 'Living Spell', minAchievements: 825 },
-        { name: 'True Arcana', minAchievements: 850 },
-        { name: 'Basic Cheater?', minAchievements: 875 },
-        { name: 'Completionist', minAchievements: 900 }
+        { name: 'Eldritch', minAchievements: 800 },
+        { name: 'Deity', minAchievements: 825 },
+        { name: 'Living Spell', minAchievements: 850 },
+        { name: 'True Arcana', minAchievements: 875 },
+        { name: 'Basic Cheater?', minAchievements: 900 },
+        { name: 'Completionist', minAchievements: 925 }
     ];
 
     // Calculate Magic Proficiency (4% per achievement)
