@@ -21,6 +21,15 @@ const PrestigeModule = (function() {
             cost: 10,
             mpsBonus: 0.05,  // 5% MPS boost
             isPurchased: false
+        },
+        {
+            id: '20-20-vision',
+            name: '20/20 Vision',
+            description: 'Wizard\'s Eyes are twice as effective.',
+            flavorText: 'Perfect magical sight grants perfect magical insight.',
+            cost: 5,
+            buildingBoost: { buildingId: 'wizards-eye', multiplier: 2 },
+            isPurchased: false
         }
         // Future prestige upgrades go here
     ];
@@ -188,6 +197,11 @@ const PrestigeModule = (function() {
             manaCrystals -= upgrade.cost;
             upgrade.isPurchased = true;
 
+            // Apply building boost if applicable
+            if (upgrade.buildingBoost) {
+                applyBuildingBoost(upgrade.buildingBoost);
+            }
+
             // Re-render the store
             renderPrestigeUpgrades();
             updateDisplay();
@@ -200,6 +214,26 @@ const PrestigeModule = (function() {
             document.body.appendChild(announcement);
             setTimeout(() => announcement.remove(), 1000);
         }
+    }
+
+    function applyBuildingBoost(boost) {
+        if (typeof buildings !== 'undefined') {
+            const building = buildings.find(b => b.id === boost.buildingId);
+            if (building) {
+                building.productionPerSecond *= boost.multiplier;
+                if (typeof recalculateMPS === 'function') {
+                    recalculateMPS();
+                }
+            }
+        }
+    }
+
+    function applyAllPrestigeBuildingBoosts() {
+        prestigeUpgrades.forEach(upgrade => {
+            if (upgrade.isPurchased && upgrade.buildingBoost) {
+                applyBuildingBoost(upgrade.buildingBoost);
+            }
+        });
     }
 
     function shouldShowPrestige() {
@@ -532,6 +566,7 @@ const PrestigeModule = (function() {
         isPrestigeMode,
         shouldShowPrestige,
         renderPrestigeUpgrades,
+        applyAllPrestigeBuildingBoosts,
         reset
     };
 })();

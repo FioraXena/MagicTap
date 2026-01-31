@@ -52,6 +52,7 @@ const buildings = [
         description: 'Generates 0.1 Mana per second.',
         flavorText: 'A spectral hand that gathers ambient mana from the air.',
         baseCost: 10,
+        baseProduction: 0.1,
         productionPerSecond: 0.1,
         owned: 0,
         unlockCondition: () => true,
@@ -64,6 +65,7 @@ const buildings = [
         description: 'Generates 0.5 Mana per second.',
         flavorText: 'One must see power, to be able to grasp it.',
         baseCost: 50,
+        baseProduction: 0.5,
         productionPerSecond: 0.5,
         owned: 0,
         unlockCondition: () => upgrades.find(u => u.id === 'magic-sight').isPurchased,
@@ -76,6 +78,7 @@ const buildings = [
         description: 'Casts spells to generate Mana.',
         flavorText: 'Practitioners of the arcane who go by far too many names.',
         baseCost: 550,
+        baseProduction: 2,
         productionPerSecond: 2,
         owned: 0,
         unlockCondition: () => upgrades.find(u => u.id === 'magic-schools').isPurchased,
@@ -88,6 +91,7 @@ const buildings = [
         description: 'Draw upon the planet to gain Mana.',
         flavorText: 'Draws raw Mana from within the planet.',
         baseCost: 1550,
+        baseProduction: 15,
         productionPerSecond: 15,
         owned: 0,
         unlockCondition: () => upgrades.find(u => u.id === 'ley-lines').isPurchased,
@@ -100,6 +104,7 @@ const buildings = [
         description: 'Crystallize raw Mana into a refined form for 38 Mana per second.',
         flavorText: 'Mana, refined into a tangible form.',
         baseCost: 21750,
+        baseProduction: 38,
         productionPerSecond: 38,
         owned: 0,
         unlockCondition: () => mana >= 17500,
@@ -1013,12 +1018,16 @@ function resetForPrestige() {
     // Reset buildings
     buildings.forEach(building => {
         building.owned = 0;
+        building.productionPerSecond = building.baseProduction;
         building.isUnlocked = false;
         building.element = null;
     });
     // Ensure first building is unlocked
     const firstBuilding = buildings.find(b => b.id === 'wizards-hand');
     if (firstBuilding) firstBuilding.isUnlocked = true;
+
+    // Apply prestige building boosts
+    PrestigeModule.applyAllPrestigeBuildingBoosts();
 
     // Reset upgrades
     upgrades.forEach(upgrade => {
@@ -1027,7 +1036,7 @@ function resetForPrestige() {
         upgrade.element = null;
     });
     // Ensure starting upgrades are unlocked
-    const startingUpgrades = ['magic-theory', 'magic-sight', 'magic-schools'];
+    const startingUpgrades = ['magic-theory', 'magic-sight', 'magic-schools', 'ley-lines'];
     startingUpgrades.forEach(id => {
         const upgrade = upgrades.find(u => u.id === id);
         if (upgrade) upgrade.isUnlocked = true;

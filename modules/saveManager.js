@@ -129,6 +129,8 @@ const SaveManager = (function() {
 
             const saveData = JSON.parse(saveString);
             if (applySaveData(saveData)) {
+                // Apply prestige building boosts before recalculating
+                PrestigeModule.applyAllPrestigeBuildingBoosts();
                 // Recalculate MPS with loaded multiplier and building data
                 recalculateMPS();
                 // Re-render everything after loading
@@ -179,6 +181,7 @@ const SaveManager = (function() {
             const saveString = atob(encoded);
             const saveData = JSON.parse(saveString);
             if (applySaveData(saveData)) {
+                PrestigeModule.applyAllPrestigeBuildingBoosts();
                 recalculateMPS();
                 renderBuildings();
                 renderUpgrades();
