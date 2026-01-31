@@ -52,7 +52,7 @@ Also includes save system.`
         changelog.forEach(entry => {
             const entryDiv = document.createElement('div');
             entryDiv.className = 'changelog-entry';
-            const summaryHtml = entry.summary.split('\n').map(line => `<p>${line}</p>`).join('');
+            const summaryHtml = entry.summary.split('\n').map(line => `<p>• ${line}</p>`).join('');
             entryDiv.innerHTML = `
                 <h3>V.${entry.version} <span class="changelog-date">${entry.date}</span></h3>
                 ${summaryHtml}
