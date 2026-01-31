@@ -644,6 +644,11 @@ function recalculateMPS() {
         baseMPS += building.productionPerSecond * building.owned;
     });
     manaPerSecond = baseMPS * mpsUpgradeMultiplier;
+
+    // Update Production panel with MPS bonus and multiplier
+    const mpsBonus = baseMPS * (mpsUpgradeMultiplier - 1);
+    ProductionModule.setMPSFromUpgrades(mpsBonus);
+    ProductionModule.setMPSMultiplier(mpsUpgradeMultiplier);
 }
 
 function formatTime(seconds) {
