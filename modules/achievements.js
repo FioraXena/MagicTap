@@ -472,6 +472,156 @@ const AchievementsModule = (function() {
         condition: (stats) => typeof WishingWellModule !== 'undefined' && WishingWellModule.getEffectTriggerCount() >= 100,
         isEarned: false
     },
+    // Mages' Guild Achievements
+    {
+        id: 'one-mage-army',
+        name: 'One-Mage Army',
+        description: 'Purchase 1 Mages\' Guild.',
+        condition: (stats) => buildings.find(b => b.id === 'mages-guild')?.owned >= 1,
+        isEarned: false
+    },
+    {
+        id: 'new-locations',
+        name: 'New Locations',
+        description: 'Purchase 25 Mages\' Guild buildings.',
+        condition: (stats) => buildings.find(b => b.id === 'mages-guild')?.owned >= 25,
+        isEarned: false
+    },
+    {
+        id: 'home-of-the-arcane',
+        name: 'Home of the Arcane',
+        description: 'Purchase 50 Mages\' Guild.',
+        condition: (stats) => buildings.find(b => b.id === 'mages-guild')?.owned >= 50,
+        isEarned: false
+    },
+    {
+        id: 'renovations',
+        name: 'Renovations',
+        description: 'Purchase 100 Mages\' Guild.',
+        condition: (stats) => buildings.find(b => b.id === 'mages-guild')?.owned >= 100,
+        isEarned: false
+    },
+    {
+        id: 'second-floors',
+        name: 'Second Floors',
+        description: 'Purchase 200 Mages\' Guild.',
+        condition: (stats) => buildings.find(b => b.id === 'mages-guild')?.owned >= 200,
+        isEarned: false
+    },
+    {
+        id: 'third-floors',
+        name: 'Third Floors',
+        description: 'Purchase 500 Mages\' Guild.',
+        condition: (stats) => buildings.find(b => b.id === 'mages-guild')?.owned >= 500,
+        isEarned: false
+    },
+    {
+        id: 'guild-penthouse',
+        name: 'Guild Penthouse',
+        description: 'Purchase 1000 Mages\' Guild.',
+        condition: (stats) => buildings.find(b => b.id === 'mages-guild')?.owned >= 1000,
+        isEarned: false
+    },
+    // Magic Library Achievements
+    {
+        id: 'the-magic-library',
+        name: 'The Magic Library',
+        description: 'Purchase 1 Magic Library.',
+        condition: (stats) => buildings.find(b => b.id === 'magic-library')?.owned >= 1,
+        isEarned: false
+    },
+    {
+        id: 'spell-stacks',
+        name: 'Spell Stacks',
+        description: 'Purchase 25 Magic Library.',
+        condition: (stats) => buildings.find(b => b.id === 'magic-library')?.owned >= 25,
+        isEarned: false
+    },
+    {
+        id: 'arcane-tomes',
+        name: 'Arcane Tomes',
+        description: 'Purchase 50 Magic Library.',
+        condition: (stats) => buildings.find(b => b.id === 'magic-library')?.owned >= 50,
+        isEarned: false
+    },
+    {
+        id: 'grimoires',
+        name: 'Grimoires',
+        description: 'Purchase 100 Magic Library.',
+        condition: (stats) => buildings.find(b => b.id === 'magic-library')?.owned >= 100,
+        isEarned: false
+    },
+    {
+        id: 'section-elemental-magics',
+        name: 'Section for Elemental Magics',
+        description: 'Purchase 200 Magic Library.',
+        condition: (stats) => buildings.find(b => b.id === 'magic-library')?.owned >= 200,
+        isEarned: false
+    },
+    {
+        id: 'divine-scrolls',
+        name: 'Divine Scrolls',
+        description: 'Purchase 500 Magic Library.',
+        condition: (stats) => buildings.find(b => b.id === 'magic-library')?.owned >= 500,
+        isEarned: false
+    },
+    {
+        id: 'forbidden-tomes',
+        name: 'The Forbidden Tomes',
+        description: 'Purchase 1000 Magic Library.',
+        condition: (stats) => buildings.find(b => b.id === 'magic-library')?.owned >= 1000,
+        isEarned: false
+    },
+    // Magic Spire Achievements
+    {
+        id: 'going-up',
+        name: 'Going Up',
+        description: 'Purchase 1 Magic Spire.',
+        condition: (stats) => buildings.find(b => b.id === 'magic-spire')?.owned >= 1,
+        isEarned: false
+    },
+    {
+        id: 'whats-the-point',
+        name: 'What\'s The Point?',
+        description: 'Purchase 25 Magic Spire.',
+        condition: (stats) => buildings.find(b => b.id === 'magic-spire')?.owned >= 25,
+        isEarned: false
+    },
+    {
+        id: 'from-the-earth',
+        name: 'From The Earth',
+        description: 'Purchase 50 Magic Spire.',
+        condition: (stats) => buildings.find(b => b.id === 'magic-spire')?.owned >= 50,
+        isEarned: false
+    },
+    {
+        id: 'to-the-heavens',
+        name: 'To the Heavens',
+        description: 'Purchase 100 Magic Spire.',
+        condition: (stats) => buildings.find(b => b.id === 'magic-spire')?.owned >= 100,
+        isEarned: false
+    },
+    {
+        id: 'and-beyond',
+        name: 'And Beyond',
+        description: 'Purchase 200 Magic Spire.',
+        condition: (stats) => buildings.find(b => b.id === 'magic-spire')?.owned >= 200,
+        isEarned: false
+    },
+    {
+        id: 'spires-not-slain',
+        name: 'Spires Not Slain',
+        description: 'Purchase 500 Magic Spire.',
+        condition: (stats) => buildings.find(b => b.id === 'magic-spire')?.owned >= 500,
+        isEarned: false
+    },
+    {
+        id: 'mystical-revolution',
+        name: 'Mystical Revolution',
+        description: 'Purchase 1000 Magic Spire.',
+        condition: (stats) => buildings.find(b => b.id === 'magic-spire')?.owned >= 1000,
+        isEarned: false
+    },
     ];
 
     let earnedCount = 0;
