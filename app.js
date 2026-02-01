@@ -837,11 +837,17 @@ function recalculateMPS() {
         }
     }
 
-    manaPerSecond = baseMPS * mpsUpgradeMultiplier * proficiencyMultiplier;
+    // Get Wishing Well multiplier (temporary effect)
+    let wishingWellMultiplier = 1;
+    if (typeof WishingWellModule !== 'undefined') {
+        wishingWellMultiplier = WishingWellModule.getMPSMultiplier();
+    }
+
+    manaPerSecond = baseMPS * mpsUpgradeMultiplier * proficiencyMultiplier * wishingWellMultiplier;
 
     // Update Production panel with MPS bonus and multiplier (if module is loaded)
     if (typeof ProductionModule !== 'undefined') {
-        const totalMultiplier = mpsUpgradeMultiplier * proficiencyMultiplier;
+        const totalMultiplier = mpsUpgradeMultiplier * proficiencyMultiplier * wishingWellMultiplier;
         const mpsBonus = baseMPS * (totalMultiplier - 1);
         ProductionModule.setMPSFromUpgrades(mpsBonus);
         ProductionModule.setMPSMultiplier(totalMultiplier);
@@ -1161,6 +1167,9 @@ function setupNavigation() {
                     ProductionModule.updateDisplay(buildings);
                 } else if (panel.id === 'ranking-upgrades-panel') {
                     RankingUpgradesModule.renderUpgrades();
+                } else if (panel.id === 'wishing-well-panel') {
+                    WishingWellModule.updateDisplay();
+                    WishingWellModule.renderEffects();
                 }
             });
         }
@@ -1220,6 +1229,13 @@ function gameLoop() {
     // Update prestige display (for countdown timers)
     PrestigeModule.updateDisplay();
 
+    // Update Wishing Well (coin generation)
+    if (typeof WishingWellModule !== 'undefined' && WishingWellModule.isWellUnlocked()) {
+        const coinRate = WishingWellModule.getCoinGenerationRate();
+        WishingWellModule.addCoins(coinRate / 10); // Divide by 10 since loop runs 10x per second
+        WishingWellModule.updateDisplay();
+    }
+
     updateDisplay();
 }
 
@@ -1270,6 +1286,11 @@ function resetForPrestige() {
 
     // Reset ranking upgrades
     RankingUpgradesModule.resetForPrestige();
+
+    // Reset Wishing Well
+    if (typeof WishingWellModule !== 'undefined') {
+        WishingWellModule.reset();
+    }
 
     // Re-render UI
     renderBuildings();

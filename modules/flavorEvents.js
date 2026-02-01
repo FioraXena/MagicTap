@@ -18,6 +18,12 @@ const FlavorEventsModule = (function() {
         'The familiar hum of magic comforts you.',
         'Runes flicker briefly in the shadows.',
         // === INSERT NEW EVENTS HERE ===
+        // Ley Line events (unlocked after purchasing 1 Ley Line)
+        { text: 'Light from the Ley Lines illuminate a distant city.', unlockCondition: () => buildings.find(b => b.id === 'ley-line').owned >= 1 },
+        { text: 'The Ley Lines appear to mesmerize both people and animals.', unlockCondition: () => buildings.find(b => b.id === 'ley-line').owned >= 1 },
+        // Mana Crystal events (unlocked after purchasing 1 Mana Crystal)
+        { text: 'Crystals sit upon pedestals situated in a circle.', unlockCondition: () => buildings.find(b => b.id === 'mana-crystal').owned >= 1 },
+        { text: 'Crystals begin to crack, overflowing with power.', unlockCondition: () => buildings.find(b => b.id === 'mana-crystal').owned >= 1 },
     ];
 
     let eventsLog = null;

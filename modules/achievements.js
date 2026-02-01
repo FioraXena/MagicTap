@@ -450,6 +450,28 @@ const AchievementsModule = (function() {
         isEarned: false
     },
     // === INSERT NEW ACHIEVEMENTS HERE ===
+    // Wishing Well Achievements
+    {
+        id: 'toss-a-coin',
+        name: 'Toss A Coin',
+        description: 'Trigger 10 effects from the Wishing Well.',
+        condition: (stats) => typeof WishingWellModule !== 'undefined' && WishingWellModule.getEffectTriggerCount() >= 10,
+        isEarned: false
+    },
+    {
+        id: 'penny-for-your-mana',
+        name: 'Penny For Your Mana?',
+        description: 'Trigger 50 effects from the Wishing Well.',
+        condition: (stats) => typeof WishingWellModule !== 'undefined' && WishingWellModule.getEffectTriggerCount() >= 50,
+        isEarned: false
+    },
+    {
+        id: '100-copper-coins',
+        name: '100 Copper Coins equals',
+        description: 'Trigger 100 effects from the Wishing Well.',
+        condition: (stats) => typeof WishingWellModule !== 'undefined' && WishingWellModule.getEffectTriggerCount() >= 100,
+        isEarned: false
+    },
     ];
 
     let earnedCount = 0;

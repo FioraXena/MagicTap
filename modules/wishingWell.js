@@ -5,11 +5,57 @@ const WishingWellModule = (function() {
     let maxCoins = 15;
     let level = 1;
     let isUnlocked = false;
+    let effectTriggerCount = 0;
+
+    // Active effect state
+    let activeEffect = null;
+    let effectTimeRemaining = 0;
+    let effectTimerId = null;
+    let mpsMultiplier = 1;
+
+    // Backfire chance (15% chance of getting negative effect)
+    const BACKFIRE_CHANCE = 0.15;
+
+    // Effects definition
+    const effects = [
+        {
+            id: 'magical-flourish',
+            name: 'Magical Flourish',
+            description: 'Mana per second doubled for 30 seconds.',
+            cost: 10,
+            duration: 30,
+            multiplier: 2,
+            isPositive: true,
+            backfireId: 'mana-leak'
+        },
+        {
+            id: 'mana-leak',
+            name: 'Mana Leak',
+            description: 'Mana per second halved for 30 seconds.',
+            cost: 0, // Backfire effect, not purchasable directly
+            duration: 30,
+            multiplier: 0.5,
+            isPositive: false,
+            isBackfire: true
+        }
+    ];
 
     // Coin generation rate (coins per second, starts very slow)
     function getCoinGenerationRate() {
         // Snowball effect: more coins = faster generation
         return coins / 150;
+    }
+
+    function addCoins(amount) {
+        coins = Math.min(coins + amount, maxCoins);
+    }
+
+    function spendCoins(amount) {
+        if (coins >= amount) {
+            coins -= amount;
+            return true;
+        }
+        return false;
     }
 
     function getHTML() {
@@ -20,23 +66,180 @@ const WishingWellModule = (function() {
                 <div class="wishing-well-status">
                     <p>Coins: <span id="wishing-well-coins">0</span> / <span id="wishing-well-max-coins">15</span></p>
                     <p>Well Level: <span id="wishing-well-level">1</span></p>
+                    <p>Effects Triggered: <span id="wishing-well-trigger-count">0</span></p>
+                </div>
+                <div id="wishing-well-active-effect" class="wishing-well-active" hidden>
+                    <p><strong>Active Effect:</strong> <span id="active-effect-name"></span></p>
+                    <p>Time Remaining: <span id="active-effect-time">0</span>s</p>
                 </div>
                 <div class="wishing-well-effects">
-                    <h3>Effects</h3>
-                    <p class="wishing-well-coming-soon">Wishing Well effects coming soon...</p>
+                    <h3>Available Effects</h3>
+                    <div id="wishing-well-effects-list"></div>
                 </div>
             </div>
         </section>`;
+    }
+
+    function renderEffects() {
+        const container = document.getElementById('wishing-well-effects-list');
+        if (!container) return;
+
+        container.innerHTML = '';
+
+        // Only show purchasable effects (not backfire effects)
+        const purchasableEffects = effects.filter(e => !e.isBackfire);
+
+        purchasableEffects.forEach(effect => {
+            const effectDiv = document.createElement('div');
+            effectDiv.className = 'wishing-well-effect-item';
+
+            const button = document.createElement('button');
+            button.className = 'effect-button';
+            button.disabled = coins < effect.cost || activeEffect !== null;
+            button.setAttribute('aria-label', `${effect.name}, costs ${effect.cost} coins. ${effect.description}`);
+            button.innerHTML = `
+                <span class="effect-name">${effect.name}</span>
+                <span class="effect-cost">${effect.cost} coins</span>
+            `;
+            button.addEventListener('click', () => triggerEffect(effect.id));
+
+            const descP = document.createElement('p');
+            descP.className = 'effect-description';
+            descP.textContent = effect.description;
+
+            effectDiv.appendChild(button);
+            effectDiv.appendChild(descP);
+            container.appendChild(effectDiv);
+        });
+    }
+
+    function triggerEffect(effectId) {
+        const effect = effects.find(e => e.id === effectId);
+        if (!effect || effect.isBackfire) return;
+
+        if (coins < effect.cost) {
+            if (typeof NotificationModule !== 'undefined') {
+                NotificationModule.show('Not enough coins!', 'warning');
+            }
+            return;
+        }
+
+        if (activeEffect !== null) {
+            if (typeof NotificationModule !== 'undefined') {
+                NotificationModule.show('An effect is already active!', 'warning');
+            }
+            return;
+        }
+
+        // Spend the coins
+        spendCoins(effect.cost);
+
+        // Check for backfire
+        let finalEffect = effect;
+        if (effect.backfireId && Math.random() < BACKFIRE_CHANCE) {
+            finalEffect = effects.find(e => e.id === effect.backfireId);
+            if (typeof NotificationModule !== 'undefined') {
+                NotificationModule.show('The well backfires! ' + finalEffect.name + ' activated.', 'warning');
+            }
+        } else {
+            if (typeof NotificationModule !== 'undefined') {
+                NotificationModule.show(finalEffect.name + ' activated!', 'success');
+            }
+        }
+
+        // Activate the effect
+        activateEffect(finalEffect);
+    }
+
+    function activateEffect(effect) {
+        activeEffect = effect;
+        effectTimeRemaining = effect.duration;
+        mpsMultiplier = effect.multiplier;
+        effectTriggerCount++;
+
+        // Recalculate MPS with new multiplier
+        if (typeof recalculateMPS === 'function') {
+            recalculateMPS();
+        }
+
+        updateActiveEffectDisplay();
+        renderEffects(); // Update button states
+
+        // Start countdown timer
+        if (effectTimerId) {
+            clearInterval(effectTimerId);
+        }
+        effectTimerId = setInterval(() => {
+            effectTimeRemaining--;
+            updateActiveEffectDisplay();
+
+            if (effectTimeRemaining <= 0) {
+                deactivateEffect();
+            }
+        }, 1000);
+    }
+
+    function deactivateEffect() {
+        if (effectTimerId) {
+            clearInterval(effectTimerId);
+            effectTimerId = null;
+        }
+
+        const wasNegative = activeEffect && !activeEffect.isPositive;
+        activeEffect = null;
+        effectTimeRemaining = 0;
+        mpsMultiplier = 1;
+
+        // Recalculate MPS without effect
+        if (typeof recalculateMPS === 'function') {
+            recalculateMPS();
+        }
+
+        updateActiveEffectDisplay();
+        renderEffects(); // Update button states
+
+        if (typeof NotificationModule !== 'undefined') {
+            NotificationModule.show('Wishing Well effect has ended.', wasNegative ? 'success' : 'info');
+        }
+    }
+
+    function updateActiveEffectDisplay() {
+        const container = document.getElementById('wishing-well-active-effect');
+        const nameEl = document.getElementById('active-effect-name');
+        const timeEl = document.getElementById('active-effect-time');
+
+        if (!container) return;
+
+        if (activeEffect) {
+            container.hidden = false;
+            if (nameEl) nameEl.textContent = activeEffect.name;
+            if (timeEl) timeEl.textContent = effectTimeRemaining;
+        } else {
+            container.hidden = true;
+        }
     }
 
     function updateDisplay() {
         const coinsEl = document.getElementById('wishing-well-coins');
         const maxCoinsEl = document.getElementById('wishing-well-max-coins');
         const levelEl = document.getElementById('wishing-well-level');
+        const triggerCountEl = document.getElementById('wishing-well-trigger-count');
 
         if (coinsEl) coinsEl.textContent = Math.floor(coins);
         if (maxCoinsEl) maxCoinsEl.textContent = maxCoins;
         if (levelEl) levelEl.textContent = level;
+        if (triggerCountEl) triggerCountEl.textContent = effectTriggerCount;
+
+        // Update effect button states based on coin count
+        renderEffects();
+    }
+
+    function getMPSMultiplier() {
+        return mpsMultiplier;
+    }
+
+    function getEffectTriggerCount() {
+        return effectTriggerCount;
     }
 
     function unlock() {
@@ -65,6 +268,8 @@ const WishingWellModule = (function() {
             maxCoins = savedState.maxCoins || 15;
             level = savedState.level || 1;
             isUnlocked = savedState.isUnlocked || false;
+            effectTriggerCount = savedState.effectTriggerCount || 0;
+            // Note: Active effects are not saved - they reset on page load
         }
     }
 
@@ -73,7 +278,8 @@ const WishingWellModule = (function() {
             coins: coins,
             maxCoins: maxCoins,
             level: level,
-            isUnlocked: isUnlocked
+            isUnlocked: isUnlocked,
+            effectTriggerCount: effectTriggerCount
         };
     }
 
@@ -82,16 +288,23 @@ const WishingWellModule = (function() {
         maxCoins = 15;
         level = 1;
         isUnlocked = false;
+        effectTriggerCount = 0;
+        deactivateEffect();
     }
 
     return {
         getHTML,
         updateDisplay,
+        renderEffects,
         unlock,
         isWellUnlocked,
         getCoins,
         getMaxCoins,
         getLevel,
+        getMPSMultiplier,
+        getEffectTriggerCount,
+        addCoins,
+        getCoinGenerationRate,
         loadState,
         getState,
         reset

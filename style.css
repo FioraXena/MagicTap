@@ -577,3 +577,68 @@ h2:focus {
     padding: 0.5em;
 }
 
+/* Wishing Well Styles */
+.wishing-well-status {
+    background: #1a1a2a;
+    padding: 1em;
+    border-radius: 4px;
+    margin-bottom: 1em;
+}
+
+.wishing-well-active {
+    background: #2a3a4a;
+    border: 2px solid #ffd700;
+    padding: 1em;
+    border-radius: 4px;
+    margin-bottom: 1em;
+}
+
+.wishing-well-effects h3 {
+    margin-bottom: 0.5em;
+}
+
+.wishing-well-effect-item {
+    background: #2a2a3a;
+    padding: 1em;
+    border-radius: 4px;
+    margin-bottom: 0.5em;
+}
+
+.effect-button {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 0.75em 1em;
+    background: #3a4a5a;
+    border: 1px solid #5a6a7a;
+    border-radius: 4px;
+    color: #f0f0f0;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.2s;
+}
+
+.effect-button:hover:not(:disabled) {
+    background: #4a5a6a;
+}
+
+.effect-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.effect-name {
+    font-weight: bold;
+}
+
+.effect-cost {
+    color: #ffd700;
+}
+
+.effect-description {
+    margin-top: 0.5em;
+    color: #aaa;
+    font-size: 0.9em;
+}
+
