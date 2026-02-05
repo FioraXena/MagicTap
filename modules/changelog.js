@@ -4,7 +4,8 @@ const ChangelogModule = (function() {
         {
             version: '0.7',
             date: '02-05-26',
-            summary: `Added Spellcasting system with 8 spells and Spell Power regeneration.
+            summary: `MagicTap now has sound! Sounds contributed by Pitermach.
+Added complete Spellcasting system with 8 spells and Spell Power regeneration.
 Added Prestige Potential upgrades - unlock the power of your prestige level (10 tiers, 10% each).
 Added Mana-Saturated upgrade chain continuation.
 Fixed Runestone positioning and made them accessible buttons.
