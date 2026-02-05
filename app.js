@@ -1,4 +1,4 @@
-const VERSION = '0.5';
+const VERSION = '0.7';
 
 let mana = 0;
 let manaPerClick = 1;
@@ -111,6 +111,97 @@ const buildings = [
         productionPerSecond: 38,
         owned: 0,
         unlockCondition: () => mana >= 17500,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'mana-manipulator',
+        name: 'Mana Manipulator',
+        description: 'Utilize lost Mana manipulation techniques to bring Mana into this world.',
+        flavorText: 'These devices were used to manipulate Mana. Why they were lost, and considered forbidden is still a mystery to you.',
+        baseCost: 134000,
+        baseProduction: 98,
+        productionPerSecond: 98,
+        owned: 0,
+        unlockCondition: () => upgrades.find(u => u.id === 'advanced-mana-manipulation-techniques')?.isPurchased,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'mana-shard',
+        name: 'Mana Shard',
+        description: 'Light reflects from these shards, becoming raw magic.',
+        flavorText: 'Shards of pure magic.',
+        baseCost: 490000,
+        baseProduction: 200,
+        productionPerSecond: 200,
+        owned: 0,
+        unlockCondition: () => mana >= 350000,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'mana-fountain',
+        name: 'Mana Fountain',
+        description: 'Discover Mana flowing within the planet.',
+        flavorText: 'Natural wellsprings of pure magical energy.',
+        baseCost: 20000000,
+        baseProduction: 2900,
+        productionPerSecond: 2900,
+        owned: 0,
+        unlockCondition: () => mana >= 13000000,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'church-of-mana',
+        name: 'Church of Mana',
+        description: 'Worship the weave for boons from the weave.',
+        flavorText: 'The weave is the foremost on magic, so you must learn from it what your mortal mind can.',
+        baseCost: 70000000,
+        baseProduction: 12500,
+        productionPerSecond: 12500,
+        owned: 0,
+        unlockCondition: () => mana >= 55000000,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'mages-guild',
+        name: 'Mages\' Guild',
+        description: 'Magi come together to share mystical knowledge.',
+        flavorText: 'A grand structure dedicated to learning magic from others.',
+        baseCost: 450000000,
+        baseProduction: 125000,
+        productionPerSecond: 125000,
+        owned: 0,
+        unlockCondition: () => mana >= 100000000,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'magic-library',
+        name: 'Magic Library',
+        description: 'Ancient tomes give you knowledge of ways to secure more Mana.',
+        flavorText: 'A home for all tomes magical, including forbidden texts.',
+        baseCost: 1400000000,
+        baseProduction: 5500000,
+        productionPerSecond: 5500000,
+        owned: 0,
+        unlockCondition: () => mana >= 950000000,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'magic-spire',
+        name: 'Magic Spire',
+        description: 'A towering structure that pierces the veil between realms, drawing Mana from other planes.',
+        flavorText: 'The spire hums with energy, its peak lost in clouds of pure magic.',
+        baseCost: 17500000000,
+        baseProduction: 36575000,
+        productionPerSecond: 36575000,
+        owned: 0,
+        unlockCondition: () => mana >= 7500000000,
         isUnlocked: false,
         element: null
     },
@@ -574,11 +665,23 @@ const upgrades = [
         id: 'mana-drenched',
         name: 'Mana-Drenched',
         description: 'Gain +1 bonus prestige level and +2% Mana per second.',
-        flavorText: 'You are saturated with arcane energy.',
+        flavorText: 'You are drenched with arcane energy.',
         cost: 1000000000000000,
         effect: () => { PrestigeModule.addBonusPrestigeLevel(1); mpsUpgradeMultiplier *= 1.02; recalculateMPS(); },
         isPurchased: false,
         unlockCondition: () => upgrades.find(u => u.id === 'mana-touched').isPurchased,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'mana-saturated',
+        name: 'Mana-Saturated',
+        description: 'Gain +1 bonus prestige level and +2% Mana per second.',
+        flavorText: 'You are saturated with arcane energy.',
+        cost: 1000000000000000,
+        effect: () => { PrestigeModule.addBonusPrestigeLevel(1); mpsUpgradeMultiplier *= 1.02; recalculateMPS(); },
+        isPurchased: false,
+        unlockCondition: () => upgrades.find(u => u.id === 'mana-drenched').isPurchased,
         isUnlocked: false,
         element: null
     },
@@ -590,7 +693,7 @@ const upgrades = [
         cost: 1000000000000000,
         effect: () => { PrestigeModule.addBonusPrestigeLevel(1); mpsUpgradeMultiplier *= 1.02; recalculateMPS(); },
         isPurchased: false,
-        unlockCondition: () => upgrades.find(u => u.id === 'mana-drenched').isPurchased,
+        unlockCondition: () => upgrades.find(u => u.id === 'mana-saturated').isPurchased,
         isUnlocked: false,
         element: null
     },
@@ -661,6 +764,18 @@ const upgrades = [
         flavorText: 'Toss a coin, for a chance at...',
         cost: 25000,
         effect: () => { WishingWellModule.unlock(); },
+        isPurchased: false,
+        unlockCondition: () => mana >= 50000,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'spellcasting',
+        name: 'Spellcasting',
+        description: 'Unlock the Spellcasting panel, allowing you to cast powerful spells.',
+        flavorText: 'Channel your accumulated mana into arcane incantations.',
+        cost: 75000,
+        effect: () => { },
         isPurchased: false,
         unlockCondition: () => mana >= 50000,
         isUnlocked: false,
@@ -811,20 +926,494 @@ const upgrades = [
         isUnlocked: false,
         element: null
     },
+    // === WIZARD'S HAND UPGRADES ===
+    {
+        id: 'double-tap',
+        name: 'Double Tap',
+        description: 'Wizard\'s Hands are twice as effective.',
+        flavorText: 'Two taps are better than one.',
+        cost: 60,
+        effect: () => { const b = buildings.find(b => b.id === 'wizards-hand'); if(b) b.productionPerSecond *= 2; recalculateMPS(); },
+        isPurchased: false,
+        unlockCondition: () => buildings.find(b => b.id === 'wizards-hand').owned >= 2,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'triple-tap',
+        name: 'Triple Tap',
+        description: 'Wizard\'s Hands are three times as effective.',
+        flavorText: 'Three taps make a charm.',
+        cost: 300,
+        effect: () => { const b = buildings.find(b => b.id === 'wizards-hand'); if(b) b.productionPerSecond *= 3; recalculateMPS(); },
+        isPurchased: false,
+        unlockCondition: () => buildings.find(b => b.id === 'wizards-hand').owned >= 3,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'button-booping',
+        name: 'Button Booping',
+        description: 'Wizard\'s Hands are twice as effective.',
+        flavorText: 'Boop the Gather Mana button, and train your Wizard\'s Hands to do the same.',
+        cost: 30000,
+        effect: () => { const b = buildings.find(b => b.id === 'wizards-hand'); if(b) b.productionPerSecond *= 2; recalculateMPS(); },
+        isPurchased: false,
+        unlockCondition: () => buildings.find(b => b.id === 'wizards-hand').owned >= 25,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'spectral-hands',
+        name: 'Spectral Hands',
+        description: 'Wizard\'s Hands are twice as effective.',
+        flavorText: 'Hands made of pure magical energy.',
+        cost: 1248016,
+        effect: () => { const b = buildings.find(b => b.id === 'wizards-hand'); if(b) b.productionPerSecond *= 2; recalculateMPS(); },
+        isPurchased: false,
+        unlockCondition: () => buildings.find(b => b.id === 'wizards-hand').owned >= 50,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'delegation-by-hand',
+        name: 'Delegation By Hand',
+        description: 'Wizard\'s Hands get +1% MPS for each non-Wizard\'s Hand building owned.',
+        flavorText: 'Delegate the work to capable hands.',
+        cost: 10000000,
+        effect: () => { /* Handled dynamically in recalculateMPS */ },
+        isPurchased: false,
+        unlockCondition: () => buildings.find(b => b.id === 'wizards-hand').owned >= 100,
+        isUnlocked: false,
+        element: null
+    },
+    // === WIZARD'S EYE UPGRADES ===
+    {
+        id: 'focused-vision',
+        name: 'Focused Vision',
+        description: 'Wizard\'s Eyes are twice as effective.',
+        flavorText: 'Focus your magical sight.',
+        cost: 1550,
+        effect: () => { const b = buildings.find(b => b.id === 'wizards-eye'); if(b) b.productionPerSecond *= 2; recalculateMPS(); },
+        isPurchased: false,
+        unlockCondition: () => buildings.find(b => b.id === 'wizards-eye').owned >= 10,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'mystic-viewpoint',
+        name: 'Mystic Viewpoint',
+        description: 'Wizard\'s Eyes are twice as effective.',
+        flavorText: 'See the world from a mystic perspective.',
+        cost: 25000,
+        effect: () => { const b = buildings.find(b => b.id === 'wizards-eye'); if(b) b.productionPerSecond *= 2; recalculateMPS(); },
+        isPurchased: false,
+        unlockCondition: () => buildings.find(b => b.id === 'wizards-eye').owned >= 25,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'beholders-eyes',
+        name: 'Beholders\' Eyes',
+        description: 'Wizard\'s Eyes are twice as effective.',
+        flavorText: 'Eyes that see all, miss nothing.',
+        cost: 1500000,
+        effect: () => { const b = buildings.find(b => b.id === 'wizards-eye'); if(b) b.productionPerSecond *= 2; recalculateMPS(); },
+        isPurchased: false,
+        unlockCondition: () => buildings.find(b => b.id === 'wizards-eye').owned >= 50,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'overseer',
+        name: 'Overseer',
+        description: 'Wizard\'s Eyes get +1% MPS for each non-Wizard\'s Eye building owned.',
+        flavorText: 'Oversee all magical operations.',
+        cost: 35000000,
+        effect: () => { /* Handled dynamically in recalculateMPS */ },
+        isPurchased: false,
+        unlockCondition: () => buildings.find(b => b.id === 'wizards-eye').owned >= 100,
+        isUnlocked: false,
+        element: null
+    },
+    // === MAGUS UPGRADES ===
+    {
+        id: 'mages-apprentice',
+        name: 'Mage\'s Apprentice',
+        description: 'Magus buildings are twice as effective.',
+        flavorText: 'Every master was once an apprentice.',
+        cost: 333000,
+        effect: () => { const b = buildings.find(b => b.id === 'magus'); if(b) b.productionPerSecond *= 2; recalculateMPS(); },
+        isPurchased: false,
+        unlockCondition: () => buildings.find(b => b.id === 'magus').owned >= 25,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'archmage-upgrade',
+        name: 'Archmage',
+        description: 'Magus buildings are three times as effective.',
+        flavorText: 'The pinnacle of magical mastery.',
+        cost: 90000000,
+        effect: () => { const b = buildings.find(b => b.id === 'magus'); if(b) b.productionPerSecond *= 3; recalculateMPS(); },
+        isPurchased: false,
+        unlockCondition: () => buildings.find(b => b.id === 'magus').owned >= 100,
+        isUnlocked: false,
+        element: null
+    },
+    // === LEY LINE UPGRADES ===
+    {
+        id: 'eco-friendly-ley-lines',
+        name: 'Eco-Friendly Ley Lines',
+        description: 'Ley Lines are twice as effective.',
+        flavorText: 'Learn to be nicer to the planet with your Ley Line withdrawal.',
+        cost: 55500,
+        effect: () => { const b = buildings.find(b => b.id === 'ley-line'); if(b) b.productionPerSecond *= 2; recalculateMPS(); },
+        isPurchased: false,
+        unlockCondition: () => buildings.find(b => b.id === 'ley-line').owned >= 10,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'mana-spouts',
+        name: 'Mana Spouts',
+        description: 'Ley Lines are twice as effective.',
+        flavorText: 'Install spouts to improve Ley Line yields.',
+        cost: 715000,
+        effect: () => { const b = buildings.find(b => b.id === 'ley-line'); if(b) b.productionPerSecond *= 2; recalculateMPS(); },
+        isPurchased: false,
+        unlockCondition: () => buildings.find(b => b.id === 'ley-line').owned >= 25,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'bathed-in-mana',
+        name: 'Bathed In Mana',
+        description: 'Ley Lines are twice as effective.',
+        flavorText: 'Immerse yourself in the flow of Mana.',
+        cost: 5151515,
+        effect: () => { const b = buildings.find(b => b.id === 'ley-line'); if(b) b.productionPerSecond *= 2; recalculateMPS(); },
+        isPurchased: false,
+        unlockCondition: () => buildings.find(b => b.id === 'ley-line').owned >= 50,
+        isUnlocked: false,
+        element: null
+    },
+    // === MANA CRYSTAL UPGRADES ===
+    {
+        id: 'mana-jewel',
+        name: 'Mana Jewel',
+        description: 'Mana Crystals are twice as effective.',
+        flavorText: 'Further refinement turns simple crystals of Mana into pure jewels.',
+        cost: 125000,
+        effect: () => { const b = buildings.find(b => b.id === 'mana-crystal'); if(b) b.productionPerSecond *= 2; recalculateMPS(); },
+        isPurchased: false,
+        unlockCondition: () => buildings.find(b => b.id === 'mana-crystal').owned >= 10,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'spell-circles',
+        name: 'Spell Circles',
+        description: 'Mana Crystals are twice as effective.',
+        flavorText: 'With a supply of Mana Crystals, you enhance your magical prowess by channeling power into one of the most potent of rituals, Magic Circles.',
+        cost: 515000,
+        effect: () => { const b = buildings.find(b => b.id === 'mana-crystal'); if(b) b.productionPerSecond *= 2; recalculateMPS(); },
+        isPurchased: false,
+        unlockCondition: () => buildings.find(b => b.id === 'mana-crystal').owned >= 25,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'mana-geodes',
+        name: 'Mana Geodes',
+        description: 'Mana Crystals are twice as effective.',
+        flavorText: 'Geodes filled with crystallized Mana.',
+        cost: 2250000,
+        effect: () => { const b = buildings.find(b => b.id === 'mana-crystal'); if(b) b.productionPerSecond *= 2; recalculateMPS(); },
+        isPurchased: false,
+        unlockCondition: () => buildings.find(b => b.id === 'mana-crystal').owned >= 50,
+        isUnlocked: false,
+        element: null
+    },
+    // === MANA SHARD UPGRADES ===
+    {
+        id: 'mana-prism',
+        name: 'Mana Prism',
+        description: 'Mana Shards are twice as effective.',
+        flavorText: 'Prisms that refract magical light.',
+        cost: 980000,
+        effect: () => { const b = buildings.find(b => b.id === 'mana-shard'); if(b) b.productionPerSecond *= 2; recalculateMPS(); },
+        isPurchased: false,
+        unlockCondition: () => buildings.find(b => b.id === 'mana-shard').owned >= 10,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'magic-dust',
+        name: 'Magic Dust',
+        description: 'Mana Shards are twice as effective.',
+        flavorText: 'Fine particles of pure magic.',
+        cost: 985000,
+        effect: () => { const b = buildings.find(b => b.id === 'mana-shard'); if(b) b.productionPerSecond *= 2; recalculateMPS(); },
+        isPurchased: false,
+        unlockCondition: () => buildings.find(b => b.id === 'mana-shard').owned >= 10,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'mana-cluster',
+        name: 'Mana Cluster',
+        description: 'Mana Shards are twice as effective.',
+        flavorText: 'Clusters of shimmering Mana shards.',
+        cost: 3300000,
+        effect: () => { const b = buildings.find(b => b.id === 'mana-shard'); if(b) b.productionPerSecond *= 2; recalculateMPS(); },
+        isPurchased: false,
+        unlockCondition: () => buildings.find(b => b.id === 'mana-shard').owned >= 25,
+        isUnlocked: false,
+        element: null
+    },
+    // === MANA FOUNTAIN UPGRADES ===
+    {
+        id: 'pool-of-mana',
+        name: 'Pool of Mana',
+        description: 'Mana Fountains are twice as effective.',
+        flavorText: 'Deep pools where Mana collects and concentrates.',
+        cost: 200000000,
+        effect: () => { const b = buildings.find(b => b.id === 'mana-fountain'); if(b) b.productionPerSecond *= 2; recalculateMPS(); },
+        isPurchased: false,
+        unlockCondition: () => buildings.find(b => b.id === 'mana-fountain').owned >= 1,
+        isUnlocked: false,
+        element: null
+    },
+    // === MANA MANIPULATION UPGRADES ===
+    {
+        id: 'advanced-mana-manipulation-techniques',
+        name: 'Advanced Mana Manipulation Techniques',
+        description: 'Double Mana per click, and unlock the Mana Manipulator building.',
+        flavorText: 'Expand upon techniques lost to time... except you have forbidden tomes also thought to be lost that detail these techniques.',
+        cost: 111111,
+        effect: () => { manaPerClick *= 2; },
+        isPurchased: false,
+        unlockCondition: () => upgrades.find(u => u.id === 'mana-manipulation-techniques')?.isPurchased,
+        isUnlocked: false,
+        element: null
+    },
+    // === AMBIENT MANA ===
+    {
+        id: 'ambient-mana',
+        name: 'Ambient Mana',
+        description: 'Increase Mana per second by 1%, and increase Mana per click by 5.',
+        flavorText: 'Mana is all around us, however, not everyone can see it.',
+        cost: 35000,
+        effect: () => { mpsUpgradeMultiplier *= 1.01; manaPerClick += 5; recalculateMPS(); },
+        isPurchased: false,
+        unlockCondition: () => upgrades.find(u => u.id === 'magic-theory')?.isPurchased && upgrades.find(u => u.id === 'magic-sight')?.isPurchased,
+        isUnlocked: false,
+        element: null
+    },
+    // === PRESTIGE POTENTIAL UPGRADES ===
+    // These unlock the power from prestige levels
+    // Must be purchased each run to apply the bonus
+    // Each tier becomes visible when the previous tier is purchased (this run or any previous run)
+    {
+        id: 'magic-core',
+        name: 'Magic Core',
+        description: 'Unlock 10% of the potential of your prestige level.',
+        flavorText: 'A core of pure magic, the foundation of true power.',
+        cost: 10001,
+        effect: () => { PrestigeModule.addPrestigePotential(10, 1); },
+        isPurchased: false,
+        unlockCondition: () => PrestigeModule.getTimesPrestiged() >= 1,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'arcane-key',
+        name: 'Arcane Key',
+        description: 'Unlock 10% of the potential of your prestige level.',
+        flavorText: 'A key to unlock deeper mysteries of the arcane.',
+        cost: 111111,
+        effect: () => { PrestigeModule.addPrestigePotential(10, 2); },
+        isPurchased: false,
+        unlockCondition: () => upgrades.find(u => u.id === 'magic-core')?.isPurchased || PrestigeModule.getHighestPotentialTier() >= 1,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'pure-mana-construct',
+        name: 'Pure Mana Construct',
+        description: 'Unlock 10% of the potential of your prestige level.',
+        flavorText: 'A construct made of solidified mana, humming with power.',
+        cost: 11111111,
+        effect: () => { PrestigeModule.addPrestigePotential(10, 3); },
+        isPurchased: false,
+        unlockCondition: () => upgrades.find(u => u.id === 'arcane-key')?.isPurchased || PrestigeModule.getHighestPotentialTier() >= 2,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'arcane-crystal',
+        name: 'Arcane Crystal',
+        description: 'Unlock 10% of the potential of your prestige level.',
+        flavorText: 'A crystal that resonates with the deepest arcane frequencies.',
+        cost: 5999999999,
+        effect: () => { PrestigeModule.addPrestigePotential(10, 4); },
+        isPurchased: false,
+        unlockCondition: () => upgrades.find(u => u.id === 'pure-mana-construct')?.isPurchased || PrestigeModule.getHighestPotentialTier() >= 3,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'legion-of-the-weave',
+        name: 'Legion of the Weave',
+        description: 'Unlock 10% of the potential of your prestige level.',
+        flavorText: 'Command a legion of magical entities woven from the fabric of reality.',
+        cost: 999999999999,
+        effect: () => { PrestigeModule.addPrestigePotential(10, 5); },
+        isPurchased: false,
+        unlockCondition: () => upgrades.find(u => u.id === 'arcane-crystal')?.isPurchased || PrestigeModule.getHighestPotentialTier() >= 4,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'nexus-of-the-arcane',
+        name: 'Nexus of the Arcane',
+        description: 'Unlock 10% of the potential of your prestige level.',
+        flavorText: 'A convergence point where all magical energies meet.',
+        cost: 9999999999999,
+        effect: () => { PrestigeModule.addPrestigePotential(10, 6); },
+        isPurchased: false,
+        unlockCondition: () => upgrades.find(u => u.id === 'legion-of-the-weave')?.isPurchased || PrestigeModule.getHighestPotentialTier() >= 5,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'essence-of-infinity',
+        name: 'Essence of Infinity',
+        description: 'Unlock 10% of the potential of your prestige level.',
+        flavorText: 'A drop of infinity itself, contained within mortal grasp.',
+        cost: 99999999999999,
+        effect: () => { PrestigeModule.addPrestigePotential(10, 7); },
+        isPurchased: false,
+        unlockCondition: () => upgrades.find(u => u.id === 'nexus-of-the-arcane')?.isPurchased || PrestigeModule.getHighestPotentialTier() >= 6,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'cosmic-mana-font',
+        name: 'Cosmic Mana Font',
+        description: 'Unlock 10% of the potential of your prestige level.',
+        flavorText: 'A fountain that draws mana from the cosmos itself.',
+        cost: 999999999999999,
+        effect: () => { PrestigeModule.addPrestigePotential(10, 8); },
+        isPurchased: false,
+        unlockCondition: () => upgrades.find(u => u.id === 'essence-of-infinity')?.isPurchased || PrestigeModule.getHighestPotentialTier() >= 7,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'universal-weave',
+        name: 'Universal Weave',
+        description: 'Unlock 10% of the potential of your prestige level.',
+        flavorText: 'The very fabric of the universe becomes your plaything.',
+        cost: 9999999999999999,
+        effect: () => { PrestigeModule.addPrestigePotential(10, 9); },
+        isPurchased: false,
+        unlockCondition: () => upgrades.find(u => u.id === 'cosmic-mana-font')?.isPurchased || PrestigeModule.getHighestPotentialTier() >= 8,
+        isUnlocked: false,
+        element: null
+    },
+    {
+        id: 'apotheosis',
+        name: 'Apotheosis',
+        description: 'Unlock 10% of the potential of your prestige level. You have achieved full mastery.',
+        flavorText: 'Transcend mortality. Become one with all magic that ever was and ever will be.',
+        cost: 99999999999999999,
+        effect: () => { PrestigeModule.addPrestigePotential(10, 10); },
+        isPurchased: false,
+        unlockCondition: () => upgrades.find(u => u.id === 'universal-weave')?.isPurchased || PrestigeModule.getHighestPotentialTier() >= 9,
+        isUnlocked: false,
+        element: null
+    },
     // === INSERT NEW UPGRADES HERE ===
 ];
 
 // --- Helper Functions ---
 function getBuildingCurrentCost(building) {
     // Exponential cost increase: baseCost * 1.15^owned
-    return building.baseCost * Math.pow(1.15, building.owned);
+    let cost = building.baseCost * Math.pow(1.15, building.owned);
+    // Apply runestone building cost modifier
+    if (typeof RunestonesModule !== 'undefined') {
+        cost *= RunestonesModule.getTempBuildingCostMultiplier();
+    }
+    // Apply spellcasting building cost modifier
+    if (typeof SpellcastingModule !== 'undefined') {
+        cost *= SpellcastingModule.getBuildingCostMultiplier();
+    }
+    return cost;
+}
+
+function getUpgradeCurrentCost(upgrade) {
+    let cost = upgrade.cost;
+    // Apply runestone upgrade cost modifier
+    if (typeof RunestonesModule !== 'undefined') {
+        cost *= RunestonesModule.getTempUpgradeCostMultiplier();
+    }
+    // Apply spellcasting upgrade cost modifier
+    if (typeof SpellcastingModule !== 'undefined') {
+        cost *= SpellcastingModule.getUpgradeCostMultiplier();
+    }
+    return cost;
 }
 
 // Recalculate total MPS from all buildings (call after upgrades modify production rates)
 function recalculateMPS() {
+    // Check if silenced by runestone
+    if (typeof RunestonesModule !== 'undefined' && RunestonesModule.isMagicSilenced()) {
+        manaPerSecond = 0;
+        // Update Production panel
+        if (typeof ProductionModule !== 'undefined') {
+            ProductionModule.setMPSFromUpgrades(0);
+            ProductionModule.setMPSMultiplier(0);
+        }
+        return;
+    }
+
+    // Get runestone building production multiplier (Arcane Overflow)
+    let runestoneProductionMult = 1;
+    if (typeof RunestonesModule !== 'undefined') {
+        runestoneProductionMult = RunestonesModule.getTempBuildingProductionMultiplier();
+    }
+
+    // Calculate total non-building-type buildings for special upgrades
+    let totalNonHandBuildings = 0;
+    let totalNonEyeBuildings = 0;
+    buildings.forEach(b => {
+        if (b.id !== 'wizards-hand') totalNonHandBuildings += b.owned;
+        if (b.id !== 'wizards-eye') totalNonEyeBuildings += b.owned;
+    });
+
     let baseMPS = 0;
     buildings.forEach(building => {
-        baseMPS += building.productionPerSecond * building.owned;
+        // Get specific building multiplier from runestones (True Sight, Crystal Clear)
+        let specificMult = 1;
+        if (typeof RunestonesModule !== 'undefined') {
+            specificMult = RunestonesModule.getSpecificBuildingMultiplier(building.id);
+        }
+
+        // Apply Delegation By Hand bonus (Wizard's Hands get +1% per non-Hand building)
+        let delegationMult = 1;
+        if (building.id === 'wizards-hand' && upgrades.find(u => u.id === 'delegation-by-hand')?.isPurchased) {
+            delegationMult = 1 + (totalNonHandBuildings * 0.01);
+        }
+
+        // Apply Overseer bonus (Wizard's Eyes get +1% per non-Eye building)
+        let overseerMult = 1;
+        if (building.id === 'wizards-eye' && upgrades.find(u => u.id === 'overseer')?.isPurchased) {
+            overseerMult = 1 + (totalNonEyeBuildings * 0.01);
+        }
+
+        baseMPS += building.productionPerSecond * building.owned * runestoneProductionMult * specificMult * delegationMult * overseerMult;
     });
 
     // Calculate proficiency multiplier (kitten-style: each upgrade multiplies by 1 + proficiency * factor)
@@ -843,11 +1432,25 @@ function recalculateMPS() {
         wishingWellMultiplier = WishingWellModule.getMPSMultiplier();
     }
 
-    manaPerSecond = baseMPS * mpsUpgradeMultiplier * proficiencyMultiplier * wishingWellMultiplier;
+    // Get Runestone MPS multiplier (Mana Surge, Mana Void)
+    let runestoneMPSMultiplier = 1;
+    if (typeof RunestonesModule !== 'undefined') {
+        runestoneMPSMultiplier = RunestonesModule.getTempMPSMultiplier();
+    }
+
+    manaPerSecond = baseMPS * mpsUpgradeMultiplier * proficiencyMultiplier * wishingWellMultiplier * runestoneMPSMultiplier;
+
+    // Add Runestone temporary MPS bonus (flat bonus from Jazz Hands, Gushing Ley Lines, etc.)
+    if (typeof RunestonesModule !== 'undefined') {
+        manaPerSecond += RunestonesModule.getTempMPSBonus();
+    }
+
+    // Ensure MPS doesn't go below 0
+    if (manaPerSecond < 0) manaPerSecond = 0;
 
     // Update Production panel with MPS bonus and multiplier (if module is loaded)
     if (typeof ProductionModule !== 'undefined') {
-        const totalMultiplier = mpsUpgradeMultiplier * proficiencyMultiplier * wishingWellMultiplier;
+        const totalMultiplier = mpsUpgradeMultiplier * proficiencyMultiplier * wishingWellMultiplier * runestoneMPSMultiplier;
         const mpsBonus = baseMPS * (totalMultiplier - 1);
         ProductionModule.setMPSFromUpgrades(mpsBonus);
         ProductionModule.setMPSMultiplier(totalMultiplier);
@@ -895,8 +1498,27 @@ function updateDisplay() {
 
 // Function to gather mana when the button is clicked
 function gatherMana() {
-    mana += manaPerClick;
-    StatisticsModule.addManaByClick(manaPerClick);
+    // Check if silenced - no mana from clicking
+    if (typeof RunestonesModule !== 'undefined' && RunestonesModule.isMagicSilenced()) {
+        // Still update display but don't gain mana
+        updateDisplay();
+        return;
+    }
+
+    // Calculate effective mana per click with runestone bonus
+    let effectiveMPC = manaPerClick;
+    if (typeof RunestonesModule !== 'undefined') {
+        effectiveMPC += RunestonesModule.getTempMPCBonus();
+    }
+    // Apply spellcasting MPC multiplier
+    if (typeof SpellcastingModule !== 'undefined') {
+        effectiveMPC *= SpellcastingModule.getMPCMultiplier();
+    }
+    // Ensure MPC doesn't go below 1
+    if (effectiveMPC < 1) effectiveMPC = 1;
+
+    mana += effectiveMPC;
+    StatisticsModule.addManaByClick(effectiveMPC);
     updateDisplay();
 }
 
@@ -916,6 +1538,14 @@ function buyBuilding(buildingId) {
         StatisticsModule.addBuildingOwned();
         updateBuildingDisplay(building);
         updateDisplay(); // Update main displays and affordability
+
+        // Play building purchase sound
+        if (typeof SoundModule !== 'undefined') {
+            SoundModule.play('buildingPurchase');
+        }
+
+        // Announce purchase for screen readers
+        announceToScreenReader('Purchased');
     } else {
         // Do nothing if cannot afford
     }
@@ -932,7 +1562,7 @@ function createBuildingElement(building) {
         <p id="building-name-${building.id}" class="building-name">${building.name}</p>
         <p class="building-description">${building.description}</p>
         <p class="building-flavor">${building.flavorText}</p>
-        <p class="building-owned" aria-live="polite" aria-atomic="true">Owned: <span>${building.owned}</span></p>
+        <p class="building-owned">Owned: <span>${building.owned}</span></p>
         <p class="building-cost">Cost: <span class="cost-value">${OptionsModule.formatNumber(Math.floor(getBuildingCurrentCost(building)))}</span> Mana</p>
         <button id="buy-${building.id}-button" class="buy-building-button">${building.name}, Can Buy</button>
     `;
@@ -994,8 +1624,9 @@ function buyUpgrade(upgradeId) {
         return;
     }
 
-    if (mana >= upgrade.cost) {
-        mana -= upgrade.cost;
+    const effectiveCost = getUpgradeCurrentCost(upgrade);
+    if (mana >= effectiveCost) {
+        mana -= effectiveCost;
         upgrade.effect(); // Apply the upgrade's effect
         upgrade.isPurchased = true;
         StatisticsModule.addUpgradePurchased();
@@ -1007,6 +1638,14 @@ function buyUpgrade(upgradeId) {
         updateUpgradeDisplay(upgrade);
         renderBuildings(); // Re-render buildings in case upgrade unlocked one
         updateDisplay(); // Update main displays and affordability
+
+        // Play upgrade purchase sound
+        if (typeof SoundModule !== 'undefined') {
+            SoundModule.play('upgradePurchase');
+        }
+
+        // Announce purchase for screen readers
+        announceToScreenReader('Purchased');
     } else {
         // Do nothing if cannot afford
     }
@@ -1023,7 +1662,7 @@ function createUpgradeElement(upgrade) {
         <p id="upgrade-name-${upgrade.id}" class="upgrade-name">${upgrade.name}</p>
         <p class="upgrade-description">${upgrade.description}</p>
         <p class="upgrade-flavor">${upgrade.flavorText}</p>
-        <p class="upgrade-cost">Cost: <span class="cost-value">${OptionsModule.formatNumber(Math.floor(upgrade.cost))}</span> Mana</p>
+        <p class="upgrade-cost">Cost: <span class="cost-value">${OptionsModule.formatNumber(Math.floor(getUpgradeCurrentCost(upgrade)))}</span> Mana</p>
         <button id="buy-${upgrade.id}-button" class="buy-upgrade-button">${upgrade.name}, Can Buy</button>
     `;
 
@@ -1046,7 +1685,8 @@ function updateUpgradeDisplay(upgrade) {
         upgrade.element.classList.add('purchased-upgrade-item');
     } else {
         // Affordability handled by checkAffordability
-        upgrade.element.querySelector('.upgrade-cost .cost-value').textContent = OptionsModule.formatNumber(Math.floor(upgrade.cost));
+        const effectiveCost = getUpgradeCurrentCost(upgrade);
+        upgrade.element.querySelector('.upgrade-cost .cost-value').textContent = OptionsModule.formatNumber(Math.floor(effectiveCost));
     }
 }
 
@@ -1087,7 +1727,11 @@ function checkAffordability() {
     upgrades.forEach(upgrade => {
         if (upgrade.element && !upgrade.isPurchased) {
             const buyButton = upgrade.element.querySelector('.buy-upgrade-button');
-            if (mana >= upgrade.cost) {
+            const effectiveCost = getUpgradeCurrentCost(upgrade);
+            // Update displayed cost in case runestone modifier changed
+            const costEl = upgrade.element.querySelector('.upgrade-cost .cost-value');
+            if (costEl) costEl.textContent = OptionsModule.formatNumber(Math.floor(effectiveCost));
+            if (mana >= effectiveCost) {
                 buyButton.disabled = false;
                 buyButton.textContent = `${upgrade.name}, Can Buy`;
                 buyButton.setAttribute('aria-label', `${upgrade.name}, Can Buy`);
@@ -1095,7 +1739,7 @@ function checkAffordability() {
                 buyButton.classList.remove('cannot-buy');
             } else {
                 buyButton.disabled = true;
-                const timeUntil = getTimeUntilAffordable(upgrade.cost);
+                const timeUntil = getTimeUntilAffordable(effectiveCost);
                 const timeStr = formatTime(timeUntil);
                 const timerDisplay = timeStr ? `, ${timeStr}` : '';
                 buyButton.textContent = `${upgrade.name}, Not Affordable${timerDisplay}`;
@@ -1113,10 +1757,20 @@ let currentOpenPanel = null;
 function togglePanel(panel, heading) {
     if (!panel) return;
 
+    // Panels that don't play menu sounds (have their own sounds)
+    const excludedPanels = ['wishing-well-panel', 'prestige-panel', 'prestige-store-panel'];
+    const panelId = panel.id || '';
+    const playMenuSound = !excludedPanels.includes(panelId);
+
     // If clicking the same panel, close it
     if (currentOpenPanel === panel) {
         panel.hidden = true;
         currentOpenPanel = null;
+
+        // Play close sound
+        if (playMenuSound && typeof SoundModule !== 'undefined') {
+            SoundModule.play('menuClose');
+        }
         return;
     }
 
@@ -1128,6 +1782,11 @@ function togglePanel(panel, heading) {
     // Open the new panel
     panel.hidden = false;
     currentOpenPanel = panel;
+
+    // Play open sound
+    if (playMenuSound && typeof SoundModule !== 'undefined') {
+        SoundModule.play('menuOpen');
+    }
 
     // Scroll to and focus the heading
     if (heading) {
@@ -1146,6 +1805,7 @@ function setupNavigation() {
         'production-button': document.getElementById('production-panel'),
         'prestige-button': document.getElementById('prestige-panel'),
         'wishing-well-button': document.getElementById('wishing-well-panel'),
+        'spellcasting-button': document.getElementById('spellcasting-panel'),
         'changelog-button': document.getElementById('changelog-panel'),
         'options-button': document.getElementById('options-panel')
     };
@@ -1185,6 +1845,15 @@ function updateWishingWellButton() {
     }
 }
 
+// Check if Spellcasting button should be visible
+function updateSpellcastingButton() {
+    const spellcastingUpgrade = upgrades.find(u => u.id === 'spellcasting');
+    const spellcastingButton = document.getElementById('spellcasting-button');
+    if (spellcastingButton && spellcastingUpgrade && spellcastingUpgrade.isPurchased) {
+        spellcastingButton.style.display = '';
+    }
+}
+
 // Check if Ranking Upgrades button should be visible
 function updateRankingUpgradesButton() {
     const rankingButton = document.getElementById('ranking-upgrades-button');
@@ -1197,11 +1866,79 @@ function updateRankingUpgradesButton() {
 }
 
 // --- Game Loop and Initialization ---
+// Basic click handler for mana gathering
 gatherManaButton.addEventListener('click', gatherMana);
 
-// Calculate effective MPS with prestige bonus
+// Setup gather button sounds (called after SoundModule.init)
+function setupGatherButtonSounds() {
+    let isGathering = false;
+    let gatherInterval = null;
+
+    const startGathering = (e) => {
+        if (isGathering) return;
+        isGathering = true;
+
+        // Play initial gather sound
+        if (typeof SoundModule !== 'undefined') {
+            SoundModule.onGatherStart();
+        }
+
+        // Start continuous gathering after short delay (for hold)
+        gatherInterval = setInterval(() => {
+            gatherMana();
+        }, 100);
+    };
+
+    const stopGathering = () => {
+        if (!isGathering) return;
+        isGathering = false;
+
+        if (gatherInterval) {
+            clearInterval(gatherInterval);
+            gatherInterval = null;
+        }
+
+        if (typeof SoundModule !== 'undefined') {
+            SoundModule.onGatherEnd();
+        }
+    };
+
+    // Mouse events
+    gatherManaButton.addEventListener('mousedown', startGathering);
+    gatherManaButton.addEventListener('mouseup', stopGathering);
+    gatherManaButton.addEventListener('mouseleave', stopGathering);
+
+    // Touch events (for mobile)
+    gatherManaButton.addEventListener('touchstart', (e) => {
+        e.preventDefault(); // Prevent double-firing with click
+        startGathering(e);
+    }, { passive: false });
+    gatherManaButton.addEventListener('touchend', stopGathering);
+    gatherManaButton.addEventListener('touchcancel', stopGathering);
+
+    // Keyboard support (Enter/Space when focused)
+    gatherManaButton.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            if (!e.repeat) {
+                startGathering(e);
+            }
+        }
+    });
+    gatherManaButton.addEventListener('keyup', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            stopGathering();
+        }
+    });
+}
+
+// Calculate effective MPS with prestige bonus and spell effects
 function getEffectiveMPS() {
-    return manaPerSecond * PrestigeModule.getPrestigeMultiplier();
+    let effectiveMPS = manaPerSecond * PrestigeModule.getPrestigeMultiplier();
+    // Apply spellcasting MPS multiplier
+    if (typeof SpellcastingModule !== 'undefined') {
+        effectiveMPS *= SpellcastingModule.getMPSMultiplier();
+    }
+    return effectiveMPS;
 }
 
 function gameLoop() {
@@ -1226,14 +1963,27 @@ function gameLoop() {
     // Update ranking upgrades button visibility (based on achievement count)
     updateRankingUpgradesButton();
 
+    // Update spellcasting button visibility (based on achievement count)
+    updateSpellcastingButton();
+
     // Update prestige display (for countdown timers)
     PrestigeModule.updateDisplay();
 
     // Update Wishing Well (coin generation)
     if (typeof WishingWellModule !== 'undefined' && WishingWellModule.isWellUnlocked()) {
-        const coinRate = WishingWellModule.getCoinGenerationRate();
+        let coinRate = WishingWellModule.getCoinGenerationRate();
+        // Apply Golden Eye spell multiplier
+        if (typeof SpellcastingModule !== 'undefined') {
+            coinRate *= SpellcastingModule.getWishingWellMultiplier();
+        }
         WishingWellModule.addCoins(coinRate / 10); // Divide by 10 since loop runs 10x per second
         WishingWellModule.updateDisplay();
+    }
+
+    // Update Spellcasting (spell power regen, active spell timers)
+    if (typeof SpellcastingModule !== 'undefined') {
+        SpellcastingModule.update(0.1); // 0.1 seconds per tick
+        SpellcastingModule.updateDisplay();
     }
 
     updateDisplay();
@@ -1265,7 +2015,7 @@ function resetForPrestige() {
     // Apply prestige building boosts
     PrestigeModule.applyAllPrestigeBuildingBoosts();
 
-    // Reset upgrades
+    // Reset upgrades (all upgrades reset each run)
     upgrades.forEach(upgrade => {
         upgrade.isPurchased = false;
         upgrade.isUnlocked = false;
@@ -1292,6 +2042,19 @@ function resetForPrestige() {
         WishingWellModule.reset();
     }
 
+    // Reset Runestones
+    if (typeof RunestonesModule !== 'undefined') {
+        RunestonesModule.reset();
+    }
+
+    // Reset Spellcasting (clear active spells, keep spell power)
+    if (typeof SpellcastingModule !== 'undefined') {
+        SpellcastingModule.reset();
+    }
+
+    // Reset prestige potential for this run (must buy upgrades again)
+    PrestigeModule.resetPotentialForRun();
+
     // Re-render UI
     renderBuildings();
     renderUpgrades();
@@ -1310,20 +2073,33 @@ updateDisplay();
 renderBuildings();
 renderUpgrades();
 FlavorEventsModule.init();
+RunestonesModule.init();
+SpellcastingModule.init();
+SoundModule.init();
 SaveManager.init();
+
+// Set up gather button sound handling (click and hold)
+setupGatherButtonSounds();
 
 // Display version in title
 document.getElementById('game-title').textContent = 'MagicTap, V.' + VERSION;
 document.title = 'MagicTap, V.' + VERSION;
 
-// Function for general announcements (kept for future use, but not for purchases)
-function announce(message) {
-    const announcement = document.createElement('p');
-    announcement.textContent = message;
-    announcement.classList.add('sr-only');
-    eventsLog.prepend(announcement);
+// Simple announcement helper for screen readers
+// Clears previous announcements so rapid actions only announce once
+function announceToScreenReader(message) {
+    const notificationArea = document.getElementById('notification-area');
+    if (!notificationArea) return;
 
-    while (eventsLog.children.length > 5) {
-        eventsLog.removeChild(eventsLog.lastChild);
-    }
+    // Clear any pending sr-only announcements to prevent spam
+    const existingAnnouncements = notificationArea.querySelectorAll('.sr-only-announcement');
+    existingAnnouncements.forEach(el => el.remove());
+
+    const announcement = document.createElement('span');
+    announcement.className = 'sr-only sr-only-announcement';
+    announcement.textContent = message;
+    notificationArea.appendChild(announcement);
+
+    // Remove after announcement is read
+    setTimeout(() => announcement.remove(), 1000);
 }

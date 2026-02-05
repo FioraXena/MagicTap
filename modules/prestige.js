@@ -5,23 +5,40 @@ const PrestigeModule = (function() {
     let totalManaCrystalsEarned = 0;  // Total ever earned (for prestige level)
     let bonusPrestigeLevels = 0;  // Bonus levels from upgrades (shown as pending)
     let timesPrestiged = 0;
-    let isInPrestigeMode = false;
+    let isInPrestigeStore = false;
+    let crystalsSpentThisSession = 0; // Track crystals spent for refund
+    let prestigePotentialUnlocked = 0; // Percentage of prestige power unlocked THIS RUN (0-100)
+    let highestPotentialTierPurchased = 0; // Highest tier ever purchased (1-10), persists across runs
 
     // Constants (Cookie Clicker formula)
     const PRESTIGE_BASE = 1e12;  // 1 trillion mana for first Mana Crystal
     const PRESTIGE_UNLOCK_THRESHOLD = 1e9;  // 1 billion mana to see prestige button (first run)
 
     // Prestige Upgrades (permanent upgrades bought with Mana Crystals)
+    // Ordered by cost for progressive unlocking
     const prestigeUpgrades = [
+        // 1-cost upgrades (visible from start)
         {
-            id: 'spell-core',
-            name: 'Spell Core',
-            description: 'Boosts MPS by 5%.',
-            flavorText: 'A wizard must always be aware of their inner self, and their connection to the arcane and metaphysical. Spell Cores help them channel their will into reality.',
-            cost: 10,
-            mpsBonus: 0.05,  // 5% MPS boost
-            isPurchased: false
+            id: 'mana-crystal-upgrade',
+            name: 'Mana Crystal',
+            description: 'Unlocks the Ancient Spell Staff and Spell Core upgrades.',
+            flavorText: 'A crystallized fragment of pure mana, pulsing with arcane potential.',
+            cost: 1,
+            isPurchased: false,
+            unlockCost: 0
         },
+        // 3-cost upgrades (requires Mana Crystal)
+        {
+            id: 'ancient-spell-staff-unlock',
+            name: 'Ancient Spell Staff Unlock',
+            description: 'Unlocks the Ancient Spell Staff upgrade.',
+            flavorText: 'A relic from ages past, imbued with the power of countless forgotten spells.',
+            cost: 3,
+            isPurchased: false,
+            unlockCost: 0,
+            requiresUpgrade: 'mana-crystal-upgrade'
+        },
+        // 5-cost upgrades
         {
             id: '20-20-vision',
             name: '20/20 Vision',
@@ -29,62 +46,93 @@ const PrestigeModule = (function() {
             flavorText: 'Perfect magical sight grants perfect magical insight.',
             cost: 5,
             buildingBoost: { buildingId: 'wizards-eye', multiplier: 2 },
-            isPurchased: false
+            isPurchased: false,
+            unlockCost: 0
         },
+        // 10-cost upgrades (requires Mana Crystal)
         {
-            id: 'ancient-spell-staff-unlock',
-            name: 'Ancient Spell Staff Unlock',
-            description: 'Unlocks the Ancient Spell Staff upgrade.',
-            flavorText: 'A relic from ages past, imbued with the power of countless forgotten spells.',
-            cost: 3,
-            isPurchased: false
+            id: 'spell-core',
+            name: 'Spell Core',
+            description: 'Boosts MPS by 5%.',
+            flavorText: 'A wizard must always be aware of their inner self, and their connection to the arcane and metaphysical.',
+            cost: 10,
+            mpsBonus: 0.05,
+            isPurchased: false,
+            unlockCost: 0,
+            requiresUpgrade: 'mana-crystal-upgrade'
         }
         // Future prestige upgrades go here
     ];
 
     // Calculate Mana Crystals from total mana using Cookie Clicker formula
-    // Mana Crystals = floor(cubeRoot(totalMana / 1e12))
     function calculateManaCrystals(totalMana) {
         if (totalMana < PRESTIGE_BASE) return 0;
         return Math.floor(Math.pow(totalMana / PRESTIGE_BASE, 1/3));
     }
 
     // Calculate mana needed to reach a specific Mana Crystal count
-    // Mana needed = crystals^3 * 1e12
     function manaForCrystals(crystals) {
         return Math.pow(crystals, 3) * PRESTIGE_BASE;
     }
 
-    // Get the prestige multiplier (crystals + upgrade bonuses)
+    // Get the prestige multiplier
+    // Only applies the unlocked percentage of prestige power
     function getPrestigeMultiplier() {
-        // Base: each crystal = +1% MPS
-        let multiplier = 1 + (totalManaCrystalsEarned / 100);
+        // Calculate raw prestige bonus from crystals
+        const rawPrestigeBonus = totalManaCrystalsEarned / 100;
+        // Apply only the unlocked percentage of this bonus
+        const unlockedBonus = rawPrestigeBonus * (prestigePotentialUnlocked / 100);
 
-        // Add bonuses from purchased prestige upgrades
+        let multiplier = 1 + unlockedBonus;
         prestigeUpgrades.forEach(upgrade => {
             if (upgrade.isPurchased && upgrade.mpsBonus) {
                 multiplier += upgrade.mpsBonus;
             }
         });
-
         return multiplier;
     }
 
-    // Get total bonus percentage for display
-    function getTotalBonusPercent() {
-        let bonus = totalManaCrystalsEarned;  // Each crystal = 1%
+    // Add to prestige potential (called by potential-unlocking upgrades)
+    // Also updates highest tier if this is a new record
+    function addPrestigePotential(amount, tier) {
+        prestigePotentialUnlocked = Math.min(100, prestigePotentialUnlocked + amount);
+        if (tier && tier > highestPotentialTierPurchased) {
+            highestPotentialTierPurchased = tier;
+        }
+    }
 
+    // Get current prestige potential percentage (for this run)
+    function getPrestigePotential() {
+        return prestigePotentialUnlocked;
+    }
+
+    // Get highest tier ever purchased (for unlock visibility)
+    function getHighestPotentialTier() {
+        return highestPotentialTierPurchased;
+    }
+
+    // Get total bonus percentage for display (shows unlocked amount)
+    function getTotalBonusPercent() {
+        // Only show the unlocked portion of prestige bonus
+        let bonus = totalManaCrystalsEarned * (prestigePotentialUnlocked / 100);
         prestigeUpgrades.forEach(upgrade => {
             if (upgrade.isPurchased && upgrade.mpsBonus) {
                 bonus += upgrade.mpsBonus * 100;
             }
         });
-
         return bonus;
+    }
+
+    // Get raw prestige bonus (before potential unlock, for display purposes)
+    function getRawPrestigeBonus() {
+        return totalManaCrystalsEarned;
     }
 
     // Format large numbers for display
     function formatNumber(num) {
+        if (typeof OptionsModule !== 'undefined' && OptionsModule.formatNumber) {
+            return OptionsModule.formatNumber(num);
+        }
         if (num >= 1e15) return (num / 1e15).toFixed(2) + ' quadrillion';
         if (num >= 1e12) return (num / 1e12).toFixed(2) + ' trillion';
         if (num >= 1e9) return (num / 1e9).toFixed(2) + ' billion';
@@ -119,15 +167,11 @@ const PrestigeModule = (function() {
         <section id="prestige-panel" class="game-panel" hidden>
             <h2 id="prestige-heading" tabindex="-1">Prestige</h2>
             <div id="prestige-container" aria-labelledby="prestige-heading">
-                <div id="prestige-pre-unlock" style="display: none;">
-                    <p>You will acquire your first Mana Crystal in <span id="prestige-countdown">calculating...</span></p>
-                    <p class="prestige-note">Reach 1 billion Mana gathered to unlock prestige.</p>
-                </div>
-                <div id="prestige-unlocked" style="display: none;">
-                    <p id="prestige-gain-info">Prestige: (Gain <span id="prestige-pending-crystals">0</span> Mana Crystals)</p>
+                <div id="prestige-confirmation">
+                    <p id="prestige-warning">Are you sure you would like to Prestige? This will reset your current Mana, upgrades, and buildings. You will gain Mana Crystals, which are used to purchase powerful upgrades to take into your next run.</p>
+                    <p id="prestige-gain-info">You will gain: <strong><span id="prestige-pending-crystals">0</span> Mana Crystal(s)</strong></p>
                     <p>Time until next Mana Crystal: <span id="prestige-next-countdown">calculating...</span></p>
                     <p>Current Mana Crystals: <span id="prestige-current-crystals">0</span></p>
-                    <p id="prestige-bonus-levels-display" style="display: none;">Bonus Prestige Levels: <span id="prestige-bonus-levels">0</span></p>
                     <p>Production Bonus: <span id="prestige-bonus">+0%</span></p>
                     <p>Times Ascended: <span id="times-prestiged">0</span></p>
                     <button id="prestige-action-button" class="prestige-button">Prestige</button>
@@ -138,21 +182,66 @@ const PrestigeModule = (function() {
             <h2 id="prestige-store-heading" tabindex="-1">Prestige Store</h2>
             <div id="prestige-store-container">
                 <p>Mana Crystals: <span id="prestige-store-crystals">0</span></p>
+                <p>New Production Bonus: <span id="prestige-store-bonus">+0%</span></p>
                 <div id="prestige-upgrades-container"></div>
+                <div id="prestige-store-actions">
+                    <button id="refund-crystals-button" class="prestige-button">Refund All Purchases</button>
+                    <button id="reset-prestige-button" class="prestige-button">Reset (Start New Run)</button>
+                </div>
             </div>
-        </section>`;
+        </section>
+        <div id="prestige-reset-confirm" class="modal" style="display: none;">
+            <div class="modal-content">
+                <h3>Ready to Restart?</h3>
+                <p>Your Mana, buildings, and upgrades will be reset.</p>
+                <p>Your Mana Crystals and prestige upgrades will be kept.</p>
+                <div class="modal-buttons">
+                    <button id="reset-confirm-yes" class="prestige-button">Yes</button>
+                    <button id="reset-confirm-no" class="prestige-button">No</button>
+                </div>
+            </div>
+        </div>`;
     }
 
     function init() {
         const prestigeButton = document.getElementById('prestige-action-button');
         if (prestigeButton) {
-            prestigeButton.addEventListener('click', enterPrestigeMode);
+            prestigeButton.addEventListener('click', performPrestige);
         }
 
-        const finishButton = document.getElementById('finish-prestige-button');
-        if (finishButton) {
-            finishButton.addEventListener('click', finishPrestige);
+        const refundButton = document.getElementById('refund-crystals-button');
+        if (refundButton) {
+            refundButton.addEventListener('click', refundAllPurchases);
         }
+
+        const resetButton = document.getElementById('reset-prestige-button');
+        if (resetButton) {
+            resetButton.addEventListener('click', showResetConfirmation);
+        }
+
+        const resetYes = document.getElementById('reset-confirm-yes');
+        if (resetYes) {
+            resetYes.addEventListener('click', finishPrestige);
+        }
+
+        const resetNo = document.getElementById('reset-confirm-no');
+        if (resetNo) {
+            resetNo.addEventListener('click', hideResetConfirmation);
+        }
+    }
+
+    function getVisibleUpgrades() {
+        // Show upgrades based on total crystals earned and required upgrades
+        return prestigeUpgrades.filter(upgrade => {
+            // Check crystal threshold
+            if (totalManaCrystalsEarned < upgrade.unlockCost) return false;
+            // Check if requires another upgrade to be purchased
+            if (upgrade.requiresUpgrade) {
+                const requiredUpgrade = prestigeUpgrades.find(u => u.id === upgrade.requiresUpgrade);
+                if (!requiredUpgrade || !requiredUpgrade.isPurchased) return false;
+            }
+            return true;
+        });
     }
 
     function renderPrestigeUpgrades() {
@@ -161,7 +250,14 @@ const PrestigeModule = (function() {
 
         container.innerHTML = '';
 
-        prestigeUpgrades.forEach(upgrade => {
+        const visibleUpgrades = getVisibleUpgrades();
+
+        if (visibleUpgrades.length === 0) {
+            container.innerHTML = '<p>Earn more Mana Crystals to unlock upgrades!</p>';
+            return;
+        }
+
+        visibleUpgrades.forEach(upgrade => {
             const upgradeDiv = document.createElement('div');
             upgradeDiv.className = 'prestige-upgrade-item';
             upgradeDiv.id = `prestige-upgrade-${upgrade.id}`;
@@ -179,7 +275,7 @@ const PrestigeModule = (function() {
                     <p class="prestige-upgrade-name">${upgrade.name}</p>
                     <p class="prestige-upgrade-description">${upgrade.description}</p>
                     <p class="prestige-upgrade-flavor">${upgrade.flavorText}</p>
-                    <p class="prestige-upgrade-cost">Cost: <span>${upgrade.cost}</span> Mana Crystals</p>
+                    <p class="prestige-upgrade-cost">Cost: <span>${upgrade.cost}</span> Mana Crystal(s)</p>
                     <button class="prestige-upgrade-button ${canAfford ? 'can-afford' : 'cannot-afford'}"
                             data-upgrade-id="${upgrade.id}"
                             ${canAfford ? '' : 'disabled'}>
@@ -195,6 +291,17 @@ const PrestigeModule = (function() {
 
             container.appendChild(upgradeDiv);
         });
+
+        updateRefundButtonState();
+    }
+
+    function updateRefundButtonState() {
+        const refundButton = document.getElementById('refund-crystals-button');
+        if (refundButton) {
+            const hasPurchases = prestigeUpgrades.some(u => u.isPurchased);
+            refundButton.disabled = !hasPurchases;
+            refundButton.textContent = hasPurchases ? 'Refund All Purchases' : 'No Purchases to Refund';
+        }
     }
 
     function purchasePrestigeUpgrade(upgradeId) {
@@ -203,24 +310,48 @@ const PrestigeModule = (function() {
 
         if (manaCrystals >= upgrade.cost) {
             manaCrystals -= upgrade.cost;
+            crystalsSpentThisSession += upgrade.cost;
             upgrade.isPurchased = true;
-
-            // Apply building boost if applicable
-            if (upgrade.buildingBoost) {
-                applyBuildingBoost(upgrade.buildingBoost);
-            }
 
             // Re-render the store
             renderPrestigeUpgrades();
-            updateDisplay();
+            updateStoreDisplay();
 
-            // Announce purchase
-            const announcement = document.createElement('div');
-            announcement.setAttribute('role', 'alert');
-            announcement.className = 'sr-only';
-            announcement.textContent = `Purchased ${upgrade.name}!`;
-            document.body.appendChild(announcement);
-            setTimeout(() => announcement.remove(), 1000);
+            // Play sound if available
+            if (typeof SoundModule !== 'undefined') {
+                SoundModule.play('prestigeUpgrade');
+            }
+
+            // Announce purchase for screen readers (clear previous to prevent spam)
+            const notificationArea = document.getElementById('notification-area');
+            if (notificationArea) {
+                const existing = notificationArea.querySelectorAll('.sr-only-announcement');
+                existing.forEach(el => el.remove());
+                const announcement = document.createElement('span');
+                announcement.className = 'sr-only sr-only-announcement';
+                announcement.textContent = 'Purchased';
+                notificationArea.appendChild(announcement);
+                setTimeout(() => announcement.remove(), 1000);
+            }
+        }
+    }
+
+    function refundAllPurchases() {
+        let totalRefund = 0;
+
+        prestigeUpgrades.forEach(upgrade => {
+            if (upgrade.isPurchased) {
+                totalRefund += upgrade.cost;
+                upgrade.isPurchased = false;
+            }
+        });
+
+        if (totalRefund > 0) {
+            manaCrystals += totalRefund;
+            crystalsSpentThisSession = 0;
+
+            renderPrestigeUpgrades();
+            updateStoreDisplay();
         }
     }
 
@@ -244,9 +375,30 @@ const PrestigeModule = (function() {
         });
     }
 
+    function getStartingMana() {
+        let startingMana = 0;
+        prestigeUpgrades.forEach(upgrade => {
+            if (upgrade.isPurchased && upgrade.startingMana) {
+                startingMana += upgrade.startingMana;
+            }
+        });
+        return startingMana;
+    }
+
+    function getStartingBuildings() {
+        const startingBuildings = {};
+        prestigeUpgrades.forEach(upgrade => {
+            if (upgrade.isPurchased && upgrade.startingBuilding) {
+                const id = upgrade.startingBuilding.id;
+                const count = upgrade.startingBuilding.count;
+                startingBuildings[id] = (startingBuildings[id] || 0) + count;
+            }
+        });
+        return startingBuildings;
+    }
+
     function shouldShowPrestige() {
         const stats = StatisticsModule.getStats();
-        // Show if player has prestiged before OR has reached 1 billion mana
         return timesPrestiged > 0 || stats.manaTotal >= PRESTIGE_UNLOCK_THRESHOLD;
     }
 
@@ -255,150 +407,122 @@ const PrestigeModule = (function() {
         const totalMana = stats.manaTotal;
         const effectiveMPS = typeof getEffectiveMPS === 'function' ? getEffectiveMPS() : 0;
 
-        // Calculate pending crystals (what they'd gain on prestige)
+        // Calculate pending crystals
         const totalCrystalsFromMana = calculateManaCrystals(totalMana);
         const pendingCrystals = Math.max(0, totalCrystalsFromMana - totalManaCrystalsEarned);
 
         // Get elements
-        const preUnlockDiv = document.getElementById('prestige-pre-unlock');
-        const unlockedDiv = document.getElementById('prestige-unlocked');
-        const countdownEl = document.getElementById('prestige-countdown');
         const pendingEl = document.getElementById('prestige-pending-crystals');
         const nextCountdownEl = document.getElementById('prestige-next-countdown');
         const currentCrystalsEl = document.getElementById('prestige-current-crystals');
         const bonusEl = document.getElementById('prestige-bonus');
         const timesEl = document.getElementById('times-prestiged');
-        const storeCrystalsEl = document.getElementById('prestige-store-crystals');
+        const prestigeButton = document.getElementById('prestige-action-button');
 
-        const showPrestige = shouldShowPrestige();
+        // Update pending crystals
+        if (pendingEl) {
+            pendingEl.textContent = pendingCrystals;
+        }
 
-        if (!showPrestige) {
-            // Not yet unlocked - show countdown to first crystal
-            if (preUnlockDiv) preUnlockDiv.style.display = 'block';
-            if (unlockedDiv) unlockedDiv.style.display = 'none';
+        // Calculate time until next crystal
+        const nextCrystalCount = totalCrystalsFromMana + 1;
+        const manaForNextCrystal = manaForCrystals(nextCrystalCount);
+        const manaNeededForNext = manaForNextCrystal - totalMana;
 
-            // Calculate time until first crystal (1 trillion mana)
-            const manaNeeded = PRESTIGE_BASE - totalMana;
-            if (countdownEl) {
-                if (effectiveMPS > 0) {
-                    const secondsUntil = manaNeeded / effectiveMPS;
-                    countdownEl.textContent = formatTime(secondsUntil);
-                } else {
-                    countdownEl.textContent = 'never (no production)';
-                }
-            }
-        } else {
-            // Prestige unlocked
-            if (preUnlockDiv) preUnlockDiv.style.display = 'none';
-            if (unlockedDiv) unlockedDiv.style.display = 'block';
-
-            // Update pending crystals
-            if (pendingEl) {
-                pendingEl.textContent = pendingCrystals;
-            }
-
-            // Calculate time until next crystal
-            const nextCrystalCount = totalCrystalsFromMana + 1;
-            const manaForNextCrystal = manaForCrystals(nextCrystalCount);
-            const manaNeededForNext = manaForNextCrystal - totalMana;
-
-            if (nextCountdownEl) {
-                if (effectiveMPS > 0) {
-                    const secondsUntil = manaNeededForNext / effectiveMPS;
-                    nextCountdownEl.textContent = formatTime(secondsUntil);
-                } else {
-                    nextCountdownEl.textContent = 'never (no production)';
-                }
-            }
-
-            // Update current crystals and bonus
-            if (currentCrystalsEl) {
-                currentCrystalsEl.textContent = manaCrystals;
-            }
-
-            // Update bonus prestige levels display
-            const bonusLevelsDisplay = document.getElementById('prestige-bonus-levels-display');
-            const bonusLevelsEl = document.getElementById('prestige-bonus-levels');
-            if (bonusLevelsDisplay && bonusLevelsEl) {
-                if (bonusPrestigeLevels > 0) {
-                    bonusLevelsDisplay.style.display = 'block';
-                    bonusLevelsEl.textContent = bonusPrestigeLevels;
-                } else {
-                    bonusLevelsDisplay.style.display = 'none';
-                }
-            }
-
-            if (bonusEl) {
-                bonusEl.textContent = '+' + getTotalBonusPercent() + '%';
-            }
-            if (timesEl) {
-                timesEl.textContent = timesPrestiged;
+        if (nextCountdownEl) {
+            if (effectiveMPS > 0) {
+                const secondsUntil = manaNeededForNext / effectiveMPS;
+                nextCountdownEl.textContent = formatTime(secondsUntil);
+            } else {
+                nextCountdownEl.textContent = 'never (no production)';
             }
         }
 
-        // Update store crystals display
-        if (storeCrystalsEl) {
-            storeCrystalsEl.textContent = manaCrystals;
+        // Update current crystals and bonus
+        if (currentCrystalsEl) {
+            currentCrystalsEl.textContent = manaCrystals;
+        }
+
+        if (bonusEl) {
+            bonusEl.textContent = '+' + getTotalBonusPercent().toFixed(1) + '%';
+        }
+
+        if (timesEl) {
+            timesEl.textContent = timesPrestiged;
+        }
+
+        // Update prestige button state
+        if (prestigeButton) {
+            if (pendingCrystals > 0) {
+                prestigeButton.disabled = false;
+                prestigeButton.textContent = `Prestige (Gain ${pendingCrystals} Crystal${pendingCrystals > 1 ? 's' : ''})`;
+            } else {
+                prestigeButton.disabled = true;
+                prestigeButton.textContent = 'Prestige (No crystals to gain)';
+            }
         }
     }
 
-    function enterPrestigeMode() {
+    function updateStoreDisplay() {
+        const storeCrystalsEl = document.getElementById('prestige-store-crystals');
+        const storeBonusEl = document.getElementById('prestige-store-bonus');
+
+        if (storeCrystalsEl) {
+            storeCrystalsEl.textContent = manaCrystals;
+        }
+
+        if (storeBonusEl) {
+            storeBonusEl.textContent = '+' + getTotalBonusPercent().toFixed(1) + '%';
+        }
+    }
+
+    function performPrestige() {
         const stats = StatisticsModule.getStats();
         const totalMana = stats.manaTotal;
         const totalCrystalsFromMana = calculateManaCrystals(totalMana);
         const pendingCrystals = Math.max(0, totalCrystalsFromMana - totalManaCrystalsEarned);
 
         if (pendingCrystals <= 0) {
-            alert('You have no Mana Crystals to gain yet. Keep gathering mana!');
             return;
         }
-
-        // Confirm entering prestige mode
-        const confirmed = confirm(
-            'Enter Prestige Mode?\n\n' +
-            'You will gain ' + pendingCrystals + ' Mana Crystal(s).\n' +
-            'Your new production bonus will be +' + (getTotalBonusPercent() + pendingCrystals) + '%.\n\n' +
-            'Your mana, buildings, and upgrades will be reset when you finish.'
-        );
-
-        if (!confirmed) return;
 
         // Award the crystals
         manaCrystals += pendingCrystals;
         totalManaCrystalsEarned += pendingCrystals;
+        crystalsSpentThisSession = 0;
 
-        // Enter prestige mode
-        isInPrestigeMode = true;
+        // Enter prestige store
+        isInPrestigeStore = true;
+
+        // Play sound if available
+        if (typeof SoundModule !== 'undefined') {
+            SoundModule.play('enterPrestige');
+        }
 
         // Hide game elements
         hideGameElements();
 
-        // Show prestige store
-        const storePanel = document.getElementById('prestige-store-panel');
-        if (storePanel) {
-            storePanel.style.display = 'block';
-        }
-
-        // Render prestige upgrades
-        renderPrestigeUpgrades();
-
-        // Show finish button
-        const finishButton = document.getElementById('finish-prestige-button');
-        if (finishButton) {
-            finishButton.style.display = 'block';
-        }
-
-        // Close the prestige panel
+        // Hide prestige panel, show store
         const prestigePanel = document.getElementById('prestige-panel');
         if (prestigePanel) {
             prestigePanel.hidden = true;
         }
 
-        updateDisplay();
+        const storePanel = document.getElementById('prestige-store-panel');
+        if (storePanel) {
+            storePanel.style.display = 'block';
+            const storeHeading = document.getElementById('prestige-store-heading');
+            if (storeHeading) {
+                storeHeading.focus();
+            }
+        }
+
+        // Render prestige upgrades and update display
+        renderPrestigeUpgrades();
+        updateStoreDisplay();
     }
 
     function hideGameElements() {
-        // Hide main game sections
         const elementsToHide = [
             '.game-stats',
             '.game-actions',
@@ -421,7 +545,6 @@ const PrestigeModule = (function() {
     }
 
     function showGameElements() {
-        // Show main game sections
         const elementsToShow = document.querySelectorAll('[data-prestige-hidden="true"]');
         elementsToShow.forEach(el => {
             el.style.display = '';
@@ -429,22 +552,40 @@ const PrestigeModule = (function() {
         });
     }
 
+    function showResetConfirmation() {
+        const modal = document.getElementById('prestige-reset-confirm');
+        if (modal) {
+            modal.style.display = 'flex';
+            const yesButton = document.getElementById('reset-confirm-yes');
+            if (yesButton) {
+                yesButton.focus();
+            }
+        }
+    }
+
+    function hideResetConfirmation() {
+        const modal = document.getElementById('prestige-reset-confirm');
+        if (modal) {
+            modal.style.display = 'none';
+        }
+    }
+
     function finishPrestige() {
-        if (!isInPrestigeMode) return;
+        hideResetConfirmation();
 
-        const confirmed = confirm(
-            'Finish Prestige?\n\n' +
-            'Your mana, buildings, and upgrades will be reset.\n' +
-            'Your Mana Crystals, prestige upgrades, and production bonus will be kept.'
-        );
-
-        if (!confirmed) return;
+        if (!isInPrestigeStore) return;
 
         // Increment prestige count
         timesPrestiged++;
 
-        // Exit prestige mode
-        isInPrestigeMode = false;
+        // Exit prestige store
+        isInPrestigeStore = false;
+        crystalsSpentThisSession = 0;
+
+        // Play sound if available
+        if (typeof SoundModule !== 'undefined') {
+            SoundModule.play('exitPrestige');
+        }
 
         // Hide prestige store
         const storePanel = document.getElementById('prestige-store-panel');
@@ -452,21 +593,32 @@ const PrestigeModule = (function() {
             storePanel.style.display = 'none';
         }
 
-        // Hide finish button
-        const finishButton = document.getElementById('finish-prestige-button');
-        if (finishButton) {
-            finishButton.style.display = 'none';
-        }
-
         // Show game elements
         showGameElements();
 
-        // Reset game state (keeping prestige data and total mana)
+        // Reset game state (keeping prestige data)
         if (typeof resetForPrestige === 'function') {
             resetForPrestige();
         }
 
+        // Apply prestige bonuses
+        applyAllPrestigeBonuses();
+
         updateDisplay();
+    }
+
+    function applyAllPrestigeBonuses() {
+        // Apply building boosts
+        applyAllPrestigeBuildingBoosts();
+
+        // Future: Apply starting buildings here when implemented
+
+        if (typeof recalculateMPS === 'function') {
+            recalculateMPS();
+        }
+        if (typeof renderBuildings === 'function') {
+            renderBuildings();
+        }
     }
 
     function getPrestigeLevel() {
@@ -500,7 +652,7 @@ const PrestigeModule = (function() {
     }
 
     function isPrestigeMode() {
-        return isInPrestigeMode;
+        return isInPrestigeStore;
     }
 
     // For save/load
@@ -510,7 +662,9 @@ const PrestigeModule = (function() {
             totalManaCrystalsEarned,
             bonusPrestigeLevels,
             timesPrestiged,
-            isInPrestigeMode,
+            isInPrestigeStore,
+            prestigePotentialUnlocked,
+            highestPotentialTierPurchased,
             prestigeUpgrades: prestigeUpgrades.map(u => ({
                 id: u.id,
                 isPurchased: u.isPurchased
@@ -524,7 +678,9 @@ const PrestigeModule = (function() {
             totalManaCrystalsEarned = data.totalManaCrystalsEarned || 0;
             bonusPrestigeLevels = data.bonusPrestigeLevels || 0;
             timesPrestiged = data.timesPrestiged || 0;
-            isInPrestigeMode = data.isInPrestigeMode || false;
+            isInPrestigeStore = data.isInPrestigeStore || false;
+            prestigePotentialUnlocked = data.prestigePotentialUnlocked || 0;
+            highestPotentialTierPurchased = data.highestPotentialTierPurchased || 0;
 
             // Load prestige upgrade states
             if (data.prestigeUpgrades) {
@@ -536,23 +692,31 @@ const PrestigeModule = (function() {
                 });
             }
 
-            // If loading into prestige mode, restore that state
-            if (isInPrestigeMode) {
+            // If loading into prestige store, restore that state
+            if (isInPrestigeStore) {
                 hideGameElements();
                 const storePanel = document.getElementById('prestige-store-panel');
                 if (storePanel) storePanel.style.display = 'block';
-                const finishButton = document.getElementById('finish-prestige-button');
-                if (finishButton) finishButton.style.display = 'block';
                 renderPrestigeUpgrades();
+                updateStoreDisplay();
             }
         }
+    }
+
+    // Reset potential for a new run (called on prestige)
+    function resetPotentialForRun() {
+        prestigePotentialUnlocked = 0;
     }
 
     function reset() {
         manaCrystals = 0;
         totalManaCrystalsEarned = 0;
+        bonusPrestigeLevels = 0;
         timesPrestiged = 0;
-        isInPrestigeMode = false;
+        isInPrestigeStore = false;
+        crystalsSpentThisSession = 0;
+        prestigePotentialUnlocked = 0;
+        highestPotentialTierPurchased = 0;
         prestigeUpgrades.forEach(u => u.isPurchased = false);
     }
 
@@ -579,7 +743,15 @@ const PrestigeModule = (function() {
         shouldShowPrestige,
         renderPrestigeUpgrades,
         applyAllPrestigeBuildingBoosts,
+        applyAllPrestigeBonuses,
         getPrestigeUpgrades,
+        getStartingMana,
+        getStartingBuildings,
+        addPrestigePotential,
+        getPrestigePotential,
+        getHighestPotentialTier,
+        getRawPrestigeBonus,
+        resetPotentialForRun,
         reset
     };
 })();

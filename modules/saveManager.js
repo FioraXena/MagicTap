@@ -21,7 +21,8 @@ const SaveManager = (function() {
             buildings: buildings.map(b => ({
                 id: b.id,
                 owned: b.owned,
-                isUnlocked: b.isUnlocked
+                isUnlocked: b.isUnlocked,
+                productionPerSecond: b.productionPerSecond
             })),
             upgrades: upgrades.map(u => ({
                 id: u.id,
@@ -36,7 +37,9 @@ const SaveManager = (function() {
             prestige: PrestigeModule.getPrestigeData(),
             options: OptionsModule.getOptions(),
             wishingWell: WishingWellModule.getState(),
-            rankingUpgrades: RankingUpgradesModule.getSaveData()
+            rankingUpgrades: RankingUpgradesModule.getSaveData(),
+            spellcasting: typeof SpellcastingModule !== 'undefined' ? SpellcastingModule.getSaveData() : null,
+            sound: typeof SoundModule !== 'undefined' ? SoundModule.getSaveData() : null
         };
     }
 
@@ -63,6 +66,10 @@ const SaveManager = (function() {
                     if (building) {
                         building.owned = savedBuilding.owned || 0;
                         building.isUnlocked = savedBuilding.isUnlocked || false;
+                        // Restore productionPerSecond if saved, otherwise use baseProduction
+                        if (savedBuilding.productionPerSecond !== undefined) {
+                            building.productionPerSecond = savedBuilding.productionPerSecond;
+                        }
                     }
                 });
             }
@@ -108,6 +115,16 @@ const SaveManager = (function() {
                 RankingUpgradesModule.loadSaveData(data.rankingUpgrades);
             }
 
+            // Restore Spellcasting
+            if (data.spellcasting && typeof SpellcastingModule !== 'undefined') {
+                SpellcastingModule.loadSaveData(data.spellcasting);
+            }
+
+            // Restore Sound settings
+            if (data.sound && typeof SoundModule !== 'undefined') {
+                SoundModule.loadSaveData(data.sound);
+            }
+
             return true;
         } catch (e) {
             console.error('Error applying save data:', e);
@@ -137,8 +154,7 @@ const SaveManager = (function() {
 
             const saveData = JSON.parse(saveString);
             if (applySaveData(saveData)) {
-                // Apply prestige building boosts before recalculating
-                PrestigeModule.applyAllPrestigeBuildingBoosts();
+                // productionPerSecond is now saved with all boosts, no need to re-apply
                 // Recalculate MPS with loaded multiplier and building data
                 recalculateMPS();
                 // Re-render everything after loading
@@ -190,7 +206,7 @@ const SaveManager = (function() {
             const saveString = atob(encoded);
             const saveData = JSON.parse(saveString);
             if (applySaveData(saveData)) {
-                PrestigeModule.applyAllPrestigeBuildingBoosts();
+                // productionPerSecond is now saved with all boosts, no need to re-apply
                 recalculateMPS();
                 renderBuildings();
                 renderUpgrades();

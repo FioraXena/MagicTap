@@ -205,6 +205,48 @@ const AchievementsModule = (function() {
         isEarned: false
     },
     {
+        id: 'arcane-and-in-charge',
+        name: 'Arcane And In Charge',
+        description: 'Have 10,000,000,000 current Mana.',
+        condition: (stats) => stats.currentMana >= 10000000000,
+        isEarned: false
+    },
+    {
+        id: 'channel-the-weave',
+        name: 'Channel The Weave...',
+        description: 'Have 100,000,000,000 current Mana.',
+        condition: (stats) => stats.currentMana >= 100000000000,
+        isEarned: false
+    },
+    {
+        id: 'become-the-weave',
+        name: 'Become The Weave...',
+        description: 'Have 1,000,000,000,000 current Mana.',
+        condition: (stats) => stats.currentMana >= 1000000000000,
+        isEarned: false
+    },
+    {
+        id: 'worship-the-weave-mana',
+        name: 'Worship The Weave...',
+        description: 'Have 10,000,000,000,000 current Mana.',
+        condition: (stats) => stats.currentMana >= 10000000000000,
+        isEarned: false
+    },
+    {
+        id: 'and-you-get-mana',
+        name: 'And You Get Some Mana!',
+        description: 'Have 100,000,000,000,000 current Mana.',
+        condition: (stats) => stats.currentMana >= 100000000000000,
+        isEarned: false
+    },
+    {
+        id: 'and-you-get-more-mana',
+        name: 'And You Get Some More Mana!',
+        description: 'Have 1,000,000,000,000,000 current Mana.',
+        condition: (stats) => stats.currentMana >= 1000000000000000,
+        isEarned: false
+    },
+    {
         id: 'tap-to-gather',
         name: 'Tap To Gather',
         description: 'Gather 1 Mana by clicking.',
@@ -286,6 +328,20 @@ const AchievementsModule = (function() {
         name: 'MagicTapped A Lot Of Mana',
         description: 'Gather 1,000,000,000,000 Mana by clicking.',
         condition: (stats) => stats.manaByClick >= 1000000000000,
+        isEarned: false
+    },
+    {
+        id: 'is-this-enough-fireball',
+        name: 'Is This Enough To Cast A Fireball?',
+        description: 'Gather 10,000,000,000,000 Mana by clicking.',
+        condition: (stats) => stats.manaByClick >= 10000000000000,
+        isEarned: false
+    },
+    {
+        id: 'just-keep-clicking',
+        name: 'You\'re Just Going To Keep Clicking...',
+        description: 'Gather 100,000,000,000,000 Mana by clicking.',
+        condition: (stats) => stats.manaByClick >= 100000000000000,
         isEarned: false
     },
     {
@@ -472,6 +528,213 @@ const AchievementsModule = (function() {
         condition: (stats) => typeof WishingWellModule !== 'undefined' && WishingWellModule.getEffectTriggerCount() >= 100,
         isEarned: false
     },
+    // Mana Manipulator Achievements
+    {
+        id: 'mana-manipulation-ach',
+        name: 'Mana Manipulation',
+        description: 'Purchase 1 Mana Manipulator.',
+        condition: (stats) => buildings.find(b => b.id === 'mana-manipulator')?.owned >= 1,
+        isEarned: false
+    },
+    {
+        id: 'advanced-mana-manipulation-ach',
+        name: 'Advanced Mana Manipulation',
+        description: 'Purchase 25 Mana Manipulators.',
+        condition: (stats) => buildings.find(b => b.id === 'mana-manipulator')?.owned >= 25,
+        isEarned: false
+    },
+    {
+        id: 'practice-behind-theory',
+        name: 'Practice Behind The Theory',
+        description: 'Purchase 50 Mana Manipulators.',
+        condition: (stats) => buildings.find(b => b.id === 'mana-manipulator')?.owned >= 50,
+        isEarned: false
+    },
+    {
+        id: 'new-theories',
+        name: 'New Theories',
+        description: 'Purchase 100 Mana Manipulators.',
+        condition: (stats) => buildings.find(b => b.id === 'mana-manipulator')?.owned >= 100,
+        isEarned: false
+    },
+    {
+        id: 'preach-practice',
+        name: 'Preach What You Practice',
+        description: 'Purchase 200 Mana Manipulators.',
+        condition: (stats) => buildings.find(b => b.id === 'mana-manipulator')?.owned >= 200,
+        isEarned: false
+    },
+    {
+        id: 'true-mental-stimulation',
+        name: 'True Mental Stimulation',
+        description: 'Purchase 500 Mana Manipulators.',
+        condition: (stats) => buildings.find(b => b.id === 'mana-manipulator')?.owned >= 500,
+        isEarned: false
+    },
+    {
+        id: 'mental-enrichment',
+        name: 'Mental Enrichment',
+        description: 'Purchase 1000 Mana Manipulators.',
+        condition: (stats) => buildings.find(b => b.id === 'mana-manipulator')?.owned >= 1000,
+        isEarned: false
+    },
+    // Mana Shard Achievements
+    {
+        id: 'gleam-glitter',
+        name: 'Gleam and Glitter',
+        description: 'Purchase 1 Mana Shard.',
+        condition: (stats) => buildings.find(b => b.id === 'mana-shard')?.owned >= 1,
+        isEarned: false
+    },
+    {
+        id: 'sparkle-shine',
+        name: 'Sparkle and Shine',
+        description: 'Purchase 25 Mana Shards.',
+        condition: (stats) => buildings.find(b => b.id === 'mana-shard')?.owned >= 25,
+        isEarned: false
+    },
+    {
+        id: 'razzle-dazzle',
+        name: 'Razzle-Dazzle',
+        description: 'Purchase 50 Mana Shards.',
+        condition: (stats) => buildings.find(b => b.id === 'mana-shard')?.owned >= 50,
+        isEarned: false
+    },
+    {
+        id: 'blinded-by-magic',
+        name: 'Blinded By Magic',
+        description: 'Purchase 100 Mana Shards.',
+        condition: (stats) => buildings.find(b => b.id === 'mana-shard')?.owned >= 100,
+        isEarned: false
+    },
+    {
+        id: 'shards-to-clusters',
+        name: 'Shards to Clusters',
+        description: 'Purchase 200 Mana Shards.',
+        condition: (stats) => buildings.find(b => b.id === 'mana-shard')?.owned >= 200,
+        isEarned: false
+    },
+    {
+        id: 'pieces-mystic-puzzle',
+        name: 'Pieces of the Mystic Puzzle',
+        description: 'Purchase 500 Mana Shards.',
+        condition: (stats) => buildings.find(b => b.id === 'mana-shard')?.owned >= 500,
+        isEarned: false
+    },
+    {
+        id: 'shattered-from-weave',
+        name: 'Shattered From The Weave',
+        description: 'Purchase 1000 Mana Shards.',
+        condition: (stats) => buildings.find(b => b.id === 'mana-shard')?.owned >= 1000,
+        isEarned: false
+    },
+    // Mana Fountain Achievements
+    {
+        id: 'magic-not-radioactive',
+        name: 'Magic, Not Radioactive',
+        description: 'Purchase 1 Mana Fountain.',
+        condition: (stats) => buildings.find(b => b.id === 'mana-fountain')?.owned >= 1,
+        isEarned: false
+    },
+    {
+        id: 'magic-bath',
+        name: 'Magic Bath',
+        description: 'Purchase 25 Mana Fountains.',
+        condition: (stats) => buildings.find(b => b.id === 'mana-fountain')?.owned >= 25,
+        isEarned: false
+    },
+    {
+        id: 'submerged-in-mana',
+        name: 'Submerged In Mana',
+        description: 'Purchase 50 Mana Fountains.',
+        condition: (stats) => buildings.find(b => b.id === 'mana-fountain')?.owned >= 50,
+        isEarned: false
+    },
+    {
+        id: 'fountain-of-magic',
+        name: 'Fountain of Magic',
+        description: 'Purchase 100 Mana Fountains.',
+        condition: (stats) => buildings.find(b => b.id === 'mana-fountain')?.owned >= 100,
+        isEarned: false
+    },
+    {
+        id: 'fountain-of-youth',
+        name: 'Fountain Of Youth?',
+        description: 'Purchase 200 Mana Fountains.',
+        condition: (stats) => buildings.find(b => b.id === 'mana-fountain')?.owned >= 200,
+        isEarned: false
+    },
+    {
+        id: 'channeled-to-ley-lines',
+        name: 'Channeled To The Ley Lines',
+        description: 'Purchase 500 Mana Fountains.',
+        condition: (stats) => buildings.find(b => b.id === 'mana-fountain')?.owned >= 500,
+        isEarned: false
+    },
+    {
+        id: 'weavers-lifeblood',
+        name: 'Weaver\'s Lifeblood',
+        description: 'Purchase 1000 Mana Fountains.',
+        condition: (stats) => buildings.find(b => b.id === 'mana-fountain')?.owned >= 1000,
+        isEarned: false
+    },
+    // Church of Mana Achievements
+    {
+        id: 'worship-the-weave-ach',
+        name: 'Worship The Weave',
+        description: 'Purchase 1 Church of Mana.',
+        condition: (stats) => buildings.find(b => b.id === 'church-of-mana')?.owned >= 1,
+        isEarned: false
+    },
+    {
+        id: 'mana-beckons',
+        name: 'Mana Beckons',
+        description: 'Purchase 25 Church of Mana.',
+        condition: (stats) => buildings.find(b => b.id === 'church-of-mana')?.owned >= 25,
+        isEarned: false
+    },
+    {
+        id: 'doctrine-arcane',
+        name: 'Doctrine of the Arcane',
+        description: 'Purchase 50 Church of Mana.',
+        condition: (stats) => buildings.find(b => b.id === 'church-of-mana')?.owned >= 50,
+        isEarned: false
+    },
+    {
+        id: 'rule-of-weave',
+        name: 'Rule of the Weave',
+        description: 'Purchase 100 Church of Mana.',
+        condition: (stats) => buildings.find(b => b.id === 'church-of-mana')?.owned >= 100,
+        isEarned: false
+    },
+    {
+        id: 'magic-fanatics',
+        name: 'Magic Fanatics',
+        description: 'Purchase 200 Church of Mana.',
+        condition: (stats) => buildings.find(b => b.id === 'church-of-mana')?.owned >= 200,
+        isEarned: false
+    },
+    {
+        id: 'cult-of-weave',
+        name: 'Cult of the Weave',
+        description: 'Purchase 500 Church of Mana.',
+        condition: (stats) => buildings.find(b => b.id === 'church-of-mana')?.owned >= 500,
+        isEarned: false
+    },
+    {
+        id: 'whos-zealot',
+        name: 'Who\'s The Zealot Here?',
+        description: 'Purchase 666 Church of Mana.',
+        condition: (stats) => buildings.find(b => b.id === 'church-of-mana')?.owned >= 666,
+        isEarned: false
+    },
+    {
+        id: 'church-to-cathedral',
+        name: 'Church to Cathedral',
+        description: 'Purchase 1000 Church of Mana.',
+        condition: (stats) => buildings.find(b => b.id === 'church-of-mana')?.owned >= 1000,
+        isEarned: false
+    },
     // Mages' Guild Achievements
     {
         id: 'one-mage-army',
@@ -656,9 +919,17 @@ const AchievementsModule = (function() {
         const notificationArea = document.getElementById('notification-area');
         if (!notificationArea) return;
 
+        // Live announcement - only says "New Achievement!" (announced immediately, then removed)
+        const liveAnnouncement = document.createElement('span');
+        liveAnnouncement.className = 'sr-only';
+        liveAnnouncement.setAttribute('role', 'alert');
+        liveAnnouncement.textContent = 'New Achievement!';
+        notificationArea.appendChild(liveAnnouncement);
+        setTimeout(() => liveAnnouncement.remove(), 1000);
+
+        // Visible notification - fully accessible when user navigates to it
         const notification = document.createElement('div');
         notification.className = 'notification';
-        notification.setAttribute('role', 'alert');
 
         const dismissBtn = document.createElement('button');
         dismissBtn.className = 'notification-dismiss';
@@ -735,6 +1006,11 @@ const AchievementsModule = (function() {
                 newAchievements = true;
                 StatisticsModule.addAchievementEarned();
                 showNotification(achievement.name);
+
+                // Play achievement sound
+                if (typeof SoundModule !== 'undefined') {
+                    SoundModule.play('achievement');
+                }
             }
         });
 

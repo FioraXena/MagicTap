@@ -14,6 +14,12 @@ const ProductionModule = (function() {
                     <p>MPS Bonus from Upgrades: <span id="prod-mps-upgrades">+0</span></p>
                     <p>Mana per Click from Upgrades: <span id="prod-mpc-upgrades">+0</span></p>
                 </div>
+                <div id="prod-prestige-container" class="production-prestige" style="display: none;">
+                    <h3>Prestige Potential</h3>
+                    <p>Total Prestige Bonus: <span id="prod-prestige-raw">0%</span></p>
+                    <p>Potential Unlocked: <span id="prod-prestige-unlocked">0%</span></p>
+                    <p>Active Bonus: <span id="prod-prestige-active">+0%</span></p>
+                </div>
                 <h3>Buildings</h3>
                 <ul id="production-buildings-list" class="production-list"></ul>
             </div>
@@ -46,6 +52,30 @@ const ProductionModule = (function() {
         }
         if (mpcUpgradesEl) {
             mpcUpgradesEl.textContent = '+' + manaPerClickFromUpgrades.toFixed(0);
+        }
+
+        // Update prestige potential display
+        const prestigeContainer = document.getElementById('prod-prestige-container');
+        const rawEl = document.getElementById('prod-prestige-raw');
+        const unlockedEl = document.getElementById('prod-prestige-unlocked');
+        const activeEl = document.getElementById('prod-prestige-active');
+
+        if (prestigeContainer && typeof PrestigeModule !== 'undefined') {
+            const rawBonus = PrestigeModule.getRawPrestigeBonus();
+            const potential = PrestigeModule.getPrestigePotential();
+
+            // Only show if player has prestiged
+            if (PrestigeModule.getTimesPrestiged() > 0 || rawBonus > 0) {
+                prestigeContainer.style.display = '';
+                if (rawEl) rawEl.textContent = rawBonus + '%';
+                if (unlockedEl) unlockedEl.textContent = potential + '%';
+                if (activeEl) {
+                    const activeBonus = (rawBonus * potential / 100).toFixed(1);
+                    activeEl.textContent = '+' + activeBonus + '%';
+                }
+            } else {
+                prestigeContainer.style.display = 'none';
+            }
         }
 
         if (buildingsList && buildings) {

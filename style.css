@@ -642,3 +642,205 @@ h2:focus {
     font-size: 0.9em;
 }
 
+/* Runestones Styles */
+#runestone-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    min-height: 0;
+    padding: 10px 0;
+    gap: 10px;
+}
+
+#runestone-container:empty {
+    display: none;
+    padding: 0;
+}
+
+.runestone {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 70px;
+    height: 70px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.5s;
+    box-shadow: 0 0 20px currentColor;
+}
+
+.runestone.visible {
+    opacity: 1;
+    animation: runestone-float 2s ease-in-out infinite;
+}
+
+.runestone.fading {
+    opacity: 0;
+}
+
+.runestone-glyph {
+    font-size: 2em;
+    color: inherit;
+}
+
+@keyframes runestone-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
+/* Runestone Colors - Positive */
+.runestone-green { background: linear-gradient(135deg, #2d5a2d, #4a9a4a); color: #7cfc00; }
+.runestone-blue { background: linear-gradient(135deg, #2d3a5a, #4a6a9a); color: #00bfff; }
+.runestone-white { background: linear-gradient(135deg, #aaa, #fff); color: #fff; }
+.runestone-pink { background: linear-gradient(135deg, #5a2d4a, #9a4a7a); color: #ff69b4; }
+.runestone-gold { background: linear-gradient(135deg, #5a4a2d, #9a7a4a); color: #ffd700; }
+.runestone-silver { background: linear-gradient(135deg, #4a4a4a, #8a8a8a); color: #c0c0c0; }
+.runestone-purple { background: linear-gradient(135deg, #3a2d5a, #6a4a9a); color: #9370db; }
+
+/* Runestone Colors - Negative */
+.runestone-red { background: linear-gradient(135deg, #5a2d2d, #9a4a4a); color: #ff4444; }
+.runestone-black { background: linear-gradient(135deg, #1a1a1a, #3a3a3a); color: #666; }
+.runestone-orange { background: linear-gradient(135deg, #5a3a2d, #9a5a4a); color: #ff8c00; }
+.runestone-brown { background: linear-gradient(135deg, #3a2d1a, #5a4a3a); color: #8b4513; }
+.runestone-yellow { background: linear-gradient(135deg, #5a5a2d, #9a9a4a); color: #ffd700; }
+.runestone-grey { background: linear-gradient(135deg, #3a3a3a, #5a5a5a); color: #888; }
+
+.runestone:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 30px currentColor;
+}
+
+.runestone:focus {
+    outline: 3px solid #fff;
+    outline-offset: 2px;
+}
+
+/* Runestone Effect Display */
+#runestone-effect-display {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    padding: 10px 15px;
+    border-radius: 8px;
+    z-index: 1001;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    font-size: 0.9em;
+}
+
+#runestone-effect-display.effect-positive {
+    background: rgba(45, 90, 45, 0.9);
+    border: 2px solid #7cfc00;
+    color: #7cfc00;
+}
+
+#runestone-effect-display.effect-negative {
+    background: rgba(90, 45, 45, 0.9);
+    border: 2px solid #ff4444;
+    color: #ff4444;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Modal Styles */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: #2a2a2a;
+    border: 2px solid #ffd700;
+    border-radius: 8px;
+    padding: 30px;
+    max-width: 400px;
+    text-align: center;
+}
+
+.modal-content h3 {
+    color: #ffd700;
+    margin-bottom: 15px;
+}
+
+.modal-content p {
+    margin-bottom: 10px;
+}
+
+.modal-buttons {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.modal-buttons button {
+    min-width: 80px;
+}
+
+/* Prestige Store Actions */
+#prestige-store-actions {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #444;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#prestige-store-actions button {
+    padding: 12px 20px;
+    font-size: 1em;
+}
+
+#refund-crystals-button {
+    background-color: #4a4a6a;
+}
+
+#refund-crystals-button:hover:not(:disabled) {
+    background-color: #5a5a7a;
+}
+
+#refund-crystals-button:disabled {
+    background-color: #3a3a4a;
+    color: #888;
+}
+
+#reset-prestige-button {
+    background-color: #6a4a4a;
+}
+
+#reset-prestige-button:hover {
+    background-color: #7a5a5a;
+}
+
+/* Prestige Warning */
+#prestige-warning {
+    background-color: #4a3a2a;
+    border-left: 4px solid #ffd700;
+    padding: 15px;
+    margin-bottom: 15px;
+    font-style: italic;
+}
+

@@ -2,6 +2,28 @@
 const ChangelogModule = (function() {
     const changelog = [
         {
+            version: '0.7',
+            date: '02-05-26',
+            summary: `Added Spellcasting system with 8 spells and Spell Power regeneration.
+Added Prestige Potential upgrades - unlock the power of your prestige level (10 tiers, 10% each).
+Added Mana-Saturated upgrade chain continuation.
+Fixed Runestone positioning and made them accessible buttons.
+Improved screen reader announcements (reduced spam, clearer notifications).
+Default volume now starts at 50%.
+Various bug fixes and accessibility improvements.`
+        },
+        {
+            version: '0.6',
+            date: '02-01-26',
+            summary: `Added 20+ achievements.
+Added new flavor events.
+Added new upgrades.
+Added new buildings.
+Added new possibilities for the Wishing Well.
+Runestones can now appear to give potential buffs/debuffs. Pay attention to their color.
+Added new Prestige upgrades, including plans for challenge modes.`
+        },
+        {
             version: '0.5',
             date: '01-31-26',
             summary: `Addressed MPS issue.

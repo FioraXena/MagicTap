@@ -24,6 +24,27 @@ const FlavorEventsModule = (function() {
         // Mana Crystal events (unlocked after purchasing 1 Mana Crystal)
         { text: 'Crystals sit upon pedestals situated in a circle.', unlockCondition: () => buildings.find(b => b.id === 'mana-crystal').owned >= 1 },
         { text: 'Crystals begin to crack, overflowing with power.', unlockCondition: () => buildings.find(b => b.id === 'mana-crystal').owned >= 1 },
+        // Mana Shard events
+        { text: 'Shards of pure magic reflect rainbows across the walls.', unlockCondition: () => buildings.find(b => b.id === 'mana-shard')?.owned >= 1 },
+        { text: 'The shards hum with a frequency only mages can hear.', unlockCondition: () => buildings.find(b => b.id === 'mana-shard')?.owned >= 1 },
+        // Mana Fountain events (unlocked after purchasing 1 Mana Fountain)
+        { text: 'Mana bubbles eerily like water.', unlockCondition: () => buildings.find(b => b.id === 'mana-fountain')?.owned >= 1 },
+        { text: 'Mana laps at the edges of the constructed fountains.', unlockCondition: () => buildings.find(b => b.id === 'mana-fountain')?.owned >= 1 },
+        { text: 'You discover another pocket of Mana within a cave.', unlockCondition: () => buildings.find(b => b.id === 'mana-fountain')?.owned >= 1 },
+        { text: 'Natural Mana Fountains burble softly.', unlockCondition: () => buildings.find(b => b.id === 'mana-fountain')?.owned >= 1 },
+        { text: 'Somebody mistakes the glow of Mana for something else... how silly of them.', unlockCondition: () => buildings.find(b => b.id === 'mana-fountain')?.owned >= 1 },
+        // Church of Mana events
+        { text: 'Worshippers chant in unison, their voices echoing with power.', unlockCondition: () => buildings.find(b => b.id === 'church-of-mana')?.owned >= 1 },
+        { text: 'The stained glass windows depict scenes of the Weave.', unlockCondition: () => buildings.find(b => b.id === 'church-of-mana')?.owned >= 1 },
+        // Mages\' Guild events
+        { text: 'Apprentices practice their cantrips in the courtyard.', unlockCondition: () => buildings.find(b => b.id === 'mages-guild')?.owned >= 1 },
+        { text: 'A heated debate about spell theory echoes from the guild hall.', unlockCondition: () => buildings.find(b => b.id === 'mages-guild')?.owned >= 1 },
+        // Magic Library events
+        { text: 'Ancient tomes whisper secrets to those who listen.', unlockCondition: () => buildings.find(b => b.id === 'magic-library')?.owned >= 1 },
+        { text: 'A forbidden text glows ominously on a distant shelf.', unlockCondition: () => buildings.find(b => b.id === 'magic-library')?.owned >= 1 },
+        // Magic Spire events
+        { text: 'The spire\'s peak is lost in clouds of pure magical energy.', unlockCondition: () => buildings.find(b => b.id === 'magic-spire')?.owned >= 1 },
+        { text: 'Lightning arcs between the spires, dancing with arcane purpose.', unlockCondition: () => buildings.find(b => b.id === 'magic-spire')?.owned >= 1 },
     ];
 
     let eventsLog = null;

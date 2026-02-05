@@ -194,8 +194,7 @@ const RankingUpgradesModule = (function() {
 
         // Update statistics
         if (typeof StatisticsModule !== 'undefined') {
-            StatisticsModule.incrementUpgradesPurchased();
-            StatisticsModule.addManaSpent(upgrade.cost);
+            StatisticsModule.addUpgradePurchased();
         }
 
         return true;
@@ -302,14 +301,16 @@ const RankingUpgradesModule = (function() {
                     renderUpgrades();
                     updateDisplay();
 
-                    // Show notification
-                    if (typeof NotificationsModule !== 'undefined') {
-                        const items = category === 'familiars' ? familiars :
-                                      category === 'enchantments' ? enchantments : wizardries;
-                        const item = items.find(i => i.id === id);
-                        if (item) {
-                            NotificationsModule.show(`Purchased ${item.name}!`, 'upgrade');
-                        }
+                    // Announce purchase for screen readers (clear previous to prevent spam)
+                    const notificationArea = document.getElementById('notification-area');
+                    if (notificationArea) {
+                        const existing = notificationArea.querySelectorAll('.sr-only-announcement');
+                        existing.forEach(el => el.remove());
+                        const announcement = document.createElement('span');
+                        announcement.className = 'sr-only sr-only-announcement';
+                        announcement.textContent = 'Purchased';
+                        notificationArea.appendChild(announcement);
+                        setTimeout(() => announcement.remove(), 1000);
                     }
                 }
             }

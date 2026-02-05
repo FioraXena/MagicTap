@@ -27,6 +27,11 @@ const OptionsModule = (function() {
                         <input type="checkbox" id="option-sound" checked>
                         Enable Sound
                     </label>
+                    <label class="option-item volume-slider">
+                        <span>Volume:</span>
+                        <input type="range" id="option-volume" min="0" max="100" value="50">
+                        <span id="volume-display">50%</span>
+                    </label>
                     <label class="option-item">
                         <input type="checkbox" id="option-notifications" checked>
                         Enable Notifications
@@ -70,6 +75,27 @@ const OptionsModule = (function() {
         if (soundCheckbox) {
             soundCheckbox.addEventListener('change', (e) => {
                 options.soundEnabled = e.target.checked;
+                // Sync with SoundModule
+                if (typeof SoundModule !== 'undefined') {
+                    SoundModule.setEnabled(e.target.checked);
+                }
+            });
+        }
+
+        // Volume slider
+        const volumeSlider = document.getElementById('option-volume');
+        const volumeDisplay = document.getElementById('volume-display');
+
+        if (volumeSlider) {
+            volumeSlider.addEventListener('input', (e) => {
+                const volume = parseInt(e.target.value) / 100;
+                if (volumeDisplay) {
+                    volumeDisplay.textContent = e.target.value + '%';
+                }
+                // Sync with SoundModule
+                if (typeof SoundModule !== 'undefined') {
+                    SoundModule.setMasterVolume(volume);
+                }
             });
         }
 
@@ -215,6 +241,22 @@ const OptionsModule = (function() {
             if (autosaveCheckbox) autosaveCheckbox.checked = options.autoSaveEnabled;
             if (truncateCheckbox) truncateCheckbox.checked = options.truncateLargeNumbers;
             if (numberFormatSelect) numberFormatSelect.value = options.numberFormat;
+
+            // Sync SoundModule with loaded options
+            if (typeof SoundModule !== 'undefined') {
+                SoundModule.setEnabled(options.soundEnabled);
+            }
+
+            // Update volume slider from SoundModule (volume is saved separately in SoundModule)
+            const volumeSlider = document.getElementById('option-volume');
+            const volumeDisplay = document.getElementById('volume-display');
+            if (volumeSlider && typeof SoundModule !== 'undefined') {
+                const volume = Math.round(SoundModule.getMasterVolume() * 100);
+                volumeSlider.value = volume;
+                if (volumeDisplay) {
+                    volumeDisplay.textContent = volume + '%';
+                }
+            }
         }
     }
 

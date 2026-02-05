@@ -414,6 +414,47 @@
     cursor: pointer;
 }
 
+/* Volume Slider */
+.volume-slider {
+    flex-wrap: wrap;
+}
+
+.volume-slider input[type="range"] {
+    flex: 1;
+    min-width: 100px;
+    height: 8px;
+    border-radius: 4px;
+    background: #555;
+    outline: none;
+    cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.volume-slider input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #007bff;
+    cursor: pointer;
+}
+
+.volume-slider input[type="range"]::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #007bff;
+    cursor: pointer;
+    border: none;
+}
+
+#volume-display {
+    min-width: 45px;
+    text-align: right;
+}
+
 .danger-zone {
     border: 1px solid #dc3545;
 }
@@ -472,4 +513,131 @@
 .wishing-well-coming-soon {
     color: #888;
     font-style: italic;
+}
+
+/* Spellcasting Panel */
+.spell-power-section {
+    background-color: #3a3a3a;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.spell-power-label {
+    font-size: 1.1em;
+    margin-bottom: 10px;
+}
+
+#spell-power-display {
+    color: #9b59b6;
+    font-weight: bold;
+}
+
+.spell-power-bar-container {
+    background-color: #2a2a2a;
+    border-radius: 4px;
+    height: 20px;
+    overflow: hidden;
+}
+
+.spell-power-bar {
+    background: linear-gradient(90deg, #9b59b6, #8e44ad);
+    height: 100%;
+    width: 0%;
+    transition: width 0.3s ease;
+}
+
+.active-spells-section {
+    background-color: #3a3a3a;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.active-spells-section h3 {
+    color: #007bff;
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.no-active-spells {
+    color: #888;
+    font-style: italic;
+}
+
+.active-spell {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+    background-color: #2a2a2a;
+    border-radius: 4px;
+    margin-bottom: 5px;
+}
+
+.active-spell-name {
+    color: #9b59b6;
+    font-weight: bold;
+}
+
+.active-spell-time {
+    color: #ffd700;
+}
+
+.spells-list-section h3 {
+    color: #007bff;
+    margin-bottom: 10px;
+}
+
+.spell-item {
+    background-color: #3a3a3a;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+
+.spell-info {
+    flex: 1;
+}
+
+.spell-name {
+    color: #9b59b6;
+    font-weight: bold;
+    font-size: 1.1em;
+    margin: 0 0 5px 0;
+}
+
+.spell-description {
+    color: #ccc;
+    margin: 0 0 5px 0;
+}
+
+.spell-cost {
+    color: #888;
+    font-size: 0.9em;
+    margin: 0;
+}
+
+.cast-spell-button {
+    background-color: #9b59b6;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+    min-width: 80px;
+}
+
+.cast-spell-button:hover:not(:disabled) {
+    background-color: #8e44ad;
+}
+
+.cast-spell-button:disabled {
+    background-color: #555;
+    cursor: not-allowed;
 }

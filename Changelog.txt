@@ -24,3 +24,21 @@ Added achievement-related upgrades, and fleshed out the achievement boost system
 Added more achievements, upgrades, and buildings.
 Now you can get familiars, and we'll have a selector to display your favorite, as you unlock them.
 Worked more on the Wishing Well.
+V.0.6, 02-01-2026:
+Added 20+ achievements.
+Added new flavor events.
+Added new upgrades.
+Added new buildings.
+Added new possibilities for the Wishing Well.
+Runestones can now appear to give potential buffs/debuffs. Pay attention to their color.
+Added new Prestige upgrades, including plans for challenge modes.
+Added a Spellcasting system for additional effects. Power accumulates over time for spells you can cast. Details coming soon.
+V.0.7: 02-05-2026:
+MagicTap now has sound! Sounds contributed by Pitermach.
+Added complete Spellcasting system with 8 spells and Spell Power regeneration.
+Added Prestige Potential upgrades - unlock the power of your prestige level (10 tiers, 10% each).
+Added Mana-Saturated upgrade chain continuation.
+Fixed Runestone positioning and made them accessible buttons.
+Improved screen reader announcements (reduced spam, clearer notifications).
+Default volume now starts at 50%.
+Various bug fixes and accessibility improvements.
