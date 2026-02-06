@@ -299,18 +299,18 @@ const RankingUpgradesModule = (function() {
                 const id = e.target.dataset.id;
                 if (purchase(category, id)) {
                     renderUpgrades();
-                    updateDisplay();
+                    if (typeof updateDisplay === 'function') {
+                        updateDisplay();
+                    }
 
-                    // Announce purchase for screen readers (clear previous to prevent spam)
-                    const notificationArea = document.getElementById('notification-area');
-                    if (notificationArea) {
-                        const existing = notificationArea.querySelectorAll('.sr-only-announcement');
-                        existing.forEach(el => el.remove());
-                        const announcement = document.createElement('span');
-                        announcement.className = 'sr-only sr-only-announcement';
-                        announcement.textContent = 'Purchased';
-                        notificationArea.appendChild(announcement);
-                        setTimeout(() => announcement.remove(), 1000);
+                    // Play upgrade purchase sound
+                    if (typeof SoundModule !== 'undefined') {
+                        SoundModule.play('upgradePurchase');
+                    }
+
+                    // Announce purchase for screen readers
+                    if (typeof announceToScreenReader === 'function') {
+                        announceToScreenReader('Purchased');
                     }
                 }
             }

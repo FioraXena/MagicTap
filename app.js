@@ -2012,8 +2012,9 @@ function resetForPrestige() {
     const firstBuilding = buildings.find(b => b.id === 'wizards-hand');
     if (firstBuilding) firstBuilding.isUnlocked = true;
 
-    // Apply prestige building boosts
+    // Apply prestige building boosts and recalculate
     PrestigeModule.applyAllPrestigeBuildingBoosts();
+    recalculateMPS();
 
     // Reset upgrades (all upgrades reset each run)
     upgrades.forEach(upgrade => {

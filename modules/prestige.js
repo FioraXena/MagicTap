@@ -597,12 +597,10 @@ const PrestigeModule = (function() {
         showGameElements();
 
         // Reset game state (keeping prestige data)
+        // resetForPrestige() already applies prestige building boosts
         if (typeof resetForPrestige === 'function') {
             resetForPrestige();
         }
-
-        // Apply prestige bonuses
-        applyAllPrestigeBonuses();
 
         updateDisplay();
     }
