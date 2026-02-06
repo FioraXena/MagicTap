@@ -382,9 +382,12 @@ const RunestonesModule = (function() {
 
         container.appendChild(runestoneElement);
 
-        // Trigger animation
+        // Trigger animation (capture local ref in case module var is cleared)
+        const el = runestoneElement;
         requestAnimationFrame(() => {
-            runestoneElement.classList.add('visible');
+            if (el) {
+                el.classList.add('visible');
+            }
         });
     }
 
