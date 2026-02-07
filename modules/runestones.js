@@ -440,6 +440,7 @@ const RunestonesModule = (function() {
 
         const wasNegative = activeEffect && !activeEffect.isPositive;
         activeEffect = null;
+        effectTimeRemaining = 0;
 
         // Reset all temporary modifiers
         tempMPSBonus = 0;
@@ -476,6 +477,7 @@ const RunestonesModule = (function() {
             `;
         } else {
             display.hidden = true;
+            display.innerHTML = '';
         }
     }
 
