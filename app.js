@@ -1941,6 +1941,8 @@ function getEffectiveMPS() {
     return effectiveMPS;
 }
 
+let autoClickerTick = 0;
+
 function gameLoop() {
     // Skip production if in prestige mode
     if (PrestigeModule.isPrestigeMode()) {
@@ -1955,6 +1957,20 @@ function gameLoop() {
         StatisticsModule.addManaByBuildings(manaFromBuildings);
     }
     StatisticsModule.setCurrentMana(mana);
+
+    // Auto-clicker from prestige upgrade (1 click per second)
+    if (PrestigeModule.hasAutoClicker && PrestigeModule.hasAutoClicker()) {
+        autoClickerTick++;
+        if (autoClickerTick >= 10) {
+            autoClickerTick = 0;
+            let autoMPC = manaPerClick;
+            if (typeof RunestonesModule !== 'undefined') autoMPC += RunestonesModule.getTempMPCBonus();
+            if (typeof SpellcastingModule !== 'undefined') autoMPC *= SpellcastingModule.getMPCMultiplier();
+            if (autoMPC < 1) autoMPC = 1;
+            mana += autoMPC;
+            StatisticsModule.addManaByClick(autoMPC);
+        }
+    }
 
     // Check achievements and unlocks
     AchievementsModule.checkAchievements(StatisticsModule.getStats());
@@ -1975,6 +1991,10 @@ function gameLoop() {
         // Apply Golden Eye spell multiplier
         if (typeof SpellcastingModule !== 'undefined') {
             coinRate *= SpellcastingModule.getWishingWellMultiplier();
+        }
+        // Apply Well Keeper prestige upgrade
+        if (PrestigeModule.hasWellBoost && PrestigeModule.hasWellBoost()) {
+            coinRate *= 2;
         }
         WishingWellModule.addCoins(coinRate / 10); // Divide by 10 since loop runs 10x per second
         WishingWellModule.updateDisplay();
@@ -2014,6 +2034,21 @@ function resetForPrestige() {
 
     // Apply prestige building boosts and recalculate
     PrestigeModule.applyAllPrestigeBuildingBoosts();
+
+    // Apply starting mana from prestige upgrades
+    const startingMana = PrestigeModule.getStartingMana();
+    if (startingMana > 0) mana = startingMana;
+
+    // Apply starting buildings from prestige upgrades
+    const startingBuildings = PrestigeModule.getStartingBuildings();
+    Object.entries(startingBuildings).forEach(([id, count]) => {
+        const building = buildings.find(b => b.id === id);
+        if (building) {
+            building.owned += count;
+            building.isUnlocked = true;
+        }
+    });
+
     recalculateMPS();
 
     // Reset upgrades (all upgrades reset each run)
