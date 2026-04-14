@@ -22,6 +22,7 @@ let manaPerClickFromUpgrades = 0;
 let mpsFromUpgrades = 0;
 let mpsUpgradeMultiplier = 1; // Multiplier from upgrades that boost all MPS
 let proficiencyUpgradeCount = 0; // Count of kitten-style upgrades that scale with Magic Proficiency
+let bulkBuyAmount = 1;
 
 // --- Initialize Panels ---
 function initializePanels() {
@@ -1522,6 +1523,56 @@ function gatherMana() {
     updateDisplay();
 }
 
+// --- Bulk Buy Logic ---
+function getBulkBuildingCost(building, count) {
+    let totalCost = 0;
+    let costMultiplier = 1;
+    if (typeof RunestonesModule !== 'undefined') {
+        costMultiplier *= RunestonesModule.getTempBuildingCostMultiplier();
+    }
+    if (typeof SpellcastingModule !== 'undefined') {
+        costMultiplier *= SpellcastingModule.getBuildingCostMultiplier();
+    }
+    for (let i = 0; i < count; i++) {
+        totalCost += building.baseCost * Math.pow(1.15, building.owned + i) * costMultiplier;
+    }
+    return totalCost;
+}
+
+function getMaxBuyable(building) {
+    let count = 0;
+    let totalCost = 0;
+    let costMultiplier = 1;
+    if (typeof RunestonesModule !== 'undefined') {
+        costMultiplier *= RunestonesModule.getTempBuildingCostMultiplier();
+    }
+    if (typeof SpellcastingModule !== 'undefined') {
+        costMultiplier *= SpellcastingModule.getBuildingCostMultiplier();
+    }
+    while (true) {
+        const nextCost = building.baseCost * Math.pow(1.15, building.owned + count) * costMultiplier;
+        if (totalCost + nextCost > mana) break;
+        totalCost += nextCost;
+        count++;
+        if (count > 10000) break;
+    }
+    return { count, totalCost };
+}
+
+function getEffectiveBulkAmount(building) {
+    if (bulkBuyAmount === -1) {
+        return getMaxBuyable(building).count;
+    }
+    return bulkBuyAmount;
+}
+
+function getEffectiveBulkCost(building) {
+    if (bulkBuyAmount === -1) {
+        return getMaxBuyable(building).totalCost;
+    }
+    return getBulkBuildingCost(building, bulkBuyAmount);
+}
+
 // --- Building Logic ---
 function buyBuilding(buildingId) {
     const building = buildings.find(b => b.id === buildingId);
@@ -1530,14 +1581,19 @@ function buyBuilding(buildingId) {
         return;
     }
 
-    const cost = getBuildingCurrentCost(building);
-    if (mana >= cost) {
-        mana -= cost;
-        building.owned++;
+    const amount = bulkBuyAmount === -1 ? getMaxBuyable(building).count : bulkBuyAmount;
+    if (amount <= 0) return;
+
+    const totalCost = bulkBuyAmount === -1 ? getMaxBuyable(building).totalCost : getBulkBuildingCost(building, amount);
+    if (mana >= totalCost) {
+        mana -= totalCost;
+        building.owned += amount;
         recalculateMPS();
-        StatisticsModule.addBuildingOwned();
+        for (let i = 0; i < amount; i++) {
+            StatisticsModule.addBuildingOwned();
+        }
         updateBuildingDisplay(building);
-        updateDisplay(); // Update main displays and affordability
+        updateDisplay();
 
         // Play building purchase sound
         if (typeof SoundModule !== 'undefined') {
@@ -1545,9 +1601,7 @@ function buyBuilding(buildingId) {
         }
 
         // Announce purchase for screen readers
-        announceToScreenReader('Purchased');
-    } else {
-        // Do nothing if cannot afford
+        announceToScreenReader(`Purchased ${amount} ${building.name}`);
     }
 }
 
@@ -1576,9 +1630,10 @@ function createBuildingElement(building) {
 
 function updateBuildingDisplay(building) {
     if (!building.element) return;
-
     building.element.querySelector('.building-owned span').textContent = building.owned;
-    building.element.querySelector('.building-cost .cost-value').textContent = OptionsModule.formatNumber(Math.floor(getBuildingCurrentCost(building)));
+    const amount = getEffectiveBulkAmount(building);
+    const cost = amount > 0 ? getEffectiveBulkCost(building) : getBuildingCurrentCost(building);
+    building.element.querySelector('.building-cost .cost-value').textContent = OptionsModule.formatNumber(Math.floor(cost));
 }
 
 function renderBuildings() {
@@ -1704,11 +1759,20 @@ function checkAffordability() {
     buildings.forEach(building => {
         if (building.element) {
             const buyButton = building.element.querySelector('.buy-building-button');
-            const cost = getBuildingCurrentCost(building);
-            if (mana >= cost) {
+            const amount = getEffectiveBulkAmount(building);
+            const cost = amount > 0 ? getEffectiveBulkCost(building) : getBuildingCurrentCost(building);
+            let bulkLabel = '';
+            if (bulkBuyAmount === -1) {
+                bulkLabel = ` x${amount}`;
+            } else if (bulkBuyAmount > 1) {
+                bulkLabel = ` x${bulkBuyAmount}`;
+            }
+            const costEl = building.element.querySelector('.building-cost .cost-value');
+            if (costEl) costEl.textContent = OptionsModule.formatNumber(Math.floor(cost));
+            if (mana >= cost && amount > 0) {
                 buyButton.disabled = false;
-                buyButton.textContent = `${building.name}, Can Buy`;
-                buyButton.setAttribute('aria-label', `${building.name}, Can Buy`);
+                buyButton.textContent = `Buy${bulkLabel} ${building.name}`;
+                buyButton.setAttribute('aria-label', `Buy${bulkLabel} ${building.name}, costs ${OptionsModule.formatNumber(Math.floor(cost))} Mana`);
                 buyButton.classList.add('can-buy');
                 buyButton.classList.remove('cannot-buy');
             } else {
@@ -1716,8 +1780,8 @@ function checkAffordability() {
                 const timeUntil = getTimeUntilAffordable(cost);
                 const timeStr = formatTime(timeUntil);
                 const timerDisplay = timeStr ? `, ${timeStr}` : '';
-                buyButton.textContent = `${building.name}, Not Affordable${timerDisplay}`;
-                buyButton.setAttribute('aria-label', `${building.name}, Not Affordable${timerDisplay}`);
+                buyButton.textContent = `Buy${bulkLabel} ${building.name}, Not Affordable${timerDisplay}`;
+                buyButton.setAttribute('aria-label', `Buy${bulkLabel} ${building.name}, costs ${OptionsModule.formatNumber(Math.floor(cost))} Mana`);
                 buyButton.classList.add('cannot-buy');
                 buyButton.classList.remove('can-buy');
             }
@@ -2067,9 +2131,55 @@ function resetForPrestige() {
 
 setInterval(gameLoop, 100);
 
+function createBulkBuyControls() {
+    const buildingsHeading = document.getElementById('buildings-heading');
+    if (!buildingsHeading) return;
+
+    const controls = document.createElement('div');
+    controls.className = 'bulk-buy-controls';
+    controls.setAttribute('role', 'radiogroup');
+    controls.setAttribute('aria-label', 'Bulk buy amount');
+
+    const label = document.createElement('span');
+    label.id = 'bulk-buy-label';
+    label.textContent = 'Buy:';
+    controls.appendChild(label);
+
+    const options = [
+        { value: 1, text: 'x1' },
+        { value: 10, text: 'x10' },
+        { value: 100, text: 'x100' },
+        { value: -1, text: 'Max' }
+    ];
+
+    options.forEach(option => {
+        const btn = document.createElement('button');
+        btn.className = 'bulk-buy-btn';
+        btn.setAttribute('role', 'radio');
+        btn.setAttribute('aria-checked', option.value === bulkBuyAmount ? 'true' : 'false');
+        btn.setAttribute('aria-label', `Buy ${option.value === -1 ? 'max' : option.text} buildings at once`);
+        btn.textContent = option.text;
+
+        btn.addEventListener('click', () => {
+            bulkBuyAmount = option.value;
+            controls.querySelectorAll('.bulk-buy-btn').forEach(b => {
+                b.setAttribute('aria-checked', 'false');
+            });
+            btn.setAttribute('aria-checked', 'true');
+            buildings.forEach(b => updateBuildingDisplay(b));
+            checkAffordability();
+        });
+
+        controls.appendChild(btn);
+    });
+
+    buildingsHeading.insertAdjacentElement('afterend', controls);
+}
+
 // Initial setup
 initializePanels();
 setupNavigation();
+createBulkBuyControls();
 updateDisplay();
 renderBuildings();
 renderUpgrades();

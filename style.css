@@ -479,6 +479,50 @@ h2:focus {
     }
 }
 
+/* Bulk Buy Controls */
+.bulk-buy-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+}
+
+.bulk-buy-controls span {
+    color: #aaa;
+    font-size: 0.9em;
+}
+
+.bulk-buy-btn {
+    padding: 5px 12px;
+    font-size: 0.85em;
+    background-color: #3a3a4a;
+    border: 1px solid #5a5a6a;
+    color: #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    min-width: 44px;
+    min-height: 32px;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+.bulk-buy-btn:hover {
+    background-color: #4a4a5a;
+}
+
+.bulk-buy-btn:focus {
+    outline: 2px solid #007bff;
+    outline-offset: 2px;
+}
+
+.bulk-buy-btn[aria-pressed="true"] {
+    background-color: #007bff;
+    border-color: #007bff;
+    color: #fff;
+    font-weight: bold;
+}
+
 /* Ranking Upgrades Panel */
 #ranking-upgrades-panel .ranking-info {
     margin-bottom: 1.5em;
