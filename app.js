@@ -1514,6 +1514,10 @@ function gatherMana() {
     if (typeof SpellcastingModule !== 'undefined') {
         effectiveMPC *= SpellcastingModule.getMPCMultiplier();
     }
+    // Apply Wishing Well MPC multiplier (Click Frenzy)
+    if (typeof WishingWellModule !== 'undefined') {
+        effectiveMPC *= WishingWellModule.getMPCMultiplier();
+    }
     // Ensure MPC doesn't go below 1
     if (effectiveMPC < 1) effectiveMPC = 1;
 
