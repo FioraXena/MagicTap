@@ -107,6 +107,16 @@ h1, h2 {
     outline-offset: 2px;
 }
 
+/* Offline Progress Notification */
+.offline-progress-notification {
+    background-color: #2d4a2d;
+    border-color: #7cfc00;
+}
+
+.offline-progress-notification .notification-title {
+    color: #7cfc00;
+}
+
 .game-stats, .game-actions, footer nav {
     text-align: center;
     margin-bottom: 20px;
