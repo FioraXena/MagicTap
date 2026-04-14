@@ -1496,6 +1496,20 @@ function updateDisplay() {
     checkAffordability(); // Check affordability for both buildings and upgrades
 }
 
+// Function to show floating click numbers
+function showFloatingNumber(amount) {
+    const btn = document.getElementById('gather-mana-button');
+    const span = document.createElement('span');
+    span.className = 'floating-click-number';
+    span.setAttribute('aria-hidden', 'true');
+    span.textContent = '+' + OptionsModule.formatNumber(Math.floor(amount));
+    const offsetX = (Math.random() - 0.5) * 60;
+    span.style.left = `calc(50% + ${offsetX}px)`;
+    btn.parentElement.style.position = 'relative';
+    btn.parentElement.appendChild(span);
+    span.addEventListener('animationend', () => span.remove());
+}
+
 // Function to gather mana when the button is clicked
 function gatherMana() {
     // Check if silenced - no mana from clicking
@@ -1519,6 +1533,7 @@ function gatherMana() {
 
     mana += effectiveMPC;
     StatisticsModule.addManaByClick(effectiveMPC);
+    showFloatingNumber(effectiveMPC);
     updateDisplay();
 }
 
